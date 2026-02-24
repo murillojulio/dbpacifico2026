@@ -68,9 +68,9 @@ define('APP_PATH', dirname(__DIR__) . '/app/');
  * Define el CORE_PATH
  *
  * CORE_PATH:
- * - Ruta al directorio que contiene el núcleo de Kumbia (por defecto la ruta al directorio core)
+ * - Ruta al core de Kumbia instalado vía Composer (kumbia/framework 1.2.1)
  */
-define('CORE_PATH', dirname(dirname(APP_PATH)) . '/core/');
+define('CORE_PATH', dirname(dirname(__DIR__)) . '/vendor/kumbia/framework/core/');
 
 /**
  * Define el PUBLIC_PATH
@@ -98,16 +98,17 @@ $url = empty($_SERVER['PATH_INFO']) ? '/' : $_SERVER['PATH_INFO'];
  //$url = isset($_GET['_url']) ? $_GET['_url'] : '/';
 
 /**
- * Carga los vendors
- *
+ * Carga el autoload de Composer (KumbiaPHP 1.2.1 + dependencias)
  */
-//require_once("../../vendor/autoload.php");
+$vendorAutoload = dirname(dirname(__DIR__)) . '/vendor/autoload.php';
+if (!is_file($vendorAutoload)) {
+    die('Ejecuta en la raíz del proyecto: composer install');
+}
+require_once $vendorAutoload;
 
 /**
- * Carga el gestor de arranque
- * Por defecto el bootstrap del core
+ * Carga el gestor de arranque de la aplicación
  *
  * @see Bootstrap
  */
-require APP_PATH . 'libs/bootstrap.php'; //bootstrap de app
-//require CORE_PATH . 'kumbia/bootstrap.php'; //bootstrap del core
+require APP_PATH . 'libs/bootstrap.php';

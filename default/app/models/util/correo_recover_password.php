@@ -17,9 +17,6 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
-require_once CORE_PATH . 'vendors/phpmailer/src/PHPMailer.php';
-require_once CORE_PATH . 'vendors/phpmailer/src/Exception.php';
-require_once CORE_PATH . 'vendors/phpmailer/src/SMTP.php';
 
 class CorreoRecoverPassword {
 

@@ -30,3 +30,6 @@ dwsync.xml
 *.komodoproject
 .komodotools
 /default/app/temp/
+
+# Composer
+/vendor/

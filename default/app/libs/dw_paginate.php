@@ -23,14 +23,14 @@ class DwPaginate {
      * per_page: cantidad de elementos por pagina <br>
      *
      *
-     * @param array $model
-     * @return stdClass 
+     * @param object $model
+     * @return stdClass
      */
     public static function paginate($model) {
-                
-        $params = Util::getParams(func_get_args($model));
-        $page_number = isset($params['page']) ? Filter::get($params['page'], 'numeric') : 1; //Numero de la página       
-        $per_page = isset($params['per_page']) ? Filter::get($params['per_page'], 'numeric') : DATAGRID; //Datos por página        
+
+        $params = Util::getParams(func_get_args());
+        $page_number = isset($params['page']) ? (int) $params['page'] : 1; //Numero de la página
+        $per_page = isset($params['per_page']) ? (int) $params['per_page'] : DATAGRID; //Datos por página        
         $counter = ($page_number > 1) ? ( ($page_number * $per_page) - ($per_page-1) ) : 1; //Determino el contador para utilizarlo en la vista       
         
         $start = $per_page * ($page_number - 1); //Determino el offset      
@@ -123,15 +123,15 @@ class DwPaginate {
      * per_page: cantidad de elementos por pagina <br>
      *
      *
-     * @param string $model modelo
+     * @param object $model modelo
      * @param string $sql consulta sql
      * @return stdClass
      */
     public static function paginate_by_sql($model, $sql) {
 
         $params = Util::getParams(func_get_args());
-        $page_number = isset($params['page']) ? Filter::get($params['page'], 'numeric') : 1; //Numero de la página
-        $per_page = isset($params['per_page']) ? Filter::get($params['per_page'], 'numeric') : DATAGRID; //Datos por página
+        $page_number = isset($params['page']) ? (int) $params['page'] : 1; //Numero de la página
+        $per_page = isset($params['per_page']) ? (int) $params['per_page'] : DATAGRID; //Datos por página
         $counter = ($page_number > 1) ? ( ($page_number * $per_page) - ($per_page-1) ) : 1; //Determino el contador para utilizarlo en la vista
 
         $start = $per_page * ($page_number - 1); //Determino el offset
@@ -159,4 +159,3 @@ class DwPaginate {
         return $page;
     }
 }
-?>
