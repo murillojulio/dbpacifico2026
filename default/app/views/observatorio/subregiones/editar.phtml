@@ -1,0 +1,49 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>  
+    <?php echo DwForm::hidden('subregion.id', NULL, $subregion->id); ?>
+    <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">
+                    <div class="col-md-4">
+                        <?php echo DwForm::text('subregion.nombre', array('class'=>'input-readonly input-lower'), $subregion->nombre, 'Nombre de la subregion'); ?>
+                        <?php //echo DwForm::text('subregion.departamento', array('class'=>'input-readonly input-lower'), $subregion->departamento, 'Departamento'); ?>
+                        <?php echo DwForm::dbSelect('subregion.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>'input-required'), $subregion->departamento_id, 'Departamento'); ?>
+                    </div>
+                        <div class="col-md-8">
+                            <?php echo DwForm::textarea('subregion.descripcion', array('class'=>'input-lower', 'required'=>'required', 'style'=>"height: 200px;"), $subregion->descripicion, 'Descripción'); ?>
+                        </div>                       
+                    </div>                                      
+                  </div>
+               </div>
+            </div>      
+            <div class="col-md-12">               
+    <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+    <input id="fuente_cantidad" name="fuente[cantidad]" type="hidden" value="1"> 
+      <div id="panel_fuente" class="panel panel-default">
+          <div class="panel-body"> 
+            <?php View::partial('fuentes/editar', false, array('fuentes'=>$fuentes)); ?>   
+               </div> 
+      </div>                    
+ </div>
+      </div>     
+         <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Actualizar subregion'); ?>
+                <?php echo DwForm::cancel(); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type='text/javascript'>
+  
+</script>

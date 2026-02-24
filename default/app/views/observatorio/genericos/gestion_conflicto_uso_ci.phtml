@@ -1,0 +1,32 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::hidden('id_a_borrar_territorio_ci', NULL, '') ?>
+             <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>TERRITORIOS COLECTIVOS RESGUARDOS INDIGENAS EN CONFLICTO DE USO</th>                                      
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                 
+                $contador_conflicto_uso_ci = 1;
+                foreach($conflicto_usos_ci as $conflicto_uso_ci):                  
+                    
+                        ?>
+                        <tr>  
+                        <td><?php echo $conflicto_uso_ci->getTerritorio()->nombre; ?></td>
+                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver conflicto_uso_ci', "observatorio/territorios/ver_conflicto_uso_ci/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                            <?php  
+                                    echo '<button onclick="setIdBorrarTerritorioCI(this.value)" title="Quitar territorio" value="'.$conflicto_uso_ci->id.'" id="btn_delete_conflicto_uso_ci'.$conflicto_uso_ci->id.'" type="button" class="btn btn-danger btn-small" data-toggle="modal" data-target="#myModalDeleteTerritorioCI">';
+                                    echo '<i class="btn-icon-only fa fa-minus"></i></button></div>';
+                             
+                                 ?>                            
+                        </td>
+                    </tr>
+                                  
+                    <?php $contador_conflicto_uso_ci++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>

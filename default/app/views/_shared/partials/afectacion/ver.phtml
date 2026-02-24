@@ -1,0 +1,87 @@
+<?php 
+    $sub_tab_1_active = '';
+    $sub_tab_2_active = '';
+    $sub_tab_3_active = '';
+
+    if($sub_tab == '1' || $sub_tab == ''){ $sub_tab_1_active = 'active'; }
+    if($sub_tab == '2'){ $sub_tab_2_active = 'active'; }
+    if($sub_tab == '3'){ $sub_tab_3_active = 'active'; }
+?>
+
+
+<div class="container shell-view">
+<ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $sub_tab_1_active; ?>"><a href="#afe_tab1" data-toggle="tab">Territorios Afectados</a></li>
+        <li class="<?php echo $sub_tab_2_active; ?>"><a href="#afe_tab2" data-toggle="tab">Areas Protegidas Afectadas</a></li>       
+        <li class="<?php echo $sub_tab_3_active; ?>"><a href="#afe_tab3" data-toggle="tab">Zonas Excluibles de Minería Afectadas</a></li> 
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $sub_tab_1_active; ?>"><a href="#afe_tab1" data-toggle="tab">Territorios Afectados</a></li>
+        <li class="tab-pane <?php echo $sub_tab_2_active; ?>"><a href="#afe_tab2" data-toggle="tab">Areas Protegidas Afectadas</a></li>        
+        <li class="tab-pane <?php echo $sub_tab_3_active; ?>" ><a href="#afe_tab3" data-toggle="tab">Zonas Excluibles de Minería Afectadas</a></li>
+    </ul>
+
+        <div class="tab-content"> 
+            <div class="tab-pane <?php echo $sub_tab_1_active; ?>" id="afe_tab1">            
+                <div class="row">
+                    <div class="container shell-view">   
+                         <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_afectacion_territorio/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar territorio afectado', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL TERRIOTORIO AFECTADO</th>                    
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_territorio = 1;
+                foreach($territorios_afectados as $territorio): ?>                    
+                    <?php $key_show = Security::setKey($territorio->territorio_id, 'show_afectacion_territorio'); ?>
+                    <?php $key_upd = Security::setKey($territorio->territorio_id, 'upd_afectacion_territorio'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_territorio; ?></td>
+                        <td><?php echo $territorio->territorio; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver afectaciones', "afectacion/megaproyectos/ver_afectacion_territorio/$key_show/$megaproyecto->clase_megaproyecto/$key/".$megaproyecto->getAfectacion()->id."/", null, 'info', 'fa-search'); ?>
+                            <?php //echo DwHtml::buttonTable('Modificar afectaciones', "afectacion/megaproyectos/editar_afectacion_territorio/$key_upd/$megaproyecto->clase_megaproyecto/$key/".$megaproyecto->getAfectacion()->id."/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $contador_territorio++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+          
+                </div>
+            </div>
+            
+            <!-- SEGUNDA PESTAÑA --------------------->
+        
+        <div class="tab-pane <?php echo $sub_tab_2_active; ?>" id="afe_tab2">            
+                 <div class="row">
+                    
+          
+                </div>
+            </div>
+        
+        <div class="tab-pane <?php echo $sub_tab_3_active; ?>" id="afe_tab3">            
+            <div class="row">
+
+
+            </div>
+        </div>
+        </div>  
+    </div>

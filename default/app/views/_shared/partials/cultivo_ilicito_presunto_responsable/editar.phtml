@@ -1,0 +1,262 @@
+<button style="margin-bottom: 5px;" id="btn-agregar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-agregar-promotor" onclick="deshabilitar_modal_dano()">Agregar promotor</button>
+<div id="div_gestion_promotores">
+    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>PROMOTOR DEL CULTIVO</th>
+                <th>DESCRIPCION</th>
+                <th style="width:80px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($CultivoIlicitoPresuntoResponsable as $promotores) :
+            ?>
+                <tr>
+                    <td><?php echo $promotores->responsable; ?></td>
+                    <td><?php echo $promotores->descripcion_presunto_responsable; ?></td>
+                    <td class="btn-actions">
+                        <button id="btn-editar-promotor-<?php echo $promotores->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" data-loading-text="Cargando..." onclick="cargarModalEditarPromotor(<?php echo $promotores->id; ?>)"></button>
+                        <!--<button id="btn-editar-promotor-<?php echo $promotores->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="setVariablesEditar(<?php echo $promotores->id . "," . $dano->id . ",'" . $dano->nombre . "'"; ?>)" data-toggle="modal" data-target="#modal_editar_dano"></button>-->
+                        <button id="btn-eliminar-promotor-<?php echo $promotores->id ?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariablesEliminarPromotor(<?php echo $promotores->id; ?>)" data-toggle="modal" data-target="#modal_eliminar_promotor" title="Eliminar"></button>
+                    </td>
+                </tr>
+            <?php
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>
+<div id="div_modal_editar_promotor"></div>
+<div class="modal fade" id="modal_eliminar_promotor">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Eliminar promotor</h4>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este promotor?
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-eliminar-promotor" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-eliminar-promotor" type="button" class="btn btn-primary" onclick="eliminarPromotor()" data-loading-text="Eliminando...">Eliminar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="modal-agregar-promotor">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar promotor</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">                        
+                        <?php echo DwForm::dbSelect('cultivo_ilicito_presunto_responsable.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarPromotor()'), NULL, 'Promotor del cultivo <span class="req">*</span>'); ?>
+                       <?php echo DwForm::textarea('cultivo_ilicito_presunto_responsable.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonAgregarPromotor()', 'style' => "height: 130px;"), NULL, 'Descripción del promotor <span class="req">*</span>'); ?>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-agregar-promotor" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-promotor" type="button" class="btn btn-primary" onclick="agregarPromotor()" data-loading-text="Agregando...">Agregar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<label for="panel_promotores"></label>
+<script type='text/javascript'>
+ $("#btn-agregar-promotor").prop('disabled', true);
+let cultivo_ilicito_presunto_responsable_id = '';
+function deshabilitar_modal_dano() {
+        $("#btn-agregar-promotor").prop('disabled', true);
+        $('#cultivo_ilicito_presunto_responsable_descripcion').val('');
+        $('#cultivo_ilicito_presunto_responsable_presunto_responsable_id').val('');
+    }
+
+    function validarBotonAgregarPromotor() {
+        var presunto_responsable_id = $('#cultivo_ilicito_presunto_responsable_presunto_responsable_id').val();       
+        var descripcion = $('#cultivo_ilicito_presunto_responsable_descripcion').val();
+
+        if (presunto_responsable_id !== '' && descripcion !== '') {
+            $("#btn-agregar-promotor").prop('disabled', false);
+        } else {
+            $("#btn-agregar-promotor").prop('disabled', true);
+        }
+    }
+
+    function agregarPromotor() {
+        jsSpinner('show');
+        $("#btn-cancelar-agregar-promotor").prop('disabled', true);
+        let btn = $('#btn-agregar-promotor');
+        btn.button('loading');
+        let modal = $("#modal-agregar-promotor");
+        let cultivo_ilicito_id = $('#cultivo_ilicito_id').val();
+        let presunto_responsable_id = $('#cultivo_ilicito_presunto_responsable_presunto_responsable_id').val();
+        let descripcion = $('#cultivo_ilicito_presunto_responsable_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/agregar_promotor/'; ?>";
+        let datos = new FormData();
+            datos.append("cultivo_ilicito_id", cultivo_ilicito_id);
+            datos.append("presunto_responsable_id", presunto_responsable_id);
+            datos.append("descripcion", descripcion);
+
+            fetch(url,
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                /*console.log('data = ', data);*/
+                $("#div_gestion_promotores").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-agregar-promotor").prop('disabled', false);
+
+                $('#cultivo_ilicito_presunto_responsable_descripcion').val('');
+                $('#cultivo_ilicito_presunto_responsable_presunto_responsable_id').val('');
+                $("#alert-id-guardar-promotor").show();
+                $("#alert-id-guardar-promotor").hide().fadeIn(500).delay(4000).fadeOut(500);
+                jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                btn.button('reset');
+                console.error(err);
+            });  
+    }
+
+    function setVariablesEliminarPromotor(cultivo_ilicito_presunto_responsable_id_) {
+        cultivo_ilicito_presunto_responsable_id = cultivo_ilicito_presunto_responsable_id_;
+    }
+
+    function eliminarPromotor() {
+        jsSpinner('show');
+        let cultivo_ilicito_id = $('#cultivo_ilicito_id').val();
+        $("#btn-cancelar-eliminar-promotor").hide();
+        let btn = $('#btn-eliminar-promotor');
+        btn.button('loading');
+        let modal = $("#modal_eliminar_promotor");
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/eliminar_promotor/'; ?>";
+
+        let datos = new FormData();
+            datos.append("cultivo_ilicito_id", cultivo_ilicito_id);
+            datos.append("cultivo_ilicito_presunto_responsable_id", cultivo_ilicito_presunto_responsable_id);
+
+            fetch(url,
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                /*console.log('data = ', data);*/
+                $("#div_gestion_promotores").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-eliminar-promotor").show();
+                $("#alert-id-eliminar-promotor").show();
+                $("#alert-id-eliminar-promotor").hide().fadeIn(500).delay(4000).fadeOut(500);
+                jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                $("#btn-cancelar-eliminar-promotor").show();
+                btn.button('reset');
+                console.error(err);
+            });          
+    }
+    
+
+    function cargarModalEditarPromotor(cultivo_ilicito_presunto_responsable_id) {
+        jsSpinner('show');
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/cargar_editar_promotor/'; ?>";
+        let datos = new FormData();
+            datos.append("cultivo_ilicito_presunto_responsable_id", cultivo_ilicito_presunto_responsable_id);
+
+            fetch(url,
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                /*console.log('data = ', data);*/
+                jsSpinner('hide');
+                $("#div_modal_editar_promotor").html(data);
+                let modal = $("#modal-editar-promotor");
+                modal.modal('show');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                alert('ERROR en cargarModalEditarPromotor()');
+                console.error(err);
+            }); 
+    }
+
+    function validarBotonEditarPromotor() {
+        var presunto_responsable_id = $('#editar_cultivo_ilicito_presunto_responsable_presunto_responsable_id').val();
+        var descripcion = $('#editar_cultivo_ilicito_presunto_responsable_descripcion').val();
+
+        if (presunto_responsable_id !== '' && descripcion !== '' ) {
+            $("#btn-guardar-cambio-promotor").prop('disabled', false);
+        } else {
+            $("#btn-guardar-cambio-promotor").prop('disabled', true);
+        }
+    } 
+
+    function guardarCambiosPromotor() {
+        $("#btn-cancelar-guardar-cambio-promotor").prop('disabled', true);
+        let btn = $('#btn-guardar-cambio-promotor');
+        btn.button('loading');
+        let modal = $("#modal-editar-promotor");
+        let afectacion_id = $('#<?php echo $nombre_tabla; ?>_afectacion_id').val();
+        let cultivo_ilicito_presunto_responsable_id = $('#cultivo_ilicito_presunto_responsable_id').val();
+        let presunto_responsable_id = $('#editar_cultivo_ilicito_presunto_responsable_presunto_responsable_id').val();
+        let descripcion = $('#editar_cultivo_ilicito_presunto_responsable_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/guardar_cambios_promotor/'; ?>";
+
+
+        let datos = new FormData();
+            datos.append("cultivo_ilicito_presunto_responsable_id", cultivo_ilicito_presunto_responsable_id);
+            datos.append("descripcion", descripcion);
+            datos.append("presunto_responsable_id", presunto_responsable_id);
+
+            fetch(url,
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                /*console.log('data = ', data);*/
+                $("#div_gestion_promotores").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-cambio-promotor").prop('disabled', false);                 
+                $("#alert-id-guardar-cambio-promotor").show();
+                $("#alert-id-guardar-cambio-promotor").hide().fadeIn(500).delay(4000).fadeOut(500);            
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                alert('ERROR en cargarModalEditarPromotor()');
+                btn.button('reset');
+                console.error(err);
+            }); 
+    }
+
+</script>

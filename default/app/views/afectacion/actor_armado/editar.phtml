@@ -1,0 +1,127 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php $actor_armado->nombre = 'Actor Armado';
+    View::process_estado_nivel('actor_armado', $actor_armado, $page_module, $page_title, $set_title); ?>
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Información general</a></li>
+        <li><a data-toggle="tab" href="#menu1">Daños al territorio</a></li>
+        <li><a data-toggle="tab" href="#menu2">Fuente(s) de la información</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <?php echo DwForm::open(); ?>
+            <div class="row">
+
+                <?php echo DwForm::hidden('actor_armado.id', NULL, NULL) ?><div class="col-md-6">
+                    <?php echo DwForm::hidden('actor_armado.afectacion_id', NULL, NULL) ?>
+                    <?php echo DwForm::dbSelect('actor_armado.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', ''), NULL, array('class' => 'input-required'), NULL, 'Actor Armado'); ?>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="actor_armado_fecha_llegada">Fecha de llegada | DD-MM-AAAA</label>
+                                <div class="input-group date datepicker" id="dp_actor_armado_fecha_llegada">
+                                    <input id="actor_armado_fecha_llegada" name="actor_armado[fecha_llegada]" type="text" value="<?php if ($actor_armado->fecha_llegada != '') {
+                                                                                                                                        echo date('d-m-Y', strtotime($actor_armado->fecha_llegada));
+                                                                                                                                    } ?>" class="js-datepicker input-date form-control">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <p class="help-block">
+                                    <small class="help-error"></small>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="actor_armado_fecha_salida">Fecha de salida | DD-MM-AAAA</label>
+                                <div class="input-group date datepicker" id="dp_actor_armado_fecha_salida">
+                                    <input id="actor_armado_fecha_salida" name="actor_armado[fecha_salida]" type="text" value="<?php if ($actor_armado->fecha_salida != '') {
+                                                                                                                                    echo date('d-m-Y', strtotime($actor_armado->fecha_salida));
+                                                                                                                                } ?>" class="js-datepicker input-date form-control">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <p class="help-block">
+                                    <small class="help-error"></small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('actor_armado.descripcion', array('class' => 'input-lower input-required', 'rows' => '5'), NULL, 'Descripción del actor armado'); ?>
+                </div>
+            </div>
+            <div class="row">
+                <?php View::partial(
+                    'ubicacion/editar',
+                    false,
+                    array(
+                        'ubicaciones' => $ubicaciones,
+                        'afectacion_id' => $actor_armado->afectacion_id,
+                        'titulo' => 'del actor armado'
+                    )
+                );
+                ?>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::send('Actualizar'); ?>
+                    <?php echo DwForm::cancel($url_redir_back); ?>
+
+                </div>
+            </div>
+
+            <?php echo DwForm::close(); ?>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div class="row">
+                <?php 
+                View::partial(
+                    'danos/editar',
+                    false,
+                    array(
+                        'AfectacionDanoTerritorio' => $AfectacionDanoTerritorio,
+                        'nombre_tabla' => 'actor_armado',
+                        'afectacion_id' => $actor_armado->afectacion_id
+                    )
+                );
+                ?>
+            </div>
+
+        </div>
+        <div id="menu2" class="tab-pane fade">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_fuente">
+                        <h3 class="panel-title">Fuente(s) de la información</h3>
+                    </label>
+                    <div id="panel_fuente" class="panel panel-default">
+                        <div class="panel-body">
+                            <?php View::partial(
+                                'fuentes/editar',
+                                false,
+                                array('fuentes' => $fuentes, 'tabla' => 'actor_armado', 'tabla_identi' => $actor_armado->id)
+                            ); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+</div>

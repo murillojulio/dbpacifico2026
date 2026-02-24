@@ -1,0 +1,38 @@
+<div class="col-md-6">
+                            <label for="panel_ubicacion_proyecto">Ubicación <?echo $titulo;?></label>
+                            <div id="panel_ubicacion_proyecto" class="panel panel-default">
+                                <div class="panel-body">
+                              
+
+    <div id="div_ubicaciones" class="container-overflow">
+                                 
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>DEPARTAMENTO</th>
+                    <th>SUBREGION</th>
+                    <th>MUNICIPIO</th>
+                </tr>
+            </thead>
+            <tbody>                
+                <?php
+                 
+                $contador_ubicacion = 1;
+                foreach($ubicaciones as $ubicacion):                  
+                    
+                        ?>
+                        <tr>                       
+                        <td><?php echo $ubicacion->departamento_nombre; ?></td>
+                        <td><?php echo $ubicacion->subregion_nombre; ?></td>
+                        <td><?php echo $ubicacion->municipio_nombre; ?></td>
+                    </tr>
+                                  
+                    <?php $contador_ubicacion++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+                      
+                                </div>
+                            </div>                           
+                        </div>                          

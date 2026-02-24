@@ -1,0 +1,60 @@
+<?php View::flash(); ?>
+
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::hidden('tipo', NULL, 'urbano') ?>
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php //echo DwHtml::button("gestion_territorial/gestion_tccn/index_agregar_territorio/urbano", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+<div class="container-overflow">
+                         
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>TITULO DEL CASO</th>                    
+                    <th>CANTIDAD VICTIMAS</th>
+                    <th>FECHA</th>                    
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_caso = 1;
+                foreach($casos as $caso): ?>
+                    
+                    <?php $key_show = Security::setKey($caso->id, 'show_caso'); ?>
+                    <?php $key_upd = Security::setKey($caso->id, 'upd_caso'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_caso; ?></td>
+                        <td><?php echo $caso->titulo; ?></td>
+                        <td><?php echo $caso->cantidad_victima; ?></td>
+                        <td><?php echo $caso->fecha_desde; ?></td>
+                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver caso', "observatorio/territorios/ver_caso/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar caso', "violencia_politica/casos/editar_caso/$caso->id/1/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $contador_caso++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    
+     <div class="row">
+        <div class="form-actions">
+            <div class="text-left">
+                <?php echo DwButton::back(Session::get('redir_back')); ?>               
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>

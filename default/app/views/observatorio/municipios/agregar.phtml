@@ -1,0 +1,146 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">                 
+                        <div class="col-md-4">
+                            <?php 
+                            if($departamento_id)
+                            {
+                                echo DwForm::text('municipio.departamento_nombre', array('class'=>'input-readonly'), $departamento_nombre, 'Departamento');
+                                echo DwForm::hidden("municipio.departamento_id", NULL, $departamento_id);
+                            }
+                            else {
+                                echo DwForm::dbSelect('municipio.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Departamento'); 
+                            }
+                            ?>
+                        </div>
+                        <div class="col-md-4">
+                        <?php echo DwForm::text('municipio.nombre', array('class'=>'input-lower input-required'), NULL, 'Nombre'); ?>
+                    </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('municipio.cabecera', array('class'=>'input-lower input-required'), NULL, 'Cabecera'); ?>
+                        </div>                        
+                    </div>                    
+                    <div class="row">  
+                        <div class="col-md-4">
+                        <?php echo DwForm::select('municipio.certificado', array(''=>'Seleccione', 'SI'=>'Si', 'NO'=>'No'), array('class'=>'input-required'), NULL, '¿El municipio está certificado?:'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::date('municipio.fecha_creacion', array('class'=>'input-required'), '', 'Fecha de fundación del municipio - AAAA-MM-DD'); ?>
+                        </div> 
+                    </div>  
+                      <div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_area">Area superficie</label>
+                            <div id="panel_area" class="panel panel-default">
+                                <div class="panel-body">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="municipio_area_total">Total<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="municipio_area_total" name="municipio[area_total]" type="text" value="" class="formato_punto_coma form-control" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                      <div class="col-md-4">
+                                        <label for="municipio_area_cabecera">Cabecera<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="municipio_area_cabecera" name="municipio[area_cabecera]" type="text" value="" class="formato_punto_coma form-control" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <label for="municipio_area_rural">Rural<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="municipio_area_rural" name="municipio[area_rural]" type="text" value="" class="formato_punto_coma form-control" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+                       
+                  </div>
+               </div>
+            </div>
+                
+         <div class="col-md-12">
+                 <label for="panel_poblacion"><h3 class="panel-title">Población</h3></label>   
+                <div id="panel_poblacion" class="panel panel-default">
+                  <div class="panel-body">
+                       
+                    <?php  echo View::partial('poblacion/agregar', false, array('para_territorio' => 'no')); ?>                                    
+                  </div>
+               </div>
+            </div>      
+             <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+                
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/agregar', false, NULL); ?>
+                    </div>                    
+                </div>
+            </div> 
+           
+                          
+                    
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar municipio'); ?>
+                <?php echo DwForm::cancel(); ?>
+                <?php if($departamento_id)
+                        {
+                            echo DwForm::focus('municipio.nombre');
+                        }
+ else {echo DwForm::focus('municipio.departamento_id');}
+                            ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>
+
+
+<script type="text/javascript">
+     $(".formato_punto_coma").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 2,
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });   
+    
+        
+$("#form-1").submit(function(){
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: '',
+        thousandsSeparator: ''
+    });    
+});
+</script>

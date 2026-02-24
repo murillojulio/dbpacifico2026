@@ -1,0 +1,102 @@
+<?php View::flash(); ?>
+<div id="div_modal_editar_victima">
+ <div class="modal fade" id="modal-editar-victima">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Editar Víctima</h4>
+                </div>
+      
+    <div class="modal-body">
+        <div class="row">
+        <?php View::estado_nivel('victima', $Victima, $page_module, $page_title, $set_title); ?>
+            <div class="col-md-12">
+               <div class="row">  
+                   <?php echo DwForm::hidden("victima.editar_caso_id", NULL, $Victima->caso_id);?> 
+                   <?php echo DwForm::hidden("victima.editar_id", NULL, $victima_id);?>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="victima_editar_nombre">Nombre(s) y Apellido(s)<span class="req">*</span></label>
+                                <?php echo DwForm::text('victima.editar_nombre', array('onkeyup'=>'validarBotonGuardarCambioVictima()'), $Victima->nombre, 'Nombre(s) y Apellido(s)'); ?>
+                            </div>    
+                        </div>                        
+                        <div class="col-md-3">
+                            <label for="victima_editar_genero_id">Género<span class="req">*</span></label>
+                        <?php echo DwForm::dbSelect('victima.editar_genero_id', 'nombre', array('opcion/genero', 'getListadoGeneroDBS', Genero::ACTIVO), NULL, array('onchange'=>'validarBotonGuardarCambioVictima()'), $Victima->genero_id, 'Género'); ?>
+                        </div>
+                    <div class="col-md-3">
+                        <label for="victima_editar_edad">Edad</label>
+                        <?php echo DwForm::number('victima.editar_edad', array('class'=>'input-integer', 'placeholder'=>'SIN INFORMACIÓN'), $Victima->edad, 'Edad'); ?>
+                    </div>
+               </div>
+                 <div class="row">                   
+                     <div class="col-md-6">
+                         <div class="form-group">
+                            <label for="victima_editar_ocupacion">Ocupación<span class="req">*</span></label>
+                            <?php echo DwForm::text('victima.editar_ocupacion', array('onkeyup'=>'validarBotonGuardarCambioVictima()'), $Victima->ocupacion, 'Ocupación'); ?>
+                        </div>
+                    </div>                        
+                    <div class="col-md-6">
+                    
+                       </div>                        
+               </div>
+
+               <div class="row">               
+                    <div class="col-md-6">
+                        <div class="form-group">
+                        <label for="panel_perfil">Perfiles de la víctima <span class="req">*</span></label>
+                        <div id="panel_perfil" class="panel panel-default">
+                            <div class="panel-body" style="margin-top:-15px; margin-bottom:-15px;">
+                                <?php echo DwForm::dbCheckId('victima_editar_caracterizacion_check','nombre',array('opcion/caracterizacion2','getListadoCaracterizacion2DBS'), array('onclick'=>'validarBotonGuardarCambioVictima()', 'onchange'=>'validarCaracterizacionOtroEditar()', 'class'=>'editar_antecedente_violencia'), $victima_caracterizacion, 2, '6'); ?>
+                                <?php
+                                $display = '';
+                                 if(!in_array("3", $victima_caracterizacion)){ $display ='display:none;';}?>
+                                <div id="div_editar_victima_caracterizacion_otro" style="<?php echo $display;?>" >
+                                    <label for="victima_editar_caracterizacion_otro">Descripción Otro Perfil <span class="req">*</span></label>
+                                    <?php echo DwForm::text('victima.editar_caracterizacion_otro', array('onkeyup'=>''), $Victima->caracterizacion_otro, 'Descripción Otro Perfil<span class="req">*</span>'); ?>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>   
+                    </div>    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="panel_etnia">Etnia de la víctima</label>
+                            <div id="panel_etnia" class="panel panel-default">
+                                <div class="panel-body" style="margin-top:-10px; margin-bottom:-10px;">
+                                    <?php echo DwForm::dbCheckId('victima_editar_etnia_check','nombre',array('opcion/etnia2','getListEtnia2DBS'), array('onchange'=>'', 'class'=>'agregar_antecedente_violencia'), $victima_etnia, 2, '6'); ?>                                    
+                                </div>
+                            </div> 
+                        </div>   
+                    </div>                  
+                    
+                </div>
+
+              
+                <div class="row">
+                     <div class="col-md-12">
+                 <label for="panel_antecedentes">Antecedentes de la víctima relacionados con violencia</label>
+                    <div id="panel_antecedentes" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('victima_editar_antecedente_violencia_check','nombre',array('opcion/antecedente_violencia','getListadoAntecedenteViolenciaDBS'), array('onchange'=>'', 'class'=>'editar_antecedente_violencia'), $antecedente_violencia, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+             </div>  
+                </div>
+               
+            </div>             
+        </div> 
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cancelar-guardar-cambio-victima" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-guardar-cambio-victima" type="button" class="btn btn-success" onclick="guardarCambiosVictima()" data-loading-text="Guardando...">Guardar cambios</button>
+                </div>
+                
+                
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>

@@ -1,0 +1,44 @@
+<?php
+$apiKey = "AIzaSyBYggorTQe8f-FGpwEVl7uPrcuVbB9p2fU";
+?>
+<style type="text/css">
+.mimapa{width:500px;height:375px;}
+</style>
+ 
+<? echo '<div id="mimapa" class="mimapa"></div>'; ?>
+<script type="text/javascript">
+	var mimapa;
+	var gmarkers = new Array();
+ 
+        function initialize(){
+		if(GBrowserIsCompatible()){
+                        //creamos un nuevo mapa
+			mimapa = new GMap2(document.getElementById("mimapa"));
+                        //esablecemos el centro del mapa
+                        center = new GLatLng(<?php echo $centro['lat'];?>, <?php echo $centro['lng'];?>);
+			mimapa.setCenter(center, <?php echo $centro['zoom'];?>);
+                        //elegimos la interfaz del mapa
+                        mimapa.setUIToDefault();
+ 
+                        //creamos un nuevo punto y hacemos que sea arrastrable(draggable)
+                        var marker = new GMarker(center, {draggable: true});
+ 
+                        //en el evento dragstart(comenzar a arrastrar) escondemos la ventana de info
+                        GEvent.addListener(marker, "dragstart", function() {
+                          map.closeInfoWindow();
+                        });
+ 
+                        //en el evento dragend(terminar de arrastrar) mostramos la ventana de info
+                        GEvent.addListener(marker, "dragend", function() {
+                          marker.openInfoWindowHtml("Latitud:..."+marker.getPoint().lat()+"<br/>Longitud:"+marker.getPoint().lng());
+                          //y mandamos los datos a los input text
+                          document.getElementById('territorio_latitud').value=marker.getPoint().lat();
+                          document.getElementById('territorio_longitud').value=marker.getPoint().lng();
+                        });
+ 
+                        mimapa.addOverlay(marker);
+                 }
+         }
+</script>
+ 
+<?php echo "<script type='text/javascript' src='http://maps.google.com/maps?file=api&;v=2&key=".$apiKey."&async=2&callback=initialize'></script>"; ?>

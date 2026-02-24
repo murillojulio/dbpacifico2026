@@ -1,0 +1,4 @@
+<label for="select_territorio_id">
+    Territorio afectado<span class="req">*</span>
+</label>
+<?php echo DwForm::dbSelect('afectacion_dano_territorio.territorio_id', 'nombre', array('observatorio/territorio', 'getListadoTerritoriosDBS', $afectacion_id), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Territorio afectado<span class="req">*</span>'); ?>

@@ -1,0 +1,15 @@
+<?php DwForm::open() ?>
+<?php //echo DwForm::dbSelect('localidad.corregimiento_id', 'nombre', array('opcion/dano', 'getDanoByTipoDanoIdDBS',  $tipo_dano_id), NULL, array('class'=>'', 'onchange'=>'validarBotonAgregarDano()'), NULL, 'Daño'); ?>
+<?php //echo DwForm::dbSelectButton('caso.localidad_corregimiento', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $municipio_id, $tipo), NULL, array('class' => ''), $localidad_id, NULL, NULL, 'mostrarModalLocalidad(\'corregimiento\')', 'Corregimiento +'); ?>   
+<div class="col-md-3" id="div_corregimiento"> 
+    <label for="caso_localidad_corregimiento">Corregimiento</label>
+    <?php echo DwForm::dbSelectButton('caso.localidad_corregimiento', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $municipio_id, 'corregimiento'), NULL, array('onchange' => 'gestionSelectLocalidades(\'corregimiento\')'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'corregimiento\')', '+'); ?>                                
+</div>
+<div class="col-md-3" id="div_vereda">
+    <label for="caso_localidad_vereda">Vereda</label>
+    <?php echo DwForm::dbSelectButton('caso.localidad_vereda', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $municipio_id, 'vereda'), NULL, array('onchange' => 'gestionSelectLocalidades(\'vereda\')'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'vereda\')', '+'); ?>                                
+</div>
+<div class="col-md-3" id="div_inspeccion"> 
+    <label for="caso_localidad_inspeccion">Inspección</label>
+    <?php echo DwForm::dbSelectButton('caso.localidad_inspeccion', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $municipio_id, 'inspeccion'), NULL, array('onchange' => 'gestionSelectLocalidades(\'inspeccion\')'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'inspeccion\')', '+'); ?>                                
+</div>

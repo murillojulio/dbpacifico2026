@@ -1,0 +1,58 @@
+<?php 
+//    $sub_tab_1_active = '';
+//    $sub_tab_2_active = '';
+//    $sub_tab_3_active = '';
+//
+//    if($sub_tab == '1' || $sub_tab == ''){ $sub_tab_1_active = 'active'; }
+//    if($sub_tab == '2'){ $sub_tab_2_active = 'active'; }
+//    if($sub_tab == '3'){ $sub_tab_3_active = 'active'; }
+?>
+
+
+<div class="container shell-view">             
+                <div class="row">
+                    <div class="container shell-view">   
+                         <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_accion_seguimiento_control/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar accion seguimiento control', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>FECHA</th>                    
+                    <th>ENTIDAD</th>
+                    <th>DESCRIPCIÓN DE LA ACCIÓN</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_accion_seguimiento_control = 1;
+                foreach($accion_seguimiento_controls as $accion_seguimiento_control): ?>                    
+                    <?php $key_show = Security::setKey($accion_seguimiento_control->id, 'show_accion_seguimiento_control'); ?>
+                    <?php $key_upd = Security::setKey($accion_seguimiento_control->id, 'upd_accion_seguimiento_control'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_accion_seguimiento_control; ?></td>                        
+                        <td><?php echo $accion_seguimiento_control->fecha_accion; ?></td>
+                        <td><?php echo $accion_seguimiento_control->mads_car; ?></td>
+                        <td><?php echo substr($accion_seguimiento_control->descripcion_accion, 0, 90); ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver accion_seguimiento_control', "afectacion/megaproyectos/ver_accion_seguimiento_control/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            <?php //echo DwHtml::buttonTable('Modificar accion seguimiento control', "afectacion/megaproyectos/editar_accion_seguimiento_control/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $contador_accion_seguimiento_control++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>          
+                </div>
+              
+    </div>

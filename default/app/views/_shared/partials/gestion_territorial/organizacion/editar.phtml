@@ -1,0 +1,56 @@
+<div class="btn-toolbar btn-toolbar-top">
+    <div class="row">
+        <div class="btn-actions">
+            <?php
+            echo DwHtml::button("gestion_territorial/gestion_tcur/agregar_organizacion/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar organización', array('class' => 'btn-success', 'title' => ''), 'fa-check-square-o', APP_AJAX);
+            ?>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+    <thead>
+        <tr>
+            <th>NUM</th>
+            <th>NOMBRE ORGANIZACIÓN</th>
+            <th>REPRESENTANTE LEGAL</th>
+            <th class="btn-actions text-center">ESTADO</th>
+            <th class="btn-actions col-blocked text-center">OPCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $contador_organizacion = 1;
+        foreach ($organizacions as $organizacion) : ?>
+            <?php //$key_show = Security::setKey($organizacion->id, 'show_organizacion'); 
+            ?>
+            <?php $key_upd = Security::setKey($organizacion->id, 'upd_organizacion'); ?>
+            <?php $key_del = Security::setKey($organizacion->id, 'del_organizacion'); ?>
+            <tr>
+                <td><?php echo $contador_organizacion; ?></td>
+                <td><?php echo $organizacion->nombre; ?></td>
+                <td><?php echo $organizacion->nombre_representante_legal; ?></td>
+                <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $organizacion->nivel, 'estado' => $organizacion->estado)); ?>
+                <td class="btn-actions">
+                    <?php View::partial(
+                        'opcion/ver',
+                        false,
+                        array(
+                            'elemento' => 'organizacion',
+                            "nombre" => $organizacion->nombre,
+                            "url_ver" => NULL,
+                            "url_editar" => "gestion_territorial/gestion_tcur/editar_organizacion/$key_upd/$key/$order/$page/",
+                            "url_eliminar" => "gestion_territorial/gestion_tcur/eliminar_organizacion/$organizacion->nombre/$obj_territorio->nombre/$key_del/$key/$order/$page/"
+                        )
+                    ); ?>
+                </td>
+                <!--                        <td class="btn-actions">
+        <?php //echo DwHtml::buttonTable('Ver organizacion', "gestion_territorial/gestion_tcur/ver_organizacion/$key_show/$key/", null, 'info', 'fa-search'); 
+        ?>
+        <?php echo DwHtml::buttonTable('Modificar organizacion', "gestion_territorial/gestion_tcur/editar_organizacion/$key_upd/$key/$order/$page/", null, 'warning', 'fa-edit'); ?>                            
+    </td>-->
+            </tr>
+            <?php $contador_organizacion++; ?>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<br>

@@ -1,0 +1,178 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('consejo', $consejo, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                 <?php echo DwForm::hidden('consejo.id', NULL, NULL) ?>
+                 <?php echo DwForm::hidden('consejo.territorio_id', NULL, NULL) ?>
+                 <?php echo DwForm::hidden('consejo.tipo_consejo_id', NULL, NULL) ?>
+                 <?php echo DwForm::text('consejo.nombre', array('class'=>'input-required'), NULL, 'Nombre del consejo'); ?>                 
+             </div>
+             <div class="col-md-6">
+                 <?php echo DwForm::text('consejo.sigla', array('class'=>''), NULL, 'Sigla del nombre del consejo'); ?>                
+             </div>
+         </div>
+    <div class="row">        
+        <div class="col-md-6">
+                 <?php echo DwForm::text('consejo.nombre_representante_legal', array('class'=>'input-required'), NULL, 'Nombre del representante legal'); ?>
+                 <?php //echo DwForm::dbSelect('consejo.mads_car_id', 'nombre', array('opcion/mads_car', 'getListadoMadsCarDBS', MadsCar::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Entidad que ejecuta la acción de seguimiento y control');  ?>
+             </div>       
+        <div class="col-md-3">
+            <?php echo DwForm::date('consejo.fecha_inicio_representante_legal', array('class'=>'input-required'), NULL, 'Representante legal desde que fecha'); ?>                        
+        </div>
+        <div class="col-md-3">
+                        <?php echo DwForm::select('consejo.frecuencia_asamblea', array(''=>'Seleccione', 'CADA AÑO'=>'CADA AÑO', 'CADA 2 AÑOS'=>'CADA 2 AÑOS', 'CADA 3 AÑOS O MAS'=>'CADA 3 AÑOS O MAS'), array('class'=>'input-required'), NULL, 'Frecuencia de la asamblea'); ?>
+                    </div>
+    </div>
+         <div class="row">             
+             <div class="col-md-6">
+                 <label for="panel_comite">Comités del consejo</label>
+                    <div id="panel_comite" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('comite','nombre',array('opcion/comite','getComiteDBS'), NULL, $comite, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+             </div>                
+             <div class="col-md-6">
+                 <?php echo DwForm::textarea('consejo.descripcion_junta_directiva', array('class'=>'input-required'), NULL, 'Descripción de la estructura de la junta directiva'); ?>
+             </div>           
+         </div>
+    <div class="row">                
+                <?php 
+                 if($tipo_consejo_id == 2){
+                 ?>
+                <div id="div_consejo_tiene_reglamento_interno" class="col-md-3">
+                <?php
+                     echo DwForm::select('consejo.tiene_reglamento_interno', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, '¿El consejo tiene un reglamento interno?');                      
+                 ?>
+                </div>
+                <div id="div_consejo_se_aplica_reglamento" class="col-md-3">
+                <?php
+                     echo DwForm::select('consejo.se_aplica_reglamento', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>''), NULL, '¿Se aplica el reglamento interno?');                      
+                 ?>
+                </div>
+                <div id="div_consejo_descripcion_aplicacion_reglamento" class="col-md-6">                
+                <?php 
+                    echo DwForm::textarea('consejo.descripcion_aplicacion_reglamento', array('class'=>''), NULL, 'Descripción de la aplicación del reglamento interno');                                           
+                 ?>
+                </div>
+                 <?php 
+                 }
+                 if($consejo->tipo_consejo_id == 1){
+                 ?>
+                <div class="col-md-6">
+                <?php
+                     echo DwForm::dbSelect('consejo.asociacion_consejo_comunitario_id', 'nombre', array('opcion/asociacion_consejo_comunitario', 'getListadoAsociacionConsejoComunitarioDBS', AsociacionConsejoComunitario::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Seleccione si el consejo pertenece a una Asociación de Consejos Comunitarios');  
+                     echo DwForm::hidden('consejo.pertenece_asociacion_consejo_comunitario', NULL, '');
+                 ?>
+                </div>
+                <?php                     
+                 }
+                 if($consejo->tipo_consejo_id == 3){
+                     echo DwForm::hidden('consejo.consejo_id', NULL, $consejo->consejo_id); 
+                     ?>                     
+                    <div class="col-md-12">
+                     <label for="panel_comunidad">Comunidades que pertenecen a este consejo comunitario local</label>
+                    <div id="panel_comunidad" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('comunidad','nombre',array('observatorio/comunidad','getComunidadesByTerritorioId',$consejo->territorio_id), NULL, $comunidad, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div>
+                     </div> 
+                     
+                 <?php }
+                 ?>
+                 
+                    
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">               
+    <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+   
+      <div id="panel_fuente" class="panel panel-default">
+          <div class="panel-body"> 
+             <?php View::partial('fuentes/editar', false, array('fuentes'=>$fuentes)); ?>   
+              </div> 
+      </div>                    
+ </div>   
+     </div>
+    
+    
+    
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar consejo'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('consejo.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $("#consejo_asociacion_consejo_comunitario_id").on('change', function(e) {
+            var data = $('#consejo_asociacion_consejo_comunitario_id').val();
+            if(data == '')
+            {
+                $('#consejo_pertenece_asociacion_consejo_comunitario').val('NO');
+            }
+            else
+            {
+                $('#consejo_pertenece_asociacion_consejo_comunitario').val('SI');
+            }            
+        });
+        
+        if($('#consejo_tiene_reglamento_interno').val() == 'NO')
+            {
+                $('#div_consejo_se_aplica_reglamento').hide();
+            }
+            if($('#consejo_se_aplica_reglamento').val() == 'NO')
+            {
+                $('#div_consejo_descripcion_aplicacion_reglamento').hide();
+            }
+        
+       
+        $("#consejo_tiene_reglamento_interno").on('change', function(e) {
+            var data = $('#consejo_tiene_reglamento_interno').val();
+            if(data == 'SI')
+            {
+                $('#div_consejo_se_aplica_reglamento').show();
+                $('#consejo_se_aplica_reglamento').focus();
+            }
+            else
+            {
+                $('#div_consejo_se_aplica_reglamento').hide();
+                $('#consejo_se_aplica_reglamento').val('');
+                $('#div_consejo_descripcion_aplicacion_reglamento').hide();
+                $('#consejo_descripcion_aplicacion_reglamento').val('');
+            }            
+        });
+        
+        $("#consejo_se_aplica_reglamento").on('change', function(e) {
+            var data = $('#consejo_se_aplica_reglamento').val();
+            if(data == 'SI')
+            {
+                $('#div_consejo_descripcion_aplicacion_reglamento').show();
+                $('#consejo_descripcion_aplicacion_reglamento').focus();
+            }
+            else
+            {               
+                $('#div_consejo_descripcion_aplicacion_reglamento').hide();
+                $('#consejo_descripcion_aplicacion_reglamento').val('');
+            }            
+        });
+    });
+</script>

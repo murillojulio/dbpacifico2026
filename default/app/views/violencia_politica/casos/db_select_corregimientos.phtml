@@ -1,0 +1,3 @@
+<?php DwForm::open() ?>
+<label for="caso_localidad_corregimiento">Corregimiento</label>
+<?php echo DwForm::dbSelectButton('caso.localidad_corregimiento', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $municipio_id, $tipo), NULL, array('onchange' => 'gestionSelectLocalidades(\'corregimiento\')'), $localidad_id, NULL, NULL, 'mostrarModalLocalidad(\'corregimiento\')', '+'); ?>   

@@ -1,0 +1,440 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('iniciativa_empresarial', $iniciativa_empresarial, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    <ul class="nav nav-tabs">
+        <li class="<?php if($recien_creado==0){echo 'active';}?>"><a data-toggle="tab" href="#informacion_general">Información general</a></li>
+        <li class="<?php if($recien_creado==1){echo 'active';}?>"><a data-toggle="tab" href="#danos">Daños al Territorio</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="informacion_general" class="tab-pane fade <?php if($recien_creado==0){echo 'in active';}?>">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <?php echo DwForm::text('iniciativa_empresarial.nombre', array('class' => ''), NULL, 'Nombre de la iniciativa empresarial'); ?>
+                </div>
+                <div class="col-md-3">
+                    <?php echo DwForm::hidden('iniciativa_empresarial.territorio_nombre', NULL, $territorio_nombre) ?>
+                    <?php echo DwForm::hidden('iniciativa_empresarial.id', NULL, NULL) ?>
+                    <?php echo DwForm::hidden('iniciativa_empresarial.territorio_id', NULL, NULL) ?>
+                    <?php echo DwForm::hidden('iniciativa_empresarial.afectacion_id', NULL, NULL) ?>
+                    <?php echo DwForm::dbSelect('iniciativa_empresarial.tipo_iniciativa_empresarial_id', 'nombre', array('opcion/tipo_iniciativa_empresarial', 'getListadoTipoIniciativaEmpresarialDBS', TipoIniciativaEmpresarial::ACTIVO), NULL, array('class' => ''), NULL, 'Tipo de iniciativa empresarial'); ?>
+                </div>
+
+                <div class="col-md-3">
+                    <?php echo DwForm::text('iniciativa_empresarial.cobertura_poblacion', array('class' => 'input-money '), NULL, 'Cobertura población vinculada a la iniciativa'); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_actividad_productiva">
+                        <h3 class="panel-title">Actividad productiva</h3>
+                    </label>
+                    <div id="panel_actividad_productiva" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php echo DwForm::dbSelect('iniciativa_empresarial.tipo_actividad_productiva_id', 'nombre', array('opcion/tipo_actividad_productiva', 'getListadoTipoActividadProductivaDBS', TipoActividadProductiva::ACTIVO), NULL, array('class' => ''), NULL, 'Tipo de actividad productiva'); ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="panel_alcance_iniciativa">Alcance de la actividad</label>
+                                    <div id="panel_alcance_iniciativa" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_local', '1', NULL, NULL, 'LOCAL'); ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_regional', '1', NULL, NULL, 'REGIONAL'); ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_nacional', '1', NULL, NULL, 'NACIONAL'); ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_internacional', '1', NULL, NULL, 'INTERNACIONAL'); ?>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::textarea('iniciativa_empresarial.descripcion_actividad_productiva', array('class' => ''), NULL, 'Descripción actividad productiva'); ?>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_gestion_recurso">
+                        <h3 class="panel-title">Gestión de recursos</h3>
+                    </label>
+                    <div id="panel_gestion_recurso" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_cooperacion_inter"></label>
+                                    <div id="panel_cooperacion_inter" class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cooperacion_inter', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), NULL, 'Cooperación internacional'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto" class="col-md-3">
+                                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cooperacion_inter_monto', array('class' => 'input-money '), NULL, 'Monto'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien" class="col-md-6">
+                                                    <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cooperacion_inter_quien', array('class' => ''), NULL, 'Quienes'); ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_cooperacion_nal"></label>
+                                    <div id="panel_cooperacion_nal" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cooperacion_nal', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), NULL, 'Cooperación nacional'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto" class="col-md-3">
+                                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cooperacion_nal_monto', array('class' => 'input-money '), NULL, 'Monto'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien" class="col-md-6">
+                                                    <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cooperacion_nal_quien', array('class' => ''), NULL, 'Quienes'); ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_cooperacion_cog"></label>
+                                    <div id="panel_cooperacion_cog" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cogestionada', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), NULL, 'Cogestionada'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cogestionada_monto" class="col-md-3">
+                                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cogestionada_monto', array('class' => 'input-money '), NULL, 'Monto'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_cogestionada_quien" class="col-md-6">
+                                                    <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cogestionada_quien', array('class' => ''), NULL, 'Quienes'); ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_cooperacion_auto"></label>
+                                    <div id="panel_cooperacion_auto" class="panel panel-default">
+                                        <div class="panel-body">
+
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_autogestionada', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), NULL, 'Autogestionada'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_autogestionada_monto" class="col-md-3">
+                                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_autogestionada_monto', array('class' => 'input-money '), NULL, 'Monto'); ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_cooperacion_ali"></label>
+                                    <div id="panel_cooperacion_ali" class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_alianza', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), NULL, 'Alianza'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_alianza_monto" class="col-md-3">
+                                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_alianza_monto', array('class' => 'input-money '), NULL, 'Monto'); ?>
+                                                </div>
+                                                <div id="div_iniciativa_empresarial_ges_rec_alianza_quien" class="col-md-6">
+                                                    <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_alianza_quien', array('class' => ''), NULL, 'Quienes'); ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_modelo_administracion"></label>
+                    <div id="panel_modelo_administracion" class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="row">
+
+
+                                <div class="col-md-3">
+                                    <?php echo DwForm::select(
+                                        'iniciativa_empresarial.modelo_administracion',
+                                        array('' => 'Seleccione', 'EXTERNO' => 'EXTERNO', 'COMPARTIDO' => 'COMPARTIDO', 'AUTONÓMO' => 'AUTÓNOMO'),
+                                        array('class' => ''),
+                                        NULL,
+                                        'Modelo de administración'
+                                    ); ?>
+                                </div>
+                                <div id="div_iniciativa_empresarial_modelo_administracion_quien" class="col-md-9">
+                                    <?php echo DwForm::textarea('iniciativa_empresarial.modelo_administracion_quien', array('class' => ''), NULL, 'Quiénes'); ?>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="panel_fuente">
+                            <h3 class="panel-title">Fuente(s) de la información</h3>
+                        </label>
+
+                        <div id="panel_fuente" class="panel panel-default">
+                            <div class="panel-body">
+                                <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::send('Actualizar iniciativa_empresarial'); ?>
+                    <?php echo DwForm::cancel($url_redir_back); ?>
+                    <?php //echo DwForm::focus('iniciativa_empresarial.nombre'); 
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div id="danos" class="tab-pane fade <?php if($recien_creado==1){echo 'in active';}?>">
+        <?php View::partial(
+                            'danos/editar',
+                            false,
+                            array(
+                                'AfectacionDanoTerritorio' => $AfectacionDanoTerritorio,
+                                'nombre_tabla' => 'iniciativa_empresarial',
+                                'afectacion_id' => '',
+                                'territorio_id' => $iniciativa_empresarial->territorio_id
+                            )
+                        );
+                        ?>
+        </div>
+    </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').hide();
+        $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').hide();
+        $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').hide();
+        $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').hide();
+        $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').hide();
+        $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').hide();
+        $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').hide();
+        $('#div_iniciativa_empresarial_ges_rec_alianza_monto').hide();
+        $('#div_iniciativa_empresarial_ges_rec_alianza_quien').hide();
+        $('#div_iniciativa_empresarial_modelo_administracion_quien').hide();
+       var data = $('#iniciativa_empresarial_ges_rec_cooperacion_inter').val();
+        if (data == 'SI') {
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').show();
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').show();
+        } else {
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').hide();
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').hide();
+        }
+
+
+
+        var data = $('#iniciativa_empresarial_ges_rec_cooperacion_nal').val();
+        if (data == 'SI') {
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').show();
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').show();
+        } else {
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').hide();
+            $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').hide();
+        }
+
+        var data = $('#iniciativa_empresarial_ges_rec_cogestionada').val();
+        if (data == 'SI') {
+            $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').show();
+            $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').show();
+        } else {
+            $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').hide();
+            $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').hide();
+        }
+
+        var data = $('#iniciativa_empresarial_ges_rec_autogestionada').val();
+        if (data == 'SI') {
+            $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').show();
+        } else {
+            $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').hide();
+        }
+
+
+        var data = $('#iniciativa_empresarial_ges_rec_alianza').val();
+        if (data == 'SI') {
+            $('#div_iniciativa_empresarial_ges_rec_alianza_monto').show();
+            $('#div_iniciativa_empresarial_ges_rec_alianza_quien').show();
+        } else {
+            $('#div_iniciativa_empresarial_ges_rec_alianza_monto').hide();
+            $('#div_iniciativa_empresarial_ges_rec_alianza_quien').hide();
+            $('#iniciativa_empresarial_ges_rec_alianza_quien').val('');
+        }
+
+        var data = $('#iniciativa_empresarial_modelo_administracion').val();
+        if (data == 'EXTERNO' || data == 'COMPARTIDO') {
+            $('#div_iniciativa_empresarial_modelo_administracion_quien').show();
+        } else {
+            $('#div_iniciativa_empresarial_modelo_administracion_quien').hide();
+        }
+
+
+
+
+        $("#iniciativa_empresarial_ges_rec_cooperacion_inter").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cooperacion_inter').val();
+            if (data == 'SI') {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').focus();
+            } else {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_quien').val('');
+            }
+        });
+
+        $("#iniciativa_empresarial_ges_rec_cooperacion_nal").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cooperacion_nal').val();
+            if (data == 'SI') {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').focus();
+            } else {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_quien').val('');
+            }
+        });
+
+        $("#iniciativa_empresarial_ges_rec_cogestionada").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cogestionada').val();
+            if (data == 'SI') {
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').focus();
+            } else {
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_quien').val('');
+            }
+        });
+
+        $("#iniciativa_empresarial_ges_rec_autogestionada").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_autogestionada').val();
+            if (data == 'SI') {
+                $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').show();
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').val('');
+                //$('#div_iniciativa_empresarial_ges_rec_autogestionada_quien').show();
+                //$('#iniciativa_empresarial_ges_rec_autogestionada_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').focus();
+            } else {
+                $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').val('');
+                //$('#div_iniciativa_empresarial_ges_rec_autogestionada_quien').hide();
+                //$('#iniciativa_empresarial_ges_rec_autogestionada_quien').val('');                
+            }
+        });
+
+        $("#iniciativa_empresarial_ges_rec_alianza").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_alianza').val();
+            if (data == 'SI') {
+                $('#div_iniciativa_empresarial_ges_rec_alianza_monto').show();
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_alianza_quien').show();
+                $('#iniciativa_empresarial_ges_rec_alianza_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').focus();
+            } else {
+                $('#div_iniciativa_empresarial_ges_rec_alianza_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_alianza_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_alianza_quien').val('');
+            }
+        });
+        $("#iniciativa_empresarial_modelo_administracion").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_modelo_administracion').val();
+            if (data == 'EXTERNO' || data == 'COMPARTIDO') {
+                $('#div_iniciativa_empresarial_modelo_administracion_quien').show();
+                $('#iniciativa_empresarial_modelo_administracion_quien').val('');
+                $('#iniciativa_empresarial_modelo_administracion_quien').focus();
+            } else {
+                $('#div_iniciativa_empresarial_modelo_administracion_quien').hide();
+                $('#iniciativa_empresarial_modelo_administracion_quien').val('');
+            }
+        });
+    });
+</script>

@@ -1,0 +1,46 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">                        
+                        <?php echo DwForm::text('subsidio.nombre', array('class'=>'input-readonly'), $obj_subsidio->nombre, 'Nombre del programa social.'); ?>
+                    </div>                
+                    <div class="col-md-6">
+                        <?php echo DwForm::text('subsidio.consulta_previa', array('class'=>'input-readonly'), $obj_subsidio->consulta_previa, '¿Son un compromiso de la Consulta Previa?'); ?>
+                        
+                    </div>           
+                </div>
+    
+    
+    <div class="row">
+        <div class="col-md-6">                
+           <?php echo DwForm::dbSelect('subsidio.tipo_subsidio_id', 'nombre', array('opcion/tipo_subsidio', 'getListadoTipoSubsidioDBS', TipoSubsidio::ACTIVO), NULL, array('class'=>'input-readonly'), $obj_subsidio->tipo_subsidio_id, 'Tipo de subsidio'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo DwForm::textarea('subsidio.descripcion', array('class'=>'input-readonly'), $obj_subsidio->descripcion, 'Descripción del subsidio'); ?>
+        </div>
+    </div>
+    
+     <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::number('subsidio.monto', array('class'=>'input-lower input-integer input-readonly'), $obj_subsidio->monto, 'Monto del subsidio'); ?>            
+            </div>
+                      
+        </div>    
+
+       <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

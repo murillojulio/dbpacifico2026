@@ -1,0 +1,28 @@
+<?php View::flash(); ?>
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>    
+     <div class="row">
+        <div class="col-md-12">       
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/1", 'Ambiental', array('class' => 'btn-success btn-lg','style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+            </div> 
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/2", 'Espiritual', array('class' => 'btn-success btn-lg', 'style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+            </div>
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/3", 'Uso territorio', array('class' => 'btn-success btn-lg', 'style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+           </div>       
+        </div>
+        <div class="col-md-12">       
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/4", 'Organizacional', array('class' => 'btn-success btn-lg', 'style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+            </div> 
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/5", 'Relaciones Sociales', array('class' => 'btn-success btn-lg', 'style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+            </div>
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/impactos/listar/6", 'Control territorio', array('class' => 'btn-success btn-lg', 'style'=>'margin:10px; width:100%; height:80px;'), '', APP_AJAX); ?>
+           </div>    
+        </div>
+    </div>
+</div>

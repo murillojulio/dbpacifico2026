@@ -1,0 +1,49 @@
+<?php View::flash(); ?>
+<div id="div_gestion_victima">
+    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>NUM</th>
+                <th>NOMBRE</th>                    
+                <th>EDAD</th>
+                <th>GENERO</th>   
+                <th>PERFIL</th>   
+                <th class="btn-actions col-blocked text-center">ESTADO</th>
+                <th class="btn-actions col-blocked text-center">OPCIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $contador_victima = 1;
+            foreach($victimas as $victima): ?>
+
+                <?php //$key_show = Security::setKey($victima->id, 'show_victima'); ?>
+                <?php $key_upd = Security::setKey($victima->id, 'upd_victima'); ?>                    
+                <?php $key_del = Security::setKey($victima->id, 'del_victima'); ?>                    
+                <tr>
+                    <td><?php echo $contador_victima; ?></td>
+                    <td><?php echo $victima->nombre.' '.$victima->apellido; ?></td>
+                    <td><?php echo ($victima->edad === '') ? 'Sin información' : $victima->edad; ?></td>
+                    <td><?php try { echo $victima->getGenero()->nombre; } catch (Exception $exc) {} ?></td>
+                    <td><?php try { foreach($victima->getVictimaCaracterizacion2() as $perfil):
+                                        echo $perfil->getCaracterizacion2()->nombre.' - ';
+                                    endforeach; } catch (Exception $exc) {} ?></td>
+                    <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$victima->nivel, 'estado'=>$victima->estado)); ?>
+<!--                    <td class="btn-actions">
+                        <?php /* View::partial('opcion/ver', false, 
+                                array('elemento'=>'víctima',
+                                    "nombre"=>$victima->nombre,
+                                    'url_ver'=>NULL,
+                                    'url_editar'=>"violencia_politica/casos/editar_victima/$key_upd/",
+                                    "url_eliminar"=>"violencia_politica/casos/eliminar_victima/$victima->nombre/$caso->titulo/$key_del/$caso->id/")); */ ?>                      
+                    </td>                                        -->
+                    <td class="btn-actions">                                                
+                        <button id="btn-editar-victima-<?php echo $victima->id?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="cargarModalEditarVictima(<?php echo $victima->id; ?>)"></button>
+                        <button id="btn-eliminar-victima-<?php echo $victima->id?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setNombreEliminarVictima(<?php echo $victima->id.",'".$victima->nombre."'"; ?>)" data-toggle="modal" data-target="#modal_eliminar_victima" title="Eliminar"></button>
+                    </td>
+                </tr>
+                <?php $contador_victima++; ?>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

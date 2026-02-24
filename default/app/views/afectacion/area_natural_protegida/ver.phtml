@@ -1,0 +1,431 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    
+     
+    <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="<?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Traslape</a></li>              
+        <li class="<?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Afectación del área natural protegida</a></li>  
+        <li class="<?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Fuente(s) de la información</a></li>         
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Traslape</a></li>                
+        <li class="tab-pane <?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Afectación del área natural protegida</a></li>  
+        <li class="tab-pane <?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Fuente(s) de la información</a></li>         
+    </ul>
+    
+    
+    <div class="tab-content">
+        <div class="tab-pane <?php echo $tab_1_active; ?>" id="tab1">
+            <div class="row">
+                    <div class="col-md-6">
+       <?php echo DwForm::hidden('area_natural_protegida.id', NULL, NULL) ?>
+       <?php echo DwForm::hidden('area_natural_protegida.afectacion_id', NULL, NULL) ?>
+        <?php echo DwForm::text('area_natural_protegida.nombre', array('class'=>'input-readonly'), NULL, 'Nombre área natural protegida'); ?>
+       
+               </div>
+                 <div class="col-md-4">
+                        <?php echo DwForm::dbSelect('area_natural_protegida.tipo_area_natural_protegida_id', 'nombre', array('opcion/tipo_area_natural_protegida', 'getListadoTipoAreaNaturalProtegidaDBS'), NULL, array('class'=>'input-readonly'), NULL, 'Tipo área natural protegida'); ?>          
+                    </div> 
+                 <div class="col-md-2">
+                            <label for="area">Área<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input value="<?php echo number_format($area_natural_protegida->area, 2, '.', ','); ?>" id="area" name="area_natural_protegida[area]" type="text" class="form-control formato_punto_coma" readonly="" data-invalid="">                                          
+                                            <div class="input-group-addon">km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                        </div> 
+                    </div>
+                     <div class="row"> 
+                         <div class="col-md-3" id="div_departamento"> 
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>'input-readonly'), $ubicacion->departamento_id, 'Departamento'); ?>                           
+                        </div>
+                        <div class="col-md-3" id="div_municipio">                    
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento', $ubicacion->departamento_id), NULL, array('class' => 'input-readonly'), $ubicacion->municipio_id, 'Municipio'); ?>                        
+                        </div>
+                           <div class="col-md-6">
+                        <?php echo DwForm::text('area_natural_protegida.resolucion', array('class'=>'input-readonly'), NULL, 'Resolución de creación'); ?>
+                    </div>  
+                          
+                      </div> 
+             <div class="row">
+                                    <div class="col-md-4">  
+                                        <?php echo DwForm::select('area_natural_protegida.consecion_turistica', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿Conseción turística?'); ?>
+                                    </div>
+                                </div>
+            <div id="div_info_empresa">
+                                     <div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_empresa">Empresa propietaria de la coseción turistica</label>
+                            <div id="panel_empresa" class="panel panel-default">
+                                <div class="panel-body">
+                                  <div class="row">
+                                      <div class="col-md-6">
+                        <?php echo DwForm::text('area_natural_protegida.nombre_empresa', array('class'=>'input-readonly'), NULL, 'Nombre de la empresa'); ?>
+                    </div>
+                                      <div class="col-md-3">
+                        <?php echo DwForm::text('area_natural_protegida.representante_empresa', array('class'=>'input-readonly'), NULL, 'Nombre del representante legal'); ?>
+                    </div>       
+                                      <div class="col-md-3">
+                        <?php echo DwForm::text('area_natural_protegida.sede_principal', array('class'=>'input-readonly'), NULL, 'Sede principal'); ?>
+                    </div>           
+                                    
+                                  </div>  
+                                    <div class="row">                                                                 
+                                        <div class="col-md-6">  
+                         <?php echo DwForm::select('area_natural_protegida.es_filial_matriz', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa es filial de una casa matriz?:'); ?>
+                    </div>  
+                                        <div id="div_area_natural_protegida_nombre_filial_matriz" class="col-md-6">
+                        <?php echo DwForm::text('area_natural_protegida.nombre_filial_matriz', array('class'=>'input-readonly'), NULL, 'Nombre de la casa matriz'); ?>
+                    </div>
+                                    
+                                  </div> 
+                                    <div class="row">                                                                 
+                                        <div class="col-md-6">  
+                         <?php echo DwForm::select('area_natural_protegida.accionista_nacional', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa tiene accionistas Nacionales?:'); ?>
+                    </div>  
+                                        <div class="col-md-6">
+                        <?php echo DwForm::select('area_natural_protegida.accionista_extranjero', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa tiene accionistas Extranjeros?:'); ?>
+                    </div>
+                                    
+                                  </div> 
+                                    <div class="row">                                                                 
+                                        <div class="col-md-6">  
+                         <?php echo DwForm::select('area_natural_protegida.otro_sitio_colombia', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa opera en otro sitio en Colombia?:'); ?>
+                    </div>  
+                                        <div class="col-md-6">
+                        <?php echo DwForm::select('area_natural_protegida.otro_sitio_extranjero', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa opera en otro sitio en el Extranjero?:'); ?>
+                    </div>
+                                    
+                                  </div> 
+                                    
+                                    <div class="row">
+                    <div class="col-md-6">                        
+                        <?php echo DwForm::select('area_natural_protegida.otra_actividad', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿La empresa realiza otras actividades?'); ?>
+                    </div>                       
+                                        <div id="div_area_natural_protegida_otra_actividad_cual" class="col-md-6">
+                         <?php echo DwForm::textarea('area_natural_protegida.otra_actividad_cual', array('class'=>'input-lower', 'readonly'=>'readonly'), NULL, 'Cuáles actividades'); ?>
+                    </div> 
+                    </div> 
+            </div></div></div>
+                                </div>            
+            
+            </div>           
+            <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+        </div>
+                        
+
+         <!-- Modal Borrar ubicacion -->
+<div class="modal fade" id="myModalDeleteTerritorioCN" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Eliminar territorio</h4>
+      </div>
+      <div class="modal-body">
+          ¿Esta seguro que desea eliminar este territorio de la lista de conflicto de uso?       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button id="btn_borrar_territorio_cn" type="button" class="btn btn-primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+         
+          <!-- Modal Borrar ubicacion -->
+<div class="modal fade" id="myModalDeleteTerritorioCI" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Eliminar territorio</h4>
+      </div>
+      <div class="modal-body">
+          ¿Esta seguro que desea eliminar este territorio de la lista de conflicto de uso?       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button id="btn_borrar_territorio_ci" type="button" class="btn btn-primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+        
+        <!--      //////////////////////////////////  SEGUNDA PESTAÑA-->
+
+
+
+<div class="tab-pane <?php echo $tab_2_active; ?>" id="tab2">
+     
+     <div class="row">
+                                    <div class="col-md-4">  
+                                        <?php echo DwForm::select('area_natural_protegida.traslape', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿Esta área natural protegida tiene traslape con territorios?'); ?>
+                                    </div>
+                                </div>
+                                <div id="div_traslape_no" class="row">
+                                     <div class="col-md-6">
+                                        <?php echo DwForm::textarea('area_natural_protegida.plan_de_manejo', array('class'=>'input-lower'), NULL, 'Plan de manejo'); ?>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <?php echo DwForm::textarea('area_natural_protegida.participantes', array('class'=>'input-lower'), NULL, 'Participantes'); ?>
+                                    </div>
+                                </div>
+      <div id="div_traslape_si" class="row">
+          <div class="col-md-12">
+          <label for="panel_conflicto">Conflicto de uso</label>
+                <div id="panel_conflicto" class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">                            
+                            <div class="col-md-4">  
+                                <?php echo DwForm::select('area_natural_protegida.territorio_afro', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿Conflicto de uso con territorios de comunidades negras?'); ?>
+                            </div>
+                            <div id="div_conflicto_afro">
+                            <div class="col-md-8">  
+                               
+                                <div id="div_territorios_afro" class="row">
+                                    <?php echo DwForm::hidden('id_a_borrar_territorio_cn', NULL, '') ?>
+                                    <div class="col-md-12">                                        
+             <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>TERRITORIOS COLECTIVOS COMUNIDADES NEGRAS EN CONFLICTO DE USO</th>                                      
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                 
+                $contador_conflicto_uso_cn = 1;
+                foreach($conflicto_usos_cn as $conflicto_uso_cn):                  
+                    
+                        ?>
+                        <tr>   
+                        <td><?php echo $conflicto_uso_cn->getTerritorio()->nombre; ?></td>
+                       
+                    </tr>
+                                  
+                    <?php $contador_conflicto_uso_cn++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    <?php echo DwForm::textarea('area_natural_protegida.acuerdo_uso_manejo', array('class'=>'input-lower', 'readonly'=>'readonly'), NULL, 'Acuerdos de uso y manejo - territorios de comunidades negras'); ?>
+                                        </div>                          
+                                    </div>                          
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">&nbsp;</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">  
+                                <?php echo DwForm::select('area_natural_protegida.territorio_indigena', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-readonly'), NULL, '¿Conflicto de uso con territorios de comunidades indigenas?'); ?>
+                            </div>
+                            <div id="div_conflicto_indigena">
+                            <div class="col-md-8">
+                                  <div id="div_territorios_indigena" class="row">  
+                                    <?php echo DwForm::hidden('id_a_borrar_territorio_ci', NULL, '') ?>
+                                    <div class="col-md-12">                                        
+             <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>TERRITORIOS COLECTIVOS RESGUARDOS INDIGENAS EN CONFLICTO DE USO</th>                                                          
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                 
+                $contador_conflicto_uso_ci = 1;
+                foreach($conflicto_usos_ci as $conflicto_uso_ci):                  
+                    
+                        ?>
+                        <tr>   
+                        <td><?php echo $conflicto_uso_ci->getTerritorio()->nombre; ?></td>
+                       
+                    </tr>
+                                  
+                    <?php $contador_conflicto_uso_ci++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                <?php echo DwForm::textarea('area_natural_protegida.regimen_especial_manejo', array('class'=>'input-lower', 'readonly'=>'readonly'), NULL, 'Régimen especial de manejo - territorios de comunidades indigenas'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+     <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+           
+    </div> 
+
+<!--      //////////////////////////////////  TERCERA PESTAÑA-->
+        <div class="tab-pane <?php echo $tab_3_active; ?>" id="tab3">
+             <div class="row">
+                 <div class="col-md-12">
+                      
+                   <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">TIPO AFECTACION</th>
+                    <th class="col-hidden" >DESCRIPCION</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php 
+                try {   
+                $counter_aanp = 1;
+                foreach($afectacion_area_natural_protegidas as $afectacion_area_natural_protegida): ?>
+                    <?php $key_show = Security::setKey($afectacion_area_natural_protegida->id, 'show_area_natural_protegida'); ?>
+                    <?php $key_upd = Security::setKey($afectacion_area_natural_protegida->id, 'upd_area_natural_protegida'); ?>
+                    <?php $key_inac = Security::setKey($afectacion_area_natural_protegida->id, 'inactivar_area_natural_protegida'); ?>
+                    <?php $key_reac = Security::setKey($afectacion_area_natural_protegida->id, 'reactivar_area_natural_protegida'); ?>
+                    <tr>
+                        <td><?php echo $counter_aanp; ?></td>
+                        <td><?php echo $afectacion_area_natural_protegida->getTipoAfectacionAreaNaturalProtegida()->nombre; ?></td>
+                        <td><?php echo $afectacion_area_natural_protegida->descripcion; ?></td>                        
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver afectación', "afectacion/area_natural_protegida/ver_afectacion/$afectacion_area_natural_protegida->id/$nombre/", null, 'info', 'fa-search'); ?>                          
+                           
+                        </td>
+                    </tr>
+                    <?php $counter_aanp++; ?>
+                <?php endforeach; 
+                
+                
+
+} catch (Exception $e) {
+    
+}
+                ?>
+            </tbody>
+        </table>
+                 </div>
+             </div>
+             <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+    </div> 
+
+<!--      //////////////////////////////////  CUARTA PESTAÑA-->
+        <div class="tab-pane <?php echo $tab_4_active; ?>" id="tab4">
+             <div class="row">
+                 <div class="col-md-12">
+                     <?php View::partial('fuentes/ver', false, array('fuentes'=>$fuentes)); ?>  
+                 </div>
+             </div>
+             <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+    </div> 
+    </div>
+     <?php echo DwForm::close(); ?> 
+</div>
+    
+    
+    <script type='text/javascript'>
+$("#div_traslape_no").hide();
+$("#div_traslape_si").hide();
+$("#div_conflicto_afro").hide();
+$("#div_conflicto_indigena").hide();
+
+
+if($("#area_natural_protegida_consecion_turistica").val() == 'SI')
+{
+    $("#div_info_empresa").show();
+}
+if($("#area_natural_protegida_consecion_turistica").val() == 'NO')
+{
+    $("#div_info_empresa").hide();
+}
+if($("#area_natural_protegida_traslape").val() == 'SI')
+{
+    $("#div_traslape_si").show();
+}
+if($("#area_natural_protegida_territorio_afro").val() == 'SI')
+{
+    $("#div_conflicto_afro").show();
+}
+if($("#area_natural_protegida_territorio_indigena").val() == 'SI')
+{
+    $("#div_conflicto_indigena").show();
+}
+
+
+         if($('#area_natural_protegida_es_filial_matriz').val() == 'SI')
+        { $('#div_area_natural_protegida_nombre_filial_matriz').show();
+        }else{$('#div_area_natural_protegida_nombre_filial_matriz').hide();}
+              
+        
+        if($('#area_natural_protegida_otra_actividad').val() == 'SI')
+        { $('#div_area_natural_protegida_otra_actividad_cual').show();
+        }else{$('#div_area_natural_protegida_otra_actividad_cual').hide();}
+              
+        
+ $(".formato_punto_coma").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 2,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+         
+$("#caso_departamento_id").on('change', function(e) 
+{                 
+            var departamento_id = $('#caso_departamento_id').val();            
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>"+departamento_id+"/caso.municipio_id/Municipio/si/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_readonly=si",
+            }).done(function(data) {                
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();                
+            }).fail(function() {
+                alert("error");
+            });
+});
+</script>
+</div>

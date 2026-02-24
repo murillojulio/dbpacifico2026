@@ -1,0 +1,198 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                 <?php echo DwForm::hidden('cabildo.territorio_id', NULL, $territorio_id) ?>
+                 <?php echo DwForm::hidden('cabildo.tipo_cabildo_id', NULL, $tipo_cabildo_id) ?>
+                 <?php echo DwForm::text('cabildo.nombre', array('class'=>'input-required'), NULL, 'Nombre del cabildo'); ?>                  
+             </div>  
+             <?php
+                 if($tipo_cabildo_id == 3)
+                 { ?>
+                <div class="col-md-6">
+              <?php
+                     echo DwForm::text('cabildo.nombre_cabildo_mayor', array('class'=>'input-readonly'), $cabildo_mayor_nombre, 'Pertenece al cabildo mayor');                 
+                ?>
+                </div>
+                <?php
+                 }
+                 ?>
+             
+             
+                  <?php 
+    if($tipo_cabildo_id == 2){
+        ?>
+         <div class="col-md-3">
+              <?php echo DwForm::text('cabildo.cobertura_resguardo', array('class'=>'input-money'), NULL, 'Cobertura Resguardos'); ?>                    
+        </div>
+         <div class="col-md-3">
+              <?php echo DwForm::text('cabildo.cantidad_cabildo_local', array('class'=>'input-money'), NULL, 'Número de cabildos locales'); ?>                    
+        </div>            
+            <?php
+        
+    }
+    ?>
+        </div>
+   
+    <div class="row">        
+        <div class="col-md-6">
+                  <?php
+                     echo DwForm::dbSelect('cabildo.asociacion_cabildo_zonal_id', 'nombre', array('opcion/asociacion_cabildo_zonal', 'getListadoAsociacionCabildoZonalDBS', AsociacionCabildoZonal::ACTIVO), NULL, array('class'=>''), NULL, 'Seleccione si el cabildo pertenece a una Asociación de Cabildos Zonal');  
+                     echo DwForm::hidden('cabildo.pertenece_asociacion_cabildo_zonal', NULL, '');
+                 ?>
+             </div>
+        <div class="col-md-6">
+             <?php
+                     echo DwForm::dbSelect('cabildo.asociacion_cabildo_regional_id', 'nombre', array('opcion/asociacion_cabildo_regional', 'getListadoAsociacionCabildoRegionalDBS', AsociacionCabildoRegional::ACTIVO), NULL, array('class'=>''), NULL, 'Seleccione si el cabildo pertenece a una Asociación de Cabildos Regional');  
+                     echo DwForm::hidden('cabildo.pertenece_asociacion_cabildo_regional', NULL, '');
+                 ?>
+        </div>        
+    </div>
+     <?php 
+    if($tipo_cabildo_id == 1 || $tipo_cabildo_id == 3){
+        ?>
+         <div class="row">             
+             <div class="col-md-12">
+                 <label for="panel_comite">Autoridades tradicionales</label>
+                    <div id="panel_comite" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php
+                                $tipo_autoridad_tradicional = new TipoAutoridadTradicional();
+                                $tats = $tipo_autoridad_tradicional->getListadoTipoAutoridadTradicionalDBS();
+                                
+                                $autoridad_tradicional = new AutoridadTradicional();
+                                 
+                                foreach ($tats as $tat)
+                                {     
+                                    $ats = $autoridad_tradicional->getAutoridadTradicionalByTipoAutoridadTradicionalIdDBS($tat->id);
+                                    echo '<div class="row">
+                                        <div class="col-md-12">
+                                            <label for="panel_comunidad">'.$tat->nombre.'</label>
+                                           <div id="panel_comunidad" class="panel panel-default">
+                                               <div class="panel-body">
+                                               <div class="row">';
+                                    foreach ($ats as $at)
+                                    {
+                                        echo '<div class="col-md-3">';
+                                        echo DwForm::number('autoridad_tradicional.'.$at->id, array('class'=>'input-money'), NULL, $at->nombre.' (Cantidad)');
+                                        echo '</div>';
+                                    }
+                                                       
+                                    echo '</div>
+                                    </div>
+                                    </div>
+                                    </div></div>';
+                                }
+                                ?>                      
+                            </div>
+                        </div>
+                    </div> 
+             </div>                
+                       
+         </div>
+    <?php
+    }
+    ?>
+    <br>
+     <div class="row">
+    <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+                
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/agregar', false, NULL); ?>
+                    </div>                    
+                </div>
+            </div> 
+     </div>
+    
+    <?php 
+    if($tipo_cabildo_id == 3){
+        echo DwForm::hidden('cabildo.cabildo_id', NULL, $cabildo_id); 
+    }
+    ?>
+    
+    
+    
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar cabildo'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('cabildo.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $("#cabildo_asociacion_cabildo_zonal_id").on('change', function(e) {
+            var data = $('#cabildo_asociacion_cabildo_zonal_id').val();
+            if(data == '')
+            {
+                $('#cabildo_pertenece_asociacion_cabildo_zonal').val('NO');
+            }
+            else
+            {
+                $('#cabildo_pertenece_asociacion_cabildo_zonal').val('SI');
+            }            
+        });
+        
+         $("#cabildo_asociacion_cabildo_regional_id").on('change', function(e) {
+            var data = $('#cabildo_asociacion_cabildo_regional_id').val();
+            if(data == '')
+            {
+                $('#cabildo_pertenece_asociacion_cabildo_regional').val('NO');
+            }
+            else
+            {
+                $('#cabildo_pertenece_asociacion_cabildo_regional').val('SI');
+            }            
+        });
+        
+        
+        $('#div_cabildo_se_aplica_reglamento').hide();
+        $('#div_cabildo_descripcion_aplicacion_reglamento').hide();
+        $("#cabildo_tiene_reglamento_interno").on('change', function(e) {
+            var data = $('#cabildo_tiene_reglamento_interno').val();
+            if(data == 'SI')
+            {
+                $('#div_cabildo_se_aplica_reglamento').show();
+                $('#cabildo_se_aplica_reglamento').focus();
+            }
+            else
+            {
+                $('#div_cabildo_se_aplica_reglamento').hide();
+                $('#cabildo_se_aplica_reglamento').val('');
+                $('#div_cabildo_descripcion_aplicacion_reglamento').hide();
+                $('#cabildo_descripcion_aplicacion_reglamento').val('');
+            }            
+        });
+        
+        $("#cabildo_se_aplica_reglamento").on('change', function(e) {
+            var data = $('#cabildo_se_aplica_reglamento').val();
+            if(data == 'SI')
+            {
+                $('#div_cabildo_descripcion_aplicacion_reglamento').show();
+                $('#cabildo_descripcion_aplicacion_reglamento').focus();
+            }
+            else
+            {               
+                $('#div_cabildo_descripcion_aplicacion_reglamento').hide();
+                $('#cabildo_descripcion_aplicacion_reglamento').val('');
+            }            
+        });
+        
+        
+    });
+</script>
+

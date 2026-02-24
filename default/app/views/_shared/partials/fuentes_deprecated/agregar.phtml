@@ -1,0 +1,112 @@
+ 
+                         
+                             <input id="fuente_cantidad" name="fuente[cantidad]" type="hidden" value="1">
+                             <div class="row" >
+                                 <div class="col-md-2" >
+                                     <button onclick="addFuenteInfo()" id="btnAdd" type="button" class="btn btn-success btn-xs">
+                                       <i class="btn-icon-only fa fa-plus"></i> 
+                                      </button>
+                                     <button onclick="removeFuenteInfo()" id="btnDel" type="button" class="btn btn-danger btn-xs">
+                                        <i class="btn-icon-only fa fa-minus"></i>
+                                      </button>                              
+                                 </div>                                 
+                             </div>
+                            
+                             
+                      <div class="fuente_1">
+                         <div class="row">                                
+                          <div  class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha1', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre1', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                        </div>
+                    </div>
+                            
+                             
+                         <div class="fuente_2">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha2', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre2', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                             </div>
+                               
+                         <div class="fuente_3">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha3', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre3', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                         </div>                                
+                                     
+                          <div class="fuente_4">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha4', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre4', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                         </div>
+                                         
+ 
+    <div>
+       
+    </div> 
+                             <div id="wrapper">
+			<a id="agregarCampo" class="btn btn-info" href="#">Agregar Campo</a>
+			<div id="contenedor">
+				<div class="added">
+					<input type="date" name="mitexto[]" id="campo_1" placeholder="Texto 1"/><a href="#" class="eliminar">&times;</a>
+				</div>
+			</div>
+		</div>
+                         
+    
+                               
+            <script type="text/javascript">
+        $(document).ready(function() {
+
+				var MaxInputs       = 8; //maximum input boxes allowed
+				var contenedor   	= $("#contenedor"); //Input boxes wrapper ID
+				var AddButton       = $("#agregarCampo"); //Add button ID
+
+				//var x = contenedor.length; //initlal text box count
+				var x = $("#contenedor div").length + 1;
+				var FieldCount = x-1; //to keep track of text box added
+
+				$(AddButton).click(function (e)  //on add input button click
+				{
+						if(x <= MaxInputs) //max input box allowed
+						{
+							FieldCount++; //text box added increment
+							//add input box 
+							$(contenedor).append('<div class="added"><input type="date" name="mitexto[]" id="campo_'+ FieldCount +'" placeholder="Texto '+ FieldCount +'"/><a href="#" class="eliminar">&times;</a></div>');
+							$(contenedor).append('<label for="fuente_fecha2">Fecha de la fuente<span class="req">*</span></label><div class="input-group date datepicker" id="dp_fuente_fecha2"><input id="fuente_fecha2" name="fuente[fecha2]" value="" class="js-datepicker input-date mask-date form-control input-required" required="required" type="text"><span class="input-group-addon"><i class="fa fa-calendar"></i></span></div><p class="help-block"> <small class="help-error"></small></p>');
+                                                        x++; //text box increment
+						}
+				return false;
+				});
+
+				$("body").on("click",".eliminar", function(e){ //user click on remove text
+						if( x > 1 ) {
+								$(this).parent('div').remove(); //remove text box
+								x--; //decrement textbox
+						}
+				return false;
+				});
+
+			});
+       
+    </script>
+    
+    

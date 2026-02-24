@@ -1,0 +1,144 @@
+<?php View::flash(); ?>
+<?php View::process($page_module, $page_title, $set_title); ?>
+<?php echo DwForm::open(); ?>
+<div class="container shell-view">
+<table id="example" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>FECHA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>  
+                    <th style="width: 125px;">TÍTULO DEL CASO</th>
+                    <th>INFORMACIÓN FALTANTE</th>                       
+                    <th class="text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_caso = 1;
+                $msg_faltante = '';
+                $bandera_msg_faltante = false;
+                foreach($Casos as $caso): 
+                    $bandera_casos = false;
+                    $caso_numero = $caso->id.substr($caso->departamento,0, 2);
+                    $caso_fecha = $caso->fecha_desde;
+                    $caso_titulo = $caso->titulo;
+                    $victimas = $caso->getVictima();
+                    
+                    $msg_territorio_id = '';
+                    $msg_des_cantidad_victima = '';
+                    $msg_descripcion = '';
+                    $msg_cantidad_victima = '';
+
+                    $msg_victima_hechos = '';
+                    $msg_victima_perfil = '';
+                    $msg_victima_etnia = '';
+                    $bool_bandera = false;
+                    $victima_nombre = '';
+
+                    if($caso->territorio_id === '' ){
+                        $msg_faltante .= '<li>Falta seleccionar el territorio.</li>';
+                        $bandera_msg_faltante = true;
+                    }
+                    if($caso->cantidad_victima === ''){
+                        $msg_faltante .= '<li>Falta la cantidad de victimas.</li>';
+                        $bandera_msg_faltante = true;
+                    }
+                    if($caso->descripcion === ''){
+                        $msg_faltante .= '<li>Falta la descripción del caso.</li>';
+                        $bandera_msg_faltante = true;
+                    }
+                    if(sizeof($victimas) === 0){
+                        $msg_faltante .= '<li>No tiene victimas.</li>';
+                        $msg_faltante .= '<li>No tiene hechos victimizantes.</li>';
+                        $bandera_msg_faltante = true;
+                    }
+
+                    foreach($victimas as $victima):
+                        $msg_victima_hechos = '';
+                        $msg_victima_perfil = '';
+                        $msg_victima_etnia = '';
+                        $bool_bandera = false;
+                        $victima_nombre = $victima->nombre;
+
+                        if(sizeof($victima->getVictimaHechovictimizantePresuntoResponsable()) === 0){
+                           $msg_victima_hechos = 'No tiene hechos victimizantes.';
+                           $bool_bandera = true;
+                        }
+                        if(sizeof($victima->getVictimaCaracterizacion2()) === 0){
+                            $msg_victima_perfil = 'No tiene Perfil.';
+                            $bool_bandera = true;
+                        }
+                        if(sizeof($victima->getVictimaEtnia2()) === 0){
+                            $msg_victima_etnia = 'No tiene Etnia.';
+                            $bool_bandera = true;
+                        }
+                        if($bool_bandera){
+                            $msg_faltante .= "<li>La víctima $victima_nombre:</li>"; 
+                            $msg_faltante .= "<ul>";
+                            if($msg_victima_perfil != ''){$msg_faltante .= "<li>$msg_victima_perfil</li>";}
+                            if($msg_victima_hechos != ''){$msg_faltante .= "<li>$msg_victima_hechos</li>";}
+                            if($msg_victima_etnia != ''){$msg_faltante .= "<li>$msg_victima_etnia</li>";}
+                            $msg_faltante .= "</ul>";
+                            $bandera_msg_faltante = true;
+                        }
+                        
+                    endforeach;
+                
+                ?>
+
+                    
+                    <?php 
+                    if($bandera_msg_faltante){
+                        $key_show = Security::setKey($caso->id, 'show_caso'); 
+                        $key_upd = Security::setKey($caso->id, 'upd_caso');                    
+                        $key_del = Security::setKey($caso->id, 'del_caso'); ?>   
+                    <tr>
+                        <td><?php echo $caso_numero; ?></td>
+                        <td><?php echo $caso_fecha; ?></td>
+                        <td><?php echo $caso_titulo; ?></td>
+                        <td><?php 
+                        echo '<ul>';
+                        echo $msg_faltante;
+                        echo '</ul>';
+                        ?></td>
+                         <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$caso->nivel, 'estado'=>$caso->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'caso',
+                                        "nombre"=>$caso->titulo,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"violencia_politica/casos/editar_caso/$caso->id/1/",
+                                        "url_eliminar"=>"violencia_politica/casos/eliminar_caso/$caso->titulo/$key_del/")); ?>
+                        </td>
+                    </tr>
+                    <?php $contador_caso++; ?>
+                <?php }
+                $msg_faltante = '';
+                $bandera_msg_faltante = false;
+             endforeach; ?>
+            </tbody>
+        </table>
+            </div>
+    <script type="text/javascript">
+    
+    $('#example').DataTable({
+        
+        dom: 'lBfrtip',
+        buttons: ['excel', 'pdf'],
+        "paging":   true,
+        "ordering": true,
+        "info":     true,
+        "language": {
+            "search": "Buscar",
+            "lengthMenu": "Mostrar _MENU_ registros&nbsp;&nbsp;",
+            "zeroRecords": "No se encontró nada - lo siento",
+            "info": "Mostrando la página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(Filtrado de _MAX_ registros totales)"
+        },
+        
+    });
+    
+    
+    </script>

@@ -1,0 +1,163 @@
+<?php 
+    $sub_tab_1_active = '';
+    $sub_tab_2_active = '';
+    $sub_tab_3_active = '';
+
+    if($sub_tab == '1' || $sub_tab == ''){ $sub_tab_1_active = 'active'; }
+    if($sub_tab == '2'){ $sub_tab_2_active = 'active'; }
+    if($sub_tab == '3'){ $sub_tab_3_active = 'active'; }
+?>
+
+
+<div class="container shell-view">
+<ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $sub_tab_1_active; ?>"><a href="#vin_tab1" data-toggle="tab">Empleo</a></li>
+        <li class="<?php echo $sub_tab_2_active; ?>"><a href="#vin_tab2" data-toggle="tab">Programas Sociales</a></li>       
+        <li class="<?php echo $sub_tab_3_active; ?>"><a href="#vin_tab3" data-toggle="tab">Subsidios</a></li> 
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $sub_tab_1_active; ?>"><a href="#vin_tab1" data-toggle="tab">Empleo</a></li>
+        <li class="tab-pane <?php echo $sub_tab_2_active; ?>"><a href="#vin_tab2" data-toggle="tab">Programas Sociales</a></li>        
+        <li class="tab-pane <?php echo $sub_tab_3_active; ?>" ><a href="#vin_tab3" data-toggle="tab">Subsidios</a></li>
+    </ul>
+
+        <div class="tab-content"> 
+            <div class="tab-pane <?php echo $sub_tab_1_active; ?>" id="vin_tab1">            
+                <div class="row">
+                    <div class="container shell-view">   
+                         <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL EMPLEADOR</th>                    
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_empleo = 1;
+                foreach($empleos as $empleo): ?>                    
+                    <?php $key_show = Security::setKey($empleo->id, 'show_empleo'); ?>
+                    
+                    <tr>
+                        <td><?php echo $contador_empleo; ?></td>
+                        <td><?php echo $empleo->nombre; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver empleo', "afectacion/megaproyectos/ver_empleo/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            
+                        </td>
+                    </tr>
+                    <?php $contador_empleo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+          
+                </div>
+            </div>
+            
+            <!-- SEGUNDA PESTAÑA --------------------->
+        
+        <div class="tab-pane <?php echo $sub_tab_2_active; ?>" id="vin_tab2">            
+                 <div class="row">
+                    <div class="container shell-view">   
+                         <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_programa_social/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar programa social', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL PROGRAMA SOCIAL</th>                    
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_programa_social = 1;
+                foreach($programa_sociales as $programa_social): ?>                    
+                    <?php $key_show = Security::setKey($programa_social->id, 'show_programa_social'); ?>
+                    
+                    <tr>
+                        <td><?php echo $contador_programa_social; ?></td>
+                        <td><?php echo $programa_social->nombre; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver programa social', "afectacion/megaproyectos/ver_programa_social/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            
+                        </td>
+                    </tr>
+                    <?php $contador_programa_social++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+          
+                </div>
+            </div>
+        
+        <div class="tab-pane <?php echo $sub_tab_3_active; ?>" id="vin_tab3">            
+                      <div class="row">
+                    <div class="container shell-view">   
+                         <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_subsidio/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar subsidio', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL SUBSIDIO</th>                    
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_subsidio = 1;
+                foreach($subsidios as $subsidio): ?>                    
+                    <?php $key_show = Security::setKey($subsidio->id, 'show_subsidio'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_subsidio; ?></td>
+                        <td><?php echo $subsidio->nombre; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver subsidio', "afectacion/megaproyectos/ver_subsidio/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                        </td>
+                    </tr>
+                    <?php $contador_subsidio++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+          
+                </div>
+            </div>
+        </div>  
+    </div>

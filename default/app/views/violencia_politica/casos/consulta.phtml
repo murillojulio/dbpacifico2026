@@ -1,0 +1,231 @@
+<?php View::flash(); ?>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+<?php 
+
+echo '<input id="tipo_modo" name="tipo[modo]" type="hidden" value="'.$modo.'">';
+?>
+    
+    <div id="div_busqueda">
+        <div class="row">
+            <div class="col-md-12">
+               <div class="row">                                    
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('caso.titulo', array('class'=>''), NULL, 'Título del caso'); ?>
+                        </div>                    
+               </div>
+                 <div class="row">
+                        <div class="col-md-3" id="div_departamento"> 
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>''), NULL, 'Departamento'); ?>
+                            <?php //echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('commons/departamento', 'findByPais', (isset($usuario->pais_de_expedicion_id)) ? $usuario->pais_de_expedicion_id : '52'), NULL, array('class' => 'input-required'), (isset($usuario->departamento_de_expedicion_id)) ? $usuario->departamento_de_expedicion_id : NULL, 'Departamento de expedición'); ?>
+                        </div>
+                        <div class="col-md-3" id="div_municipio">                    
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  $departamento_id), NULL, array('class' => ''), $municipio_id, 'Municipio'); ?>
+                        </div>
+                       <div class="col-md-6" id="div_territorio">                    
+                            <?php //echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', (isset($caso->municipio_id)) ? $caso->municipio_id : NULL), NULL, array('class' => 'input-required'), (isset($usuario->territorio_id)) ? $caso->territorio_id : NULL, 'Territorio'); ?>
+                           <?php echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', $municipio_id), NULL, array('class' => ''), $territorio_id, 'Territorio'); ?>
+                        </div>  
+                </div>
+                 <div class="row">                   
+                      <div class="col-md-6">
+                            <?php echo DwForm::text('caso.victima_nombre', array('class'=>''), NULL, 'Nombre o apellido de la víctima'); ?>
+                        </div> 
+                     <div class="col-md-2">
+                        <?php echo DwForm::dbSelect('caso.genero_id', 'nombre', array('opcion/genero', 'getListadoGeneroDBS', Genero::ACTIVO), NULL, array('class'=>''), NULL, 'Género'); ?>
+                        </div>
+                     <div class="col-md-4">
+                            <?php echo DwForm::dbSelect('caso.caracterizacion_id', 'nombre', array('opcion/caracterizacion', 'getListadoCaracterizacionDBS', Caracterizacion::ACTIVO), NULL, array('class'=>''), NULL, 'Perfil'); ?>
+                        </div>
+                        
+               </div>
+                 <div class="row">                       
+                        <div class="col-md-3">
+                            <?php echo DwForm::date('caso.fecha_desde', array('class'=>''), '', 'Fecha desde'); ?>
+                        </div> 
+                       <div class="col-md-3">
+                            <?php echo DwForm::date('caso.fecha_hasta', array('class'=>''), '', 'Fecha hasta'); ?>
+                        </div> 
+                    </div> 
+               <!-- <div class="row">                                    
+                  <div class="col-md-6"> 
+                        <?php echo DwForm::dbSelect('caso.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', PresuntoResponsable::ACTIVO), NULL, array('class'=>''), NULL, 'Presunto responsable'); ?>
+                    </div>                   
+                  <div class="col-md-6"> 
+                        <?php echo DwForm::dbSelect('caso.hechovictimizante_id', 'nombre', array('opcion/hechovictimizante', 'getListadoHechovictimizanteDBS', Hechovictimizante::ACTIVO), NULL, array('class'=>''), NULL, 'Hecho victimizante'); ?>
+                    </div>
+                </div>-->
+               
+               
+            </div>             
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">     
+                <div class="text-left">
+                    <button type="submit" class="btn btn-info text-bold" title="Buscar casos">
+                        <i class="btn-icon-only fa fa-search"></i>
+                        <span class="hidden-xs">BUSCAR</span>
+                    </button>             
+                    <?php echo DwForm::focus('caso.titulo');?>
+                </div>
+            </div>
+        </div>
+        </div>
+    <script type="text/javascript">
+   
+        if($('#tipo_modo').val() == 'resultado')
+            {
+                $("#div_busqueda").hide();
+            }            
+    </script>
+    
+ <div id="div_resultado">
+        <div class="row">
+            <div class="col-md-3">
+                <h5><span class="label label-default"><?php
+                    echo sizeof($casos).' casos encontrados';
+                    ?></span></h5>
+            </div>
+            <div class="col-md-3">
+                <button id="btn_nueva_consulta" type="button" class="btn btn-info text-bold" title="Nueva busqueda"><i class="btn-icon-only fa fa-search"></i> <span class="hidden-xs">NUEVA BUSQUEDA</span></button>             
+                
+            </div>
+        </div>
+          
+    <table id="example" class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>FECHA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>  
+                    <th style="width: 110px;">TITULO DEL CASO</th>
+                    <th>UBICACIÓN</th>
+                    <th>VÍCTIMAS</th>                                      
+                    <th class="text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_caso = 1;
+                foreach($casos as $caso): ?>
+                    
+                    <?php //$key_show = Security::setKey($caso->id, 'show_caso'); ?>
+                    <?php //$key_upd = Security::setKey($caso->id, 'upd_caso'); ?>                    
+                    <?php $key_del = Security::setKey($caso->id, 'del_caso'); ?>   
+                    <tr>
+                        <td><?php echo $caso->id.substr($caso->departamento,0, 2)  ?></td>
+                        <td><?php echo $caso->fecha_desde; ?></td>
+                        <td><?php echo $caso->titulo; ?></td>
+                        <td><?php echo $caso->departamento.' / '.$caso->municipio.' / '.$caso->territorio; ?></td>
+                        <td><?php  
+                                $cant_victima = 0;
+                                try{                                    
+                                    $victimas = $caso->getVictima();
+                                    foreach($victimas as $victima):
+                                        echo $victima->nombre.' | ';
+                                        $cant_victima++;
+                                    endforeach;
+                                } catch (Exception $exc) {
+                                 echo $exc->getTraceAsString();
+                                }                        
+                                echo "<br>Víctimas: $cant_victima"//$caso->cantidad_victima; ?></td>
+                         <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$caso->nivel, 'estado'=>$caso->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'caso',
+                                        "nombre"=>$caso->titulo,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"violencia_politica/casos/editar_caso/$caso->id/1/",
+                                        "url_eliminar"=>"violencia_politica/casos/eliminar_caso/$caso->titulo/$key_del/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver caso', "observatorio/territorios/ver_caso/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar caso', "violencia_politica/casos/editar_caso/$caso->id/1/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_caso++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+            </div>
+     <script type="text/javascript">
+   
+        if($('#tipo_modo').val() == 'consulta')
+            {
+                $("#div_resultado").hide();
+            }            
+    </script>
+
+    </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+    $('#example').DataTable({
+        dom: 'lBfrtip',
+        buttons: ['excel', 'pdf'],
+        "paging":   true,
+        "ordering": false,
+        "info":     true,
+        "language": {
+            "search": "Buscar",
+            "lengthMenu": "Mostrar _MENU_ registros&nbsp;&nbsp;",
+            "zeroRecords": "No se encontró nada - lo siento",
+            "info": "Mostrando la página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(Filtrado de _MAX_ registros totales)"
+        },
+        
+    });
+        
+             if($('#tipo_modo').val() == 'consulta')
+            {
+                $("#div_resultado").hide();
+            }
+    
+
+ $("#caso_departamento_id").on('change', function(e) {
+            var departamento_id = $('#caso_departamento_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>"+departamento_id+"/caso.municipio_id/Municipio/no/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_required=no",
+            }).done(function(data) {
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                $('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        $("#caso_municipio_id").on('change', function(e) {
+            var municipio_id = $('#caso_municipio_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>"+municipio_id+"/caso.territorio_id/Territorio/",
+                data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio",
+            }).done(function(data) {
+                $("#div_territorio").html(data);
+                $("#caso_territorio_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        $("#btn_nueva_consulta").on('click', function(e) {
+            
+                $("#div_busqueda").fadeIn();
+                $("#div_resultado").fadeOut();
+               
+        });
+        
+         });
+        
+</script>

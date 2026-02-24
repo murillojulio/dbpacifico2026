@@ -1,0 +1,29 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>        
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Actores armados</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            <?php echo DwForm::dbCheck('actor_armado','nombre',array('opcion/presunto_responsable','getListadoPresuntoResponsableDBS',''),array('onclick'=>'return false'), $array_actor_armado); ?>
+                        </div>
+                    </div>                                       
+                </div>
+               </div>
+            </div>
+          <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+    
+</div>

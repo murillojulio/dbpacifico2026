@@ -1,0 +1,20 @@
+<?php View::flash(); ?>
+<div id="div_select_multiple_victima">
+<label for="vhpr_victimas_id">Seleccione Víctima(s) <span class="req">*</span></label>
+    <?php echo DwForm::dbSelectMultipleNoSeleccion('vhpr.victimas_id', 'nombre', $victimas, array('style'=>"height: 150px;", 'onchange'=>'validarBotonAgregarVictimizacion()'), NULL, 'Víctima(s)'); ?>    
+</div>
+<script type="text/javascript">
+$("#vhpr_victimas_id").mousedown(function(e){
+        e.preventDefault();
+        
+        var select = this;
+        var scroll = select.scrollTop;
+        
+        e.target.selected = !e.target.selected;
+        
+        setTimeout(function(){select.scrollTop = scroll;}, 0);
+        
+        $(select).focus();
+        validarBotonAgregarVictimizacion();
+    }).mousemove(function(e){e.preventDefault()});
+</script>

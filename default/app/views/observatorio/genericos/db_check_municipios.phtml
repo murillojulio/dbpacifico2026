@@ -1,0 +1,11 @@
+<?php echo DwForm::hidden('territorio.departamento_nombre', NULL, $departamento_nombre); ?>
+<?php echo DwForm::hidden('territorio.departamento_id', NULL, $departamento_id); ?>
+<label for="panel_municipio"><?php echo $titulo_panel; ?></label>
+<div id="panel_municipio" class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <?php echo DwForm::dbCheckId('municipio','nombre',array('observatorio/municipio','getMunicipioPorDepartamento',$departamento_id)); ?>
+        </div>
+    </div>
+</div> 
+<?php //echo time(); ?>

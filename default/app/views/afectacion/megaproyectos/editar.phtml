@@ -1,0 +1,876 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('megaproyecto', $megaproyecto, $page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::open(); ?>
+
+    <ul class="nav nav-tabs hidden-xs">
+        <li class="<?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="<?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Vinculación de la población</a></li>
+        <li class="<?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Daños</a></li>
+        <li class="<?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Desarrollo Normativo</a></li>
+        <li class="<?php echo $tab_5_active; ?>"><a href="#tab5" data-toggle="tab">Política Pública</a></li>
+        <li class="<?php echo $tab_6_active; ?>"><a href="#tab6" data-toggle="tab">Acciones de seguimiento y control</a></li>
+        <li class="<?php echo $tab_7_active; ?>"><a href="#tab7" data-toggle="tab">Fuente(s)</a></li>
+    </ul>
+    <ul class="nav nav-tabs visible-xs">
+        <li class="tab-pane <?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Vinculación de la población</a></li>
+        <li class="tab-pane <?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Daños</a></li>
+        <li class="tab-pane <?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Desarrollo Normativo</a></li>
+        <li class="tab-pane <?php echo $tab_5_active; ?>"><a href="#tab5" data-toggle="tab">Política Pública</a></li>
+        <li class="tab-pane <?php echo $tab_6_active; ?>"><a href="#tab6" data-toggle="tab">Acciones de seguimiento y control</a></li>
+        <li class="tab-pane <?php echo $tab_7_active; ?>"><a href="#tab7" data-toggle="tab">Fuente(s)</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade <?php echo $tab_1_active; ?>" id="tab1">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_info_basica">
+                        <h3 class="panel-title">Información básica</h3>
+                    </label>
+                    <div id="panel_info_basica" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::hidden('megaproyecto.id', NULL, $megaproyecto->id) ?>
+                                    <?php echo DwForm::hidden('megaproyecto.afectacion_id', NULL, $megaproyecto->afectacion_id) ?>
+                                    <?php echo DwForm::hidden('megaproyecto.clase_megaproyecto', NULL, $megaproyecto->clase_megaproyecto) ?>
+                                    <?php echo DwForm::text('megaproyecto.nombre', array('class' => 'input-required'), $megaproyecto->nombre, 'Nombre'); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php
+                                if ($megaproyecto->documento == '') {
+                                    echo '<div class="col-md-3">';
+                                    echo DwForm::upload_V2('documento_megaproyecto', array('data-to' => PUBLIC_PATH . 'upload/upload/upload_document/documento_megaproyecto/megaproyecto/', 'data-size' => Session::get('max_size_file_upload'), 'data-files' => 'doc', 'data-success' => 'loadDocumentoMegaproyecto'), 'Adjuntar documento de Megaproyecto', 'text_con', 'icon_con');
+                                    echo '</div>  
+                      <div class="col-md-9">                        
+                         <a id="enlace_documento_megaproyecto" target="_blank" href="">                            
+                         </a>                            
+                      </div>';
+                                    echo DwForm::hidden('megaproyecto.documento', NULL, '');
+                                } else {
+                                    echo '<div class="col-md-3">';
+                                    echo DwForm::upload_V2('documento_megaproyecto', array('data-to' => PUBLIC_PATH . 'upload/upload/upload_document/documento_megaproyecto/megaproyecto/', 'data-size' => Session::get('max_size_file_upload'), 'data-files' => 'doc', 'data-success' => 'loadDocumentoMegaproyecto'), 'Cambiar documento de Megaproyecto', 'text_con', 'icon_con');
+                                    echo '</div>';
+                                    echo '<div class="col-md-9">';
+                                    echo '<a id="enlace_documento_megaproyecto" class="btn btn-info" target="_blank" href="' . PUBLIC_PATH . 'files/upload/megaproyecto/' . $megaproyecto->documento . '">';
+                                    echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento adjunto</a>';
+                                    echo '</div>';
+                                    echo DwForm::hidden('megaproyecto.documento', NULL, $megaproyecto->documento);
+                                }
+                                ?>
+                            </div>
+
+                            <script type="text/javascript">
+                                function loadDocumentoMegaproyecto(result, input) {
+
+                                    $("#megaproyecto_documento").val(result.name);
+                                    $("#enlace_documento_megaproyecto").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/megaproyecto/' + result.name);
+                                    $("#enlace_documento_megaproyecto").attr('class', 'btn btn-info');
+
+                                    //$("#enlace_documento").attr('innerHTML', result.name);
+                                    document.getElementById('enlace_documento_megaproyecto').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - ' + result.size;
+                                    document.getElementById('text_con').innerHTML = 'Cambiar documento de Megaproyecto';
+                                    $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+                                }
+                            </script>
+
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_tipo_proyecto">Tipo de megaproyecto</label>
+                                    <div id="panel_tipo_proyecto" class="panel panel-default">
+                                        <div class="panel-body">
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::dbSelect('megaproyecto.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoByClaseMegaproyectoDBS', $clase_megaproyecto), NULL, array('class' => 'input-required'), $megaproyecto->tipo_megaproyecto_id, 'Seleccione el tipo de megaproyecto'); ?>
+                                                </div>
+                                                <div id="div_subtipo_megaproyecto" class="col-md-6">
+                                                    <?php echo DwForm::dbSelect('megaproyecto.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $megaproyecto->tipo_megaproyecto_id), NULL, array('class' => 'input-required'), $megaproyecto->subtipo_megaproyecto_id, 'Seleccione el Sub tipo de megaproyecto'); ?>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <?php echo DwForm::hidden("megaproyecto.micro_subtipo_megaproyecto_id", NULL, NULL); ?>
+                                                <div id="div_micro_subtipo_megaproyecto" class="col-md-12">
+                                                    <?php echo DwForm::dbRadioId('micro_subtipo_megaproyecto', 'nombre', array('opcion/micro_subtipo_megaproyecto', 'getMicroSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $megaproyecto->subtipo_megaproyecto_id), array('onclick' => 'myFunction(this.value)'), $megaproyecto->micro_subtipo_megaproyecto_id); ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <?php View::partial(
+                                    'ubicacion/editar',
+                                    false,
+                                    array(
+                                        'ubicaciones' => $ubicaciones,
+                                        'afectacion_id' => $megaproyecto->afectacion_id,
+                                        'titulo' => 'del megaproyecto'
+                                    )
+                                ); ?>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::textarea('megaproyecto.descripcion', array('class' => 'input-lower', 'rows' => '10'), NULL, 'Descripción del megaproyecto'); ?>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_area">Área del proyecto</label>
+                                    <div id="panel_area" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="megaproyecto_area_terrestre">Terrestre</label>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input id="megaproyecto_area_terrestre" name="megaproyecto[area_terrestre]" type="text" value="<?php echo number_format($megaproyecto->area_terrestre, 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
+                                                            <div class="input-group-addon">Km<sup>2</sup></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="megaproyecto_area_maritima">Marítima</label>
+                                                    <div class="form-group">
+                                                        <div class="input-group">
+                                                            <input id="megaproyecto_area_maritima" name="megaproyecto[area_maritima]" type="text" value="<?php echo number_format($megaproyecto->area_maritima, 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
+                                                            <div class="input-group-addon">Km<sup>2</sup></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php /*echo DwForm::date('megaproyecto.fecha_iniciacion', array('class'=>''), substr($megaproyecto->fecha_iniciacion, 0, 10), 'Fecha de iniciación del proyecto'); */ ?>
+                                    <div class="form-group">
+                                        <label for="megaproyecto_fecha_iniciacion">Fecha de iniciación del proyecto | DD-MM-AAAA</label>
+                                        <div class="input-group date datepicker" id="dp_megaproyecto_fecha_iniciacion">
+                                            <input id="megaproyecto_fecha_iniciacion" name="megaproyecto[fecha_iniciacion]" type="text" value="<?php if ($megaproyecto->fecha_iniciacion != null) {
+                                                                                                                                                    echo date('d-m-Y', strtotime($megaproyecto->fecha_iniciacion));
+                                                                                                                                                } ?>" class="js-datepicker input-date form-control">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                        <p class="help-block">
+                                            <small class="help-error"></small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <?php /*echo DwForm::date('megaproyecto.fecha_terminacion', array('class'=>''), substr($megaproyecto->fecha_terminacion, 0, 10), 'Fecha de terminación del proyecto'); */ ?>
+                                    <div class="form-group">
+                                        <label for="megaproyecto_fecha_terminacion">Fecha de terminación del proyecto | DD-MM-AAAA</label>
+                                        <div class="input-group date datepicker" id="dp_megaproyecto_fecha_terminacion">
+                                            <input id="megaproyecto_fecha_terminacion" name="megaproyecto[fecha_terminacion]" type="text" value="<?php if ($megaproyecto->fecha_terminacion != null) {
+                                                                                                                                                        echo date('d-m-Y', strtotime($megaproyecto->fecha_terminacion));
+                                                                                                                                                    } ?>" class="js-datepicker input-date form-control">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                        <p class="help-block">
+                                            <small class="help-error"></small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_empresa">Empresa propietaria del proyecto</label>
+                                    <div id="panel_empresa" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div id="div_titular_usuario" class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::select('megaproyecto.titular_usuario', array('' => 'Seleccione', 'CABILDO' => 'CABILDO', 'CONSEJO COMUNITARIO' => 'CONSEJO COMUNITARIO', 'EMPRESA FORESTAL' => 'EMPRESA FORESTAL', 'SOCIEDAD' => 'SOCIEDAD'), array('class' => ''), NULL, 'Titular / Usuario'); ?>
+                                                </div>
+                                            </div>
+                                            <div id="div_cabildo" class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::dbSelect('megaproyecto.cabildo_id', 'nombre', array('gestion_territorial/cabildo', 'getListadoCabildoDBS'), NULL, array('class' => ''), NULL, 'Seleccione el cabildo'); ?>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.aval_cabildo', array('class' => 'input-lower'), NULL, 'Descripción Aval del cabildo'); ?>
+                                                </div>
+                                            </div>
+                                            <div id="div_consejo_comunitario" class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::dbSelect('megaproyecto.consejo_id', 'nombre', array('gestion_territorial/consejo', 'getListadoConsejoDBS'), NULL, array('class' => ''), NULL, 'Seleccione el consejo comunitario'); ?>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.aval_consejo_comunitario', array('class' => 'input-lower'), NULL, 'Descripción Aval junta consejo comunitario'); ?>
+                                                </div>
+                                            </div>
+                                            <div id="div_info_empresa">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::text('megaproyecto.nombre_empresa', array('class' => ''), $megaproyecto->nombre_empresa, 'Nombre de la empresa'); ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::text('megaproyecto.representante_empresa', array('class' => ''), $megaproyecto->representante_empresa, 'Nombre del representante legal'); ?>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <?php echo DwForm::text('megaproyecto.sede_principal', array('class' => ''), $megaproyecto->sede_principal, 'Sede principal'); ?>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.es_filial_matriz', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->es_filial_matriz, '¿La empresa es filial de una casa matriz?:'); ?>
+
+                                                    </div>
+                                                    <div id="div_megaproyecto_nombre_filial_matriz" class="col-md-6">
+                                                        <?php echo DwForm::text('megaproyecto.nombre_filial_matriz', array('class' => ''), $megaproyecto->nombre_filial_matriz, 'Nombre de la casa matriz'); ?>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.accionista_nacional', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->accionista_nacional, '¿La empresa tiene accionistas Nacionales?:'); ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.accionista_extranjero', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->accionista_extranjero, '¿La empresa tiene accionistas Extranjeros?:'); ?>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.otro_sitio_colombia', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->otro_sitio_colombia, '¿La empresa opera en otro sitio en Colombia?:'); ?>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.otro_sitio_extranjero', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->otro_sitio_extranjero, '¿La empresa opera en otro sitio en el Extranjero?:'); ?>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <?php echo DwForm::select('megaproyecto.otra_actividad', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->otra_actividad, '¿La empresa realiza otras actividades?'); ?>
+
+                                                    </div>
+                                                    <div id="div_megaproyecto_otra_actividad_cual" class="col-md-6">
+                                                        <?php echo DwForm::textarea('megaproyecto.otra_actividad_cual', array('class' => 'input-lower'), $megaproyecto->otra_actividad_cual, 'Cuáles actividades'); ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="div_financiacion_proyecto" class="row">
+                                <div class="col-md-12">
+                                    <label for="panel_financiacion">Financiación del proyecto</label>
+                                    <div id="panel_financiacion" class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <?php echo DwForm::select('megaproyecto.moneda_monto_inversion', array('' => '- SELECCIONE -', '$' => '$ - PESOS', 'US' => 'US - DOLARES', '€' => '€ - EUROS'), array('class' => ''), NULL, 'Moneda monto de inversión') ?>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <?php echo DwForm::text('megaproyecto.monto_inversion', array('class' => 'input-money'), number_format($megaproyecto->monto_inversion, 2, '.', ','), 'Monto de inversión'); ?>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::select('megaproyecto.financia_nacional_publica', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->financia_nacional_publica, '¿Es financiado por instituciones nacionales públicas?:'); ?>
+
+                                                </div>
+                                                <div id="div_megaproyecto_financia_nacional_publica_cual" class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.financia_nacional_publica_cual', array('class' => 'input-lower'), $megaproyecto->financia_nacional_publica_cual, '¿Cuáles instituciones finaciadoras nacionales públicas?'); ?>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::select('megaproyecto.financia_nacional_privada', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->financia_nacional_privada, '¿Es financiado por instituciones nacionales privadas?:'); ?>
+                                                </div>
+                                                <div id="div_megaproyecto_financia_nacional_privada_cual" class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.financia_nacional_privada_cual', array('class' => ''), $megaproyecto->financia_nacional_privada_cual, '¿Cuáles instituciones finaciadoras nacionales privadas?'); ?>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::select('megaproyecto.financia_inter_publica', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->financia_inter_publica, '¿Es financiado por instituciones internacionales públicas?:'); ?>
+
+                                                </div>
+                                                <div id="div_megaproyecto_financia_inter_publica_cual" class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.financia_inter_publica_cual', array('class' => 'input-lower'), $megaproyecto->financia_inter_publica_cual, '¿Cuáles instituciones finaciadoras internacionales públicas?'); ?>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::select('megaproyecto.financia_inter_privada', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->financia_inter_privada, '¿Es financiado por instituciones internacionales privadas?:'); ?>
+
+                                                </div>
+                                                <div id="div_megaproyecto_financia_inter_privada_cual" class="col-md-6">
+                                                    <?php echo DwForm::textarea('megaproyecto.financia_inter_privada_cual', array('class' => 'input-lower'), $megaproyecto->financia_inter_privada_cual, '¿Cuáles instituciones finaciadoras internacionales privadas?'); ?>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="div_cesion" class="row">
+                                <div class="col-md-3">
+                                    <?php echo DwForm::select('megaproyecto.cesion', array('' => 'Seleccione', 'SI' => 'SI', 'NO' => 'NO'), array('class' => ''), $megaproyecto->cesion, '¿Cesión?'); ?>
+
+                                </div>
+                                <div id="div_megaproyecto_tipo_cesion" class="col-md-3">
+                                    <?php echo DwForm::select('megaproyecto.tipo_cesion', array('' => 'Seleccione', 'COMPLETA' => 'COMPLETA', 'PARCIAL' => 'PARCIAL'), array('class' => ''), $megaproyecto->tipo_cesion, '¿Tipo de cesión?'); ?>
+
+                                </div>
+                                <div id="div_megaproyecto_nuevo_titular_empresa" class="col-md-6">
+                                    <?php echo DwForm::text('megaproyecto.nuevo_titular_empresa', array('class' => ''), $megaproyecto->nuevo_titular_empresa, 'Nombre del nuevo titular'); ?>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::send('Actualizar megaproyecto'); ?>
+                    <?php echo DwButton::back($url_redir_back); ?>
+                </div>
+            </div>
+
+        </div>
+
+        <!--      //////////////////////////////////  SEGUNDA PESTAÑA-->
+        <div class="tab-pane fade <?php echo $tab_2_active; ?>" id="tab2">
+
+            <!-- TABULACION INTERNA  -->
+            <?php View::partial(
+                'vinculacion_poblacion/editar',
+                false,
+                array(
+                    'empleos' => $empleos, 'megaproyecto' => $megaproyecto, 'key' => $key, 'sub_tab' => $sub_tab,
+                    'programa_sociales' => $programa_sociales, 'subsidios' => $subsidios
+                )
+            ); ?>
+            <!-- FIN TABULACION INTERNA -->
+
+            <div class="row">
+                <div class="row">
+                    <div class="form-actions">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--      //////////////////////////////////  TERCERA PESTAÑA-->
+
+        <div class="tab-pane fade <?php echo $tab_3_active; ?>" id="tab3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+
+                    </div>
+                    <div class="container-overflow">
+                        <?php View::partial(
+                            'danos/editar',
+                            false,
+                            array(
+                                'AfectacionDanoTerritorio' => $AfectacionDanoTerritorio,
+                                'nombre_tabla' => 'megaproyecto',
+                                'afectacion_id' => $megaproyecto->afectacion_id
+                            )
+                        );
+                        ?>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!--      //////////////////////////////////  CUARTA PESTAÑA-->
+        <div class="tab-pane fade <?php echo $tab_4_active; ?>" id="tab4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-toolbar btn-toolbar-top">
+                        <div class="row">
+                            <div class="btn-actions">
+                                <?php echo DwHtml::button("afectacion/megaproyectos/agregar_desarrollo_normativo/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-overflow">
+                        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>NUM</th>
+                                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                                    <th class="col-hidden">SECTOR</th>
+                                    <th class="btn-actions text-center">ESTADO</th>
+                                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $contar_dn = 1;
+                                foreach ($desarrollo_normativos as $desarrollo_normativo) : ?>
+                                    <?php $key_show = Security::setKey($desarrollo_normativo->id, 'show_desarrollo_normativo'); ?>
+                                    <?php $key_upd = Security::setKey($desarrollo_normativo->id, 'upd_desarrollo_normativo'); ?>
+                                    <?php $key_del = Security::setKey($desarrollo_normativo->id, 'del_desarrollo_normativo'); ?>
+                                    <tr>
+                                        <td><?php echo $contar_dn; ?></td>
+                                        <td><?php echo $desarrollo_normativo->nombre; ?></td>
+                                        <td><?php echo $desarrollo_normativo->sector; ?></td>
+                                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $desarrollo_normativo->nivel, 'estado' => $desarrollo_normativo->estado)); ?>
+                                        <td class="btn-actions">
+                                            <?php View::partial(
+                                                'opcion/ver',
+                                                false,
+                                                array(
+                                                    'elemento' => 'desarrollo normativo',
+                                                    "nombre" => $desarrollo_normativo->nombre,
+                                                    "url_ver" => NULL,
+                                                    "url_editar" => "afectacion/megaproyectos/editar_desarrollo_normativo/$key_upd/$megaproyecto->clase_megaproyecto/$key/",
+                                                    "url_eliminar" => "afectacion/megaproyectos/eliminar_desarrollo_normativo/$key_del/$megaproyecto->clase_megaproyecto/$key/$desarrollo_normativo->nombre/$megaproyecto->nombre/"
+                                                )
+                                            ); ?>
+                                        </td>
+                                    </tr>
+                                    <?php $contar_dn++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--      //////////////////////////////////  QUINTA PESTAÑA-->
+        <div class="tab-pane fade <?php echo $tab_5_active; ?>" id="tab5">
+            <div class="row">
+            <div class="col-md-12">
+                    <div class="btn-toolbar btn-toolbar-top">
+                        <div class="row">
+                            <div class="btn-actions">
+                                <?php echo DwHtml::button("afectacion/megaproyectos/agregar_politica_publica/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-overflow">
+                        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                            <thead>
+                                <tr>
+                                    <th>NUM</th>
+                                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                                    <th class="col-hidden">SECTOR</th>
+                                    <th class="btn-actions text-center">ESTADO</th>
+                                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $contar_pp = 1;
+                                foreach ($politicas_publicas as $politica_publica) : ?>
+                                    <?php $key_show = Security::setKey($politica_publica->id, 'show_politica_publica'); ?>
+                                    <?php $key_upd = Security::setKey($politica_publica->id, 'upd_politica_publica'); ?>
+                                    <?php $key_del = Security::setKey($politica_publica->id, 'del_politica_publica'); ?>
+                                    <tr>
+                                        <td><?php echo $contar_pp; ?></td>
+                                        <td><?php echo $politica_publica->nombre; ?></td>
+                                        <td><?php echo $politica_publica->sector; ?></td>
+                                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $politica_publica->nivel, 'estado' => $politica_publica->estado)); ?>
+                                        <td class="btn-actions">
+                                            <?php View::partial(
+                                                'opcion/ver',
+                                                false,
+                                                array(
+                                                    'elemento' => 'política pública',
+                                                    "nombre" => $politica_publica->nombre,
+                                                    "url_ver" => NULL,
+                                                    "url_editar" => "afectacion/megaproyectos/editar_politica_publica/$key_upd/$megaproyecto->clase_megaproyecto/$key/",
+                                                    "url_eliminar" => "afectacion/megaproyectos/eliminar_politica_publica/$key_del/$megaproyecto->clase_megaproyecto/$key/$politica_publica->nombre/$megaproyecto->nombre/"
+                                                )
+                                            ); ?>
+                                        </td>
+                                    </tr>
+                                    <?php $contar_pp++; ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--      //////////////////////////////////  SEXTA PESTAÑA-->
+
+        <div class="tab-pane fade <?php echo $tab_6_active; ?>" id="tab6">
+            <div class="row">
+                <div class="col-md-12">
+                    <?php View::partial(
+                        'accion_seguimiento_control/editar',
+                        false,
+                        array('accion_seguimiento_controls' => $accion_seguimiento_controls, 'megaproyecto' => $megaproyecto, 'key' => $key, 'sub_tab' => $sub_tab)
+                    ); ?>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <?php echo DwButton::back($url_redir_back); ?>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--      //////////////////////////////////  SEPTIMA PESTAÑA-->
+        <div class="tab-pane fade <?php echo $tab_7_active; ?>" id="tab7">
+            <div class="row">
+                <div class="col-md-12">
+                    <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::send('Actualizar megaproyecto'); ?>
+                    <?php echo DwButton::back($url_redir_back); ?>
+                </div>
+            </div>
+        </div>
+
+        <?php echo DwForm::close(); ?>
+    </div>
+</div>
+
+<script type='text/javascript'>
+    //Para extraccion pesquera
+    if ($('#megaproyecto_tipo_megaproyecto_id').val() == '14') {
+        $("#div_financiacion_proyecto").hide();
+        $("#div_cesion").hide();
+        $("#div_info_empresa").show();
+        $("#div_titular_usuario").hide();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    } else {
+        $("#div_financiacion_proyecto").show();
+        $("#div_cesion").show();
+
+        $("#div_info_empresa").show();
+        $("#div_titular_usuario").hide();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    }
+
+
+    //Para aprovechamiento forestal
+    if ($('#megaproyecto_tipo_megaproyecto_id').val() == '13') {
+        $("#div_info_empresa").hide();
+        $("#div_titular_usuario").show();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    } else {
+        $("#div_info_empresa").show();
+        $("#div_titular_usuario").hide();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    }
+
+
+    $("#megaproyecto_tipo_megaproyecto_id").on('change', function(e) {
+        $("#div_micro_subtipo_megaproyecto").hide();
+        //$("#div_micro_subtipo_megaproyecto").val('');
+        var tipo_megaproyecto_id = $('#megaproyecto_tipo_megaproyecto_id').val();
+
+        //Para extraccion pesquera
+        if (tipo_megaproyecto_id == '14') {
+            $("#div_financiacion_proyecto").hide();
+            $("#div_cesion").hide();
+            $("#div_info_empresa").show();
+            $("#div_titular_usuario").hide();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        } else {
+            $("#div_financiacion_proyecto").show();
+            $("#div_cesion").show();
+
+            $("#div_info_empresa").show();
+            $("#div_titular_usuario").hide();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        }
+
+        if (tipo_megaproyecto_id == '13') {
+            $("#div_info_empresa").hide();
+            $("#div_titular_usuario").show();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        } else {
+            $("#div_info_empresa").show();
+            $("#div_titular_usuario").hide();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        }
+
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_subtipo_megaproyecto/'; ?>" + tipo_megaproyecto_id + "/",
+            data: "tipo_megaproyecto_id=" + tipo_megaproyecto_id,
+        }).done(function(data) {
+            $("#div_subtipo_megaproyecto").html(data);
+            $("#megaproyecto_subtipo_megaproyecto_id").focus();
+            //$('#afectacion_territorio_id').val('');
+        }).fail(function() {
+            alert("error");
+        });
+    });
+
+
+    var titular_usuario = $('#megaproyecto_titular_usuario').val();
+    if (titular_usuario == 'CABILDO') {
+        $("#div_info_empresa").hide();
+        $("#div_cabildo").show();
+        $("#div_consejo_comunitario").hide();
+    }
+    if (titular_usuario == 'CONSEJO COMUNITARIO') {
+        $("#div_info_empresa").hide();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").show();
+    }
+    if (titular_usuario == 'EMPRESA FORESTAL') {
+        $("#div_info_empresa").show();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    }
+    if (titular_usuario == 'SOCIEDAD') {
+        $("#div_info_empresa").show();
+        $("#div_cabildo").hide();
+        $("#div_consejo_comunitario").hide();
+    }
+
+    $("#megaproyecto_titular_usuario").on('change', function(e) {
+        var titular_usuario = $('#megaproyecto_titular_usuario').val();
+        if (titular_usuario == 'CABILDO') {
+            $("#div_info_empresa").hide();
+            $("#div_cabildo").show();
+            $("#div_consejo_comunitario").hide();
+        }
+        if (titular_usuario == 'CONSEJO COMUNITARIO') {
+            $("#div_info_empresa").hide();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").show();
+        }
+        if (titular_usuario == 'EMPRESA FORESTAL') {
+            $("#div_info_empresa").show();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        }
+        if (titular_usuario == 'SOCIEDAD') {
+            $("#div_info_empresa").show();
+            $("#div_cabildo").hide();
+            $("#div_consejo_comunitario").hide();
+        }
+    });
+
+
+
+
+
+
+    $("#megaproyecto_monto_inversion").priceFormat({
+        prefix: '',
+        centsLimit: 2,
+        centsSeparator: '.',
+        thousandsSeparator: ','
+    });
+
+    $(".formato_punto_coma").priceFormat({
+        prefix: '',
+        centsLimit: 2,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });
+
+
+    if ($('#megaproyecto_es_filial_matriz').val() == 'SI') {
+        $('#div_megaproyecto_nombre_filial_matriz').show();
+    } else {
+        $('#div_megaproyecto_nombre_filial_matriz').hide();
+    }
+
+
+    $("#megaproyecto_es_filial_matriz").change(
+        function() {
+            var si_no = $('#megaproyecto_es_filial_matriz').val();
+            if (si_no == 'SI') {
+                //$('#megaproyecto_nombre_filial_matriz').show();
+                $('#div_megaproyecto_nombre_filial_matriz').show();
+                $('#megaproyecto_nombre_filial_matriz').focus();
+            } else {
+                $('#div_megaproyecto_nombre_filial_matriz').hide();
+                $('#megaproyecto_nombre_filial_matriz').val('');
+            }
+
+        });
+
+
+    if ($('#megaproyecto_otra_actividad').val() == 'SI') {
+        $('#div_megaproyecto_otra_actividad_cual').show();
+    } else {
+        $('#div_megaproyecto_otra_actividad_cual').hide();
+    }
+
+    $("#megaproyecto_otra_actividad").change(
+        function() {
+            var si_no = $('#megaproyecto_otra_actividad').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_otra_actividad_cual').show();
+                $('#megaproyecto_otra_actividad_cual').focus();
+            } else {
+                $('#div_megaproyecto_otra_actividad_cual').hide();
+                $('#megaproyecto_otra_actividad_cual').val('');
+            }
+
+        });
+
+
+
+    if ($('#megaproyecto_financia_nacional_publica').val() == 'SI') {
+        $('#div_megaproyecto_financia_nacional_publica_cual').show();
+    } else {
+        $('#div_megaproyecto_financia_nacional_publica_cual').hide();
+    }
+
+
+    $("#megaproyecto_financia_nacional_publica").change(
+        function() {
+            var si_no = $('#megaproyecto_financia_nacional_publica').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_financia_nacional_publica_cual').show();
+                $('#megaproyecto_financia_nacional_publica_cual').focus();
+            } else {
+                $('#div_megaproyecto_financia_nacional_publica_cual').hide();
+                $('#megaproyecto_financia_nacional_publica_cual').val('');
+            }
+
+        });
+
+
+    if ($('#megaproyecto_financia_inter_publica').val() == 'SI') {
+        $('#div_megaproyecto_financia_inter_publica_cual').show();
+    } else {
+        $('#div_megaproyecto_financia_inter_publica_cual').hide();
+    }
+
+    $("#megaproyecto_financia_inter_publica").change(
+        function() {
+            var si_no = $('#megaproyecto_financia_inter_publica').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_financia_inter_publica_cual').show();
+                $('#megaproyecto_financia_inter_publica_cual').focus();
+            } else {
+                $('#div_megaproyecto_financia_inter_publica_cual').hide();
+                $('#megaproyecto_financia_inter_publica_cual').val('');
+            }
+
+        });
+
+    if ($('#megaproyecto_financia_nacional_privada').val() == 'SI') {
+        $('#div_megaproyecto_financia_nacional_privada_cual').show();
+    } else {
+        $('#div_megaproyecto_financia_nacional_privada_cual').hide();
+    }
+
+    $("#megaproyecto_financia_nacional_privada").change(
+        function() {
+            var si_no = $('#megaproyecto_financia_nacional_privada').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_financia_nacional_privada_cual').show();
+                $('#megaproyecto_financia_nacional_privada_cual').focus();
+            } else {
+                $('#div_megaproyecto_financia_nacional_privada_cual').hide();
+                $('#megaproyecto_financia_nacional_privada_cual').val('');
+            }
+
+        });
+
+    if ($('#megaproyecto_financia_inter_privada').val() == 'SI') {
+        $('#div_megaproyecto_financia_inter_privada_cual').show();
+    } else {
+        $('#div_megaproyecto_financia_inter_privada_cual').hide();
+    }
+
+    $("#megaproyecto_financia_inter_privada").change(
+        function() {
+            var si_no = $('#megaproyecto_financia_inter_privada').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_financia_inter_privada_cual').show();
+                $('#megaproyecto_financia_inter_privada_cual').focus();
+            } else {
+                $('#div_megaproyecto_financia_inter_privada_cual').hide();
+                $('#megaproyecto_financia_inter_privada_cual').val('');
+            }
+
+        });
+
+
+    if ($('#megaproyecto_cesion').val() == 'SI') {
+        $('#div_megaproyecto_nuevo_titular_empresa').show();
+        $('#div_megaproyecto_tipo_cesion').show();
+    } else {
+        $('#div_megaproyecto_nuevo_titular_empresa').hide();
+        $('#div_megaproyecto_tipo_cesion').hide();
+    }
+
+
+    $("#megaproyecto_cesion").change(
+        function() {
+            var si_no = $('#megaproyecto_cesion').val();
+            if (si_no == 'SI') {
+                $('#div_megaproyecto_tipo_cesion').show();
+                $('#megaproyecto_tipo_cesion').focus();
+            } else {
+                $('#div_megaproyecto_tipo_cesion').hide();
+                $('#div_megaproyecto_nuevo_titular_empresa').hide();
+                $('#megaproyecto_nuevo_titular_empresa').val('');
+            }
+
+        });
+
+
+    $("#megaproyecto_tipo_cesion").change(
+        function() {
+            $('#div_megaproyecto_nuevo_titular_empresa').show();
+            $('#megaproyecto_nuevo_titular_empresa').focus();
+        });
+
+        function myFunction(valor) {
+    $('#megaproyecto_micro_subtipo_megaproyecto_id').val(valor);
+}
+</script>

@@ -1,0 +1,102 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">
+                    <div class="col-md-12">         
+                        <?php echo DwForm::hidden('politica_publica.afectacion_id', NULL, NULL) ?>
+                        <?php echo DwForm::hidden('politica_publica.id', NULL, NULL) ?>
+                        <?php echo DwForm::text('politica_publica.nombre', array('class'=>'input-readonly'), NULL, 'Nombre del documento'); ?>
+                    </div>                                   
+                </div>
+              
+                       <div class="row">    
+         <?php 
+            if($politica_publica->documento != '')
+            {              
+                echo '<div class="col-md-9">';                        
+                echo '<a id="enlace_documento_politica" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/politica_publica/'.$politica_publica->documento.'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento adjunto</a>';                            
+                echo '</div>';                      
+            }
+         ?>
+     </div>
+                      <br>
+                      <div class="row">
+                           <div class="col-md-6">
+                        <?php echo DwForm::dbSelect('politica_publica.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoDBS', ''), NULL, array('class'=>'input-readonly'), NULL, 'Seleccione el sector de la política pública'); ?>                        
+                    </div>  
+                           <div id="div_subtipo_megaproyecto" class="col-md-6">
+                        <?php echo DwForm::dbSelect('politica_publica.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $politica_publica->tipo_megaproyecto_id), NULL, array('class'=>'input-readonly'), NULL, 'Seleccione el subsector de la política pública'); ?>                        
+                    </div>   
+                      </div>             
+                                                    
+                      
+                      <div class="row">
+                       <?php View::partial('ubicacion/ver', false, 
+                               array('ubicaciones'=>$ubicaciones, 
+                                    'titulo'=>'de la política pública')); ?>  
+                          
+                </div>
+                      
+                      
+                                     
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <?php echo DwForm::textarea('politica_publica.contenido_politica', array('class'=>'input-lower', 'style'=>"height: 200px;"), NULL, 'Contenido de la política pública'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::textarea('politica_publica.descripcion_politica', array('class'=>'input-lower', 'style'=>"height: 200px;"), NULL, 'Descripción de la política pública'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::textarea('politica_publica.antecedente_politica', array('class'=>'input-lower', 'style'=>"height: 200px;"), NULL, 'Antecedentes de la política pública'); ?>
+                        </div>
+                    </div>                
+                </div> 
+                       <div class="row">                       
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('politica_publica.fecha_vigencia_inicio', array('class'=>'input-readonly'), NULL, 'Fecha en que inicia la vigencia de la política pública'); ?>
+                        </div> 
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('politica_publica.fecha_vigencia_fin', array('class'=>'input-readonly'), NULL, 'Fecha en que finaliza la vigencia de la política pública'); ?>
+                        </div> 
+                    </div>                     
+                  </div>
+               </div>
+            </div>
+      
+            <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>               
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/ver', false, array('fuentes'=>$fuentes)); ?> 
+                    </div>                    
+                </div>
+            </div> 
+           
+                          
+                    
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back(); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+    
+    
+</div>

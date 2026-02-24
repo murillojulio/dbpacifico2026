@@ -1,0 +1,340 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+<!--               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('afectacion_territorio.afectacion_id', NULL, $afectacion_id) ?>
+                        <?php echo DwForm::dbSelect('select.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Seleccione el Departamento donde está ubicado el territorio afectado'); ?>
+                    </div>                
+                    <div class="col-md-6">
+                        <div id="div_territorios">
+                            
+                        </div>
+                    </div>           
+                </div>-->
+    
+     <div class="row">
+         <?php echo DwForm::hidden('afectacion_territorio.afectacion_id', NULL, $afectacion_id) ?>
+         <?php echo DwForm::hidden('afectacion_territorio.territorio_nombre', NULL, '') ?>
+         <?php echo DwForm::hidden('afectacion_territorio.territorio_id', NULL, '') ?>
+         
+                         
+         <div class="col-md-12">
+                               <label for="panel_ubicacion_proyecto"><h3 class="panel-title">Ubicación del territorio afectado</h3></label>
+                            <div id="panel_ubicacion_proyecto" class="panel panel-default">
+                                <div class="panel-body">
+                                  <div class="col-md-3" id="div_departamento"> 
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>''), NULL, 'Departamento'); ?>                           
+                        </div>
+                        <div class="col-md-3" id="div_municipio">                    
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  ''), NULL, array('class' => ''), NULL, 'Municipio'); ?>                        </div>
+                       <div class="col-md-6" id="div_territorio">                                                
+                           <?php echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', ''), NULL, array('class' => ''), NULL, 'Territorio'); ?>
+                        </div>  
+                      
+                                </div>
+                            </div>                           
+                        </div>   
+                          
+                </div>
+    
+    <div id="div_impactos">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_ambiental.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Ambiental'); ?>              
+            </div>
+            <div id="div_impacto_ambiental">
+                <div class="col-md-4">
+                    <label for="panel_ambiental">Seleccione los daños ambientales</label>
+                    <div id="panel_ambiental" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_ambiental','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','1'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_ambiental.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño ambiental'); ?>
+                </div>
+            </div>
+                    </div>
+                </div>
+        </div> 
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_cultural.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Espiritual'); ?>              
+            </div>
+            <div id="div_impacto_cultural">
+                <div class="col-md-4">
+                    <label for="panel_cultural">Seleccione los daños espirituales</label>
+                    <div id="panel_cultural" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_cultural','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','2'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_cultural.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño espiritual'); ?>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>       
+                 <div class="row">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_economico.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Uso Territorio'); ?>              
+            </div>
+            <div id="div_impacto_economico">
+                <div class="col-md-4">
+                    <label for="panel_economico">Seleccione los daños uso terriorio</label>
+                    <div id="panel_economico" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_economico','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','3'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_economico.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño uso territorio'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+        </div> 
+                 <div class="row">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_social.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Organizacional'); ?>              
+            </div>
+            <div id="div_impacto_social">
+                <div class="col-md-4">
+                    <label for="panel_social">Seleccione los daños organizacionales</label>
+                    <div id="panel_social" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_social','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','4'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_social.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño organizacional'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+        </div>   
+                 <div class="row">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_organizacion.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Relaciones Sociales'); ?>              
+            </div>
+            <div id="div_impacto_organizacion">
+                <div class="col-md-4">
+                    <label for="panel_organizacion">Seleccione los daños relaciones sociales</label>
+                    <div id="panel_organizacion" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_organizacion','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','5'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_organizacion.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño relaciones sociales'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+        </div>        
+          <div class="row">
+              <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_territorial.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Daño Control Territorio'); ?>              
+            </div>
+            <div id="div_impacto_territorial">
+                <div class="col-md-4">
+                    <label for="panel_territorial">Seleccione los daños control territorio</label>
+                    <div id="panel_territorial" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_territorial','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','6'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_territorial.descripcion', array('class'=>'input-lower'), '', 'Descripción del daño control territorio'); ?>
+                </div>
+            </div>
+                </div>
+              </div>
+        </div>  
+    
+
+        
+    </div>
+
+        <div class="row">
+            <div class="form-actions">         
+                    <button id="btn_guardar" type="submit" class="btn btn-success disabled text-bold" title="Guardar territorio"><i class="btn-icon-only fa fa-save"></i> <span class="hidden-xs">GUARDAR</span></button>                                            
+                
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('territorio.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+
+<script type='text/javascript'>
+    
+$("#div_btn_guardar").hide();
+$("#div_impactos").hide();
+$("#div_impacto_ambiental").hide();
+$("#div_impacto_cultural").hide();
+$("#div_impacto_social").hide();
+$("#div_impacto_economico").hide();
+$("#div_impacto_organizacion").hide();
+$("#div_impacto_territorial").hide();
+	
+        
+ $("#caso_departamento_id").on('change', function(e) {
+            var departamento_id = $('#caso_departamento_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>"+departamento_id+"/caso.municipio_id/Municipio/no/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_required=no",
+            }).done(function(data) {
+                
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                $('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        $("#caso_municipio_id").on('change', function(e) {
+            var municipio_id = $('#caso_municipio_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>"+municipio_id+"/caso.territorio_id/Territorio/",
+                data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio",
+            }).done(function(data) {
+                $("#div_territorio").html(data);
+                $("#caso_territorio_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+  
+
+     
+$("#impacto_ambiental_si_no").change(function(){
+	var si_no = $("#impacto_ambiental_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_ambiental").show();
+        }
+        else{
+            $("#div_impacto_ambiental").hide();
+            $("input[name='checks_impacto_ambiental[]']").attr('checked', false);
+            $("#impacto_ambiental_descripcion").val('');
+        }
+        
+});
+$("#impacto_cultural_si_no").change(function(){
+	var si_no = $("#impacto_cultural_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_cultural").show();
+        }
+        else{
+            $("#div_impacto_cultural").hide();
+            $("input[name='checks_impacto_cultural[]']").attr('checked', false);
+            $("#impacto_cultural_descripcion").val('');
+        }
+        
+});
+$("#impacto_social_si_no").change(function(){
+	var si_no = $("#impacto_social_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_social").show();
+        }
+        else{
+            $("#div_impacto_social").hide();
+            $("input[name='checks_impacto_social[]']").attr('checked', false);
+            $("#impacto_social_descripcion").val('');
+        }
+        
+});
+$("#impacto_economico_si_no").change(function(){
+	var si_no = $("#impacto_economico_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_economico").show();
+        }
+        else{
+            $("#div_impacto_economico").hide();
+            $("input[name='checks_impacto_economico[]']").attr('checked', false);
+            $("#impacto_economico_descripcion").val('');
+        }
+        
+});
+$("#impacto_organizacion_si_no").change(function(){
+	var si_no = $("#impacto_organizacion_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_organizacion").show();
+        }
+        else{
+            $("#div_impacto_organizacion").hide();
+            $("input[name='checks_impacto_organizacion[]']").attr('checked', false);
+            $("#impacto_organizacion_descripcion").val('');
+        }
+        
+});
+$("#impacto_territorial_si_no").change(function(){
+	var si_no = $("#impacto_territorial_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_territorial").show();
+        }
+        else{
+            $("#div_impacto_territorial").hide();
+            $("input[name='checks_impacto_territorial[]']").attr('checked', false);
+            $("#impacto_territorial_descripcion").val('');
+        }
+        
+});
+
+</script>

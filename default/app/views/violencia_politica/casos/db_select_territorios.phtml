@@ -1,0 +1,49 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('caso.territorio_id', array('nombre', 'tipo_de_territorio'), array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect',  $municipio_id), NULL, array('class'=>''), NULL, 'Territorio'); ?>
+
+<script type='text/javascript'>
+$(document).ready(function() 
+{               
+    $("#caso_territorio_id").on('change', function(e) {
+        var texto = $('#caso_territorio_id option:selected').html();
+        var n = texto.search(" U");
+        if(texto.search(' U') !== -1 ){
+            $("#div_territorio").removeClass("col-md-6");
+            $("#div_territorio").addClass("col-md-3");
+            cargarBarrios();
+            //$(this).hide();
+        }else{
+            $('#div_barrio').hide();
+            $('#caso_comunidad_id').val('');
+            $("#div_territorio").removeClass("col-md-3");
+            $("#div_territorio").addClass("col-md-6");
+        }            
+    });
+});
+function cargarBarrios(){
+    jsSpinner('show');            
+    let datos = new FormData();
+    var territorio_id = $('#caso_territorio_id').val();
+    datos.append('territorio_id', territorio_id);
+    fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_barrios/'; ?>",
+    {
+        method: 'POST',        
+        body: datos
+    }).then(function(response) {
+        /*console.log('response =', response);*/
+        return response.text();
+    })
+    .then(function(data) {
+        console.log('data = ', data);
+        $("#div_barrio").html(data);
+        $("#caso_barrio_id").focus();
+        $("#div_barrio").addClass("col-md-3");
+        $('#div_barrio').show();
+        jsSpinner('hide');
+    })
+    .catch(function(err) {
+        jsSpinner('hide');
+        console.error(err);
+    });   
+}
+</script>

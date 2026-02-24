@@ -1,0 +1,204 @@
+<?php View::flash(); ?>
+<div class="modal fade" id="modal_agregar_cooperacion">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar Cooperación</h4>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cooperacion_nombre_clase_cooperacion">Nombre de la Cooperación <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::text('cooperacion.nombre_clase_cooperacion', array('onchange' => 'validarBotonAgregarCooperacion()'), NULL, 'Nombre de la cooperación'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cooperacion_clase_cooperacion_id">Cooperación <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('cooperacion.clase_cooperacion_id', 'nombre', array('opcion/clase_cooperacion', 'getListadoClaseCooperacionDBS', ''), NULL, array('onchange' => 'validarBotonAgregarCooperacion()'), NULL, 'Cooperación'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cooperacion_tipo_cooperacion_id">Tipo de Cooperación <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('cooperacion.tipo_cooperacion_id', 'nombre', array('opcion/tipo_cooperacion', 'getListadoTipoCooperacionDBS', ''), NULL, array('onchange' => 'validarBotonAgregarCooperacion()'), NULL, 'Tipo de cooperación'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="panel_fuente">Fuente de la información</label>
+                        <div id="panel_fuente" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">                                
+                                    <div class="col-md-12">
+                                    <div class="form-group">                            
+                                        <label for="fuente_fecha">Fecha de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::date('fuente.fecha', array('onkeyup' => 'ValidarBotonAgregarCooperacion()', 'onchange'=>'ValidarBotonAgregarCooperacion()'), NULL, 'Fecha de la fuente'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fuente_descripcion">Descripción de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::textarea('fuente.descripcion', array('class' => 'input-lower', 'onkeyup'=>'validarBotonAgregarCooperacion()'), NULL, 'Descripción de la fuente'); ?>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-guardar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-cooperacion" type="button" class="btn btn-success" onclick="agregarCooperacion()" data-loading-text="Guardando...">Continuar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+            <?php echo DwHtml::button(NULL, 'agregar', array('class' => 'btn-success', "data-toggle"=>"modal", "data-target"=>"#modal_agregar_cooperacion"), 'fa-check-square-o', NULL); ?>
+            <?php // echo DwHtml::button("afectacion/cooperacion/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="datatable table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >TIPO DE COOPERACIÓN</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num=1; ?>
+                <?php foreach($cooperacions as $cooperacion): ?>
+                    <?php $key_show = Security::setKey($cooperacion->id, 'show_cooperacion'); ?>
+                    <?php $key_upd = Security::setKey($cooperacion->id, 'upd_cooperacion'); ?>
+                    <?php $key_del = Security::setKey($cooperacion->id, 'del_cooperacion'); ?>
+                    <?php //$key_inac = Security::setKey($cooperacion->id, 'inactivar_cooperacion'); ?>
+                    <?php //$key_reac = Security::setKey($cooperacion->id, 'reactivar_cooperacion'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $cooperacion->nombre_clase_cooperacion; ?></td>
+                        <td><?php echo $cooperacion->tipo_cooperacion_nombre; ?></td>                        
+                        <td>
+                            <?php if (!empty($cooperacion->ubicaciones)): ?>
+                                <ul>
+                                    <?php foreach (explode(' | ', $cooperacion->ubicaciones) as $u): ?>
+                                        <li><?= $u ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </td> 
+                         <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$cooperacion->nivel, 'estado'=>$cooperacion->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'cooperación',
+                                        "nombre"=>$cooperacion->nombre_clase_cooperacion,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/cooperacion/editar/$key_upd/",
+                                        "url_eliminar"=>"afectacion/cooperacion/eliminar/$cooperacion->nombre_clase_cooperacion/$key_del/$cooperacion->afectacion_id/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver cooperación', "afectacion/cooperacion/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar cooperación', "afectacion/cooperacion/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($cooperacion->estado == Cooperacion::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar cooperación', "afectacion/cooperacion/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar cooperación', "afectacion/cooperacion/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/cooperacion/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+            $("#btn-agregar-cooperacion").prop('disabled', true);
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+
+        function validarBotonAgregarCooperacion() {
+        var nombre_clase_cooperacion = $('#cooperacion_nombre_clase_cooperacion').val();
+        var clase_cooperacion_id = $('#cooperacion_clase_cooperacion_id').val();
+        var tipo_cooperacion_id = $('#cooperacion_tipo_cooperacion_id').val();  
+        var fecha = $('#fuente_fecha').val();
+        var descripcion = $('#fuente_descripcion').val();
+
+        if (nombre_clase_cooperacion !== '' && clase_cooperacion_id !== '' && tipo_cooperacion_id !== '' && fecha !== '' && descripcion !== '') {
+            $("#btn-agregar-cooperacion").prop('disabled', false);
+        } else {
+            $("#btn-agregar-cooperacion").prop('disabled', true);
+        }
+    }
+
+        function agregarCooperacion() {
+        $("#btn-agregar-cooperacion").prop('disabled', true);
+        jsSpinner('show');
+
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cooperacion/agregar_desde_modal/'; ?>";
+
+        let nombre_clase_cooperacion = $('#cooperacion_nombre_clase_cooperacion').val();
+        let clase_cooperacion_id = $('#cooperacion_clase_cooperacion_id').val();
+        let tipo_cooperacion_id = $('#cooperacion_tipo_cooperacion_id').val();
+        let fuente_fecha = $('#fuente_fecha').val();
+        let fuente_descripcion = $('#fuente_descripcion').val();
+        let datos = new FormData();
+        datos.append('nombre_clase_cooperacion', nombre_clase_cooperacion);
+        datos.append('clase_cooperacion_id', clase_cooperacion_id);
+        datos.append('tipo_cooperacion_id', tipo_cooperacion_id);
+        datos.append('fuente_fecha', fuente_fecha);
+        datos.append('fuente_descripcion', fuente_descripcion);
+
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                url = "<?php echo PUBLIC_PATH . 'afectacion/cooperacion/editar/'; ?>" + data + "/";
+                $(location).attr('href', url);
+            })
+            .catch(function(err) {
+                alert('ERROR en agregarCooperacion() ' + err);
+                $("#btn-agregar-cooperacion").prop('disabled', false);     
+                console.error(err);
+            });
+    }
+</script>

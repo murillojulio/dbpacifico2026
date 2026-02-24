@@ -1,0 +1,352 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+
+    <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="disabled"><a href="#">Víctimas</a></li>
+        <li class="disabled"><a href="#">Actos victimizantes</a></li>
+        <li class="disabled"><a href="#">Daños</a></li>
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">
+        <li class="tab-pane active"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Víctimas</a></li>
+        <li class="tab-pane <?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Actos victimizantes</a></li>
+        <li class="tab-pane <?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Daños</a></li>
+    </ul>
+
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+            <div class="row">
+                <div id="div_advertencia" class="col-md-6">
+                    <div class="row">
+                        <div class="alert alert-warning">
+                            <strong>¡Advertencia!</strong> Este tipo de caso debe tener 3 o más víctimas.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php echo DwForm::dbSelect('caso.tipo_caso_id', 'nombre', array('violencia_politica/tipo_caso', 'getListadoTipoCasoDBS', TipoCaso::ACTIVO), NULL, array('class' => 'input-required'), NULL, 'Tipo de caso'); ?>
+                        </div>
+                        <div class="col-md-9">
+                            <?php echo DwForm::text('caso.titulo', array('class' => 'input-required'), NULL, 'Título del caso'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3" id="div_departamento">
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class' => 'input-required'), NULL, 'Departamento'); ?>
+                            <?php //echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('commons/departamento', 'findByPais', (isset($usuario->pais_de_expedicion_id)) ? $usuario->pais_de_expedicion_id : '52'), NULL, array('class' => 'input-required'), (isset($usuario->departamento_de_expedicion_id)) ? $usuario->departamento_de_expedicion_id : NULL, 'Departamento de expedición'); 
+                            ?>
+                        </div>
+                        <div class="col-md-3" id="div_municipio">
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  NULL), NULL, array('class' => 'input-required'), NULL, 'Municipio'); ?>
+                        </div>
+                        <div class="col-md-6" id="div_territorio">
+                            <?php //echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', (isset($caso->municipio_id)) ? $caso->municipio_id : NULL), NULL, array('class' => 'input-required'), (isset($usuario->territorio_id)) ? $caso->territorio_id : NULL, 'Territorio'); 
+                            ?>
+                            <?php echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', NULL), NULL, array('class' => ''), NULL, 'Territorio'); ?>
+                        </div>
+                        <div class="" id="div_barrio">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-md-3" id="">
+                            <?php echo DwForm::hidden("caso.localidad_id", NULL, NULL); ?>
+                        </div>
+                        <div id="div_localidades">
+                            <div class="col-md-3" id="div_corregimiento">
+                                <label for="caso_localidad_corregimiento">Corregimiento</label>
+                                <?php echo DwForm::dbSelectButton('caso.localidad_corregimiento', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', NULL, NULL), NULL, array('onchange' => 'gestionSelectLocalidades(\'corregimiento\')', 'class' => 'input-readonly'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'corregimiento\')', '+'); ?>
+                            </div>
+                            <div class="col-md-3" id="div_vereda">
+                                <label for="caso_localidad_vereda">Vereda</label>
+                                <?php echo DwForm::dbSelectButton('caso.localidad_vereda', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', NULL, NULL), NULL, array('onchange' => 'gestionSelectLocalidades(\'vereda\')', 'class' => 'input-readonly'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'vereda\')', '+'); ?>
+                            </div>
+                            <div class="col-md-3" id="div_inspeccion">
+                                <label for="caso_localidad_inspeccion">Inspección</label>
+                                <?php echo DwForm::dbSelectButton('caso.localidad_inspeccion', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', NULL, NULL), NULL, array('onchange' => 'gestionSelectLocalidades(\'inspeccion\')', 'class' => 'input-readonly'), NULL, NULL, NULL, 'mostrarModalLocalidad(\'inspeccion\')', '+'); ?>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modal_agregar_localidad">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Agregar Localidad</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php echo DwForm::text('localidad.nombre', array('class' => '', 'onkeyup' => 'validarNombreLocalidad()'), NULL, '<div id=\'titulo_localidad\'>Nombre</div>'); ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btn-cancelar-guardar-localidad" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <button id="btn-guardar-localidad" type="button" class="btn btn-primary" onclick="agregarLocalidad()" data-loading-text="Guardando...">Guardar</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        <!--  <div class="input-group">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Vereda +</button>
+      </span>         
+        <select id="caso_localidad_vereda" name="caso[localidad_vereda]" class="form-control ">
+            <option value="">Seleccione</option>
+        </select>
+           
+    </div> -->
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <?php echo DwForm::number('caso.cantidad_victima', array('class' => 'input-integer', 'placeholder' => 'INDETERMINADO'), NULL, 'Cantidad de víctimas'); ?>
+                </div>
+                <div class="col-md-3">
+                    <?php echo DwForm::date('caso.fecha_desde', array('class' => 'input-required'), '', 'Fecha en que ocurrió el caso | DD-MM-YYYY'); ?>
+                </div>
+                <div class="col-md-3">
+                    <?php /*echo DwForm::date('caso.fecha_hasta', array('class'=>'input-required'), '', 'Fecha en que finalizó el caso'); */ ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <?php echo DwForm::textarea('caso.descripcion', array('class' => 'input-lower', 'required' => 'required', 'style' => "height: 200px;"), '', 'Descripción del caso'); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="panel_fuente">
+                        <h3 class="panel-title">Fuente(s) de la información</h3>
+                    </label>
+                    <div id="panel_fuente" class="panel panel-default">
+                        <div class="panel-body">
+                            <?php View::partial('fuentes/agregar', false, NULL); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-actions">
+            <?php echo DwForm::sendContinue('Continuar'); ?>
+            <?php echo DwForm::cancel(); ?>
+            <?php //echo DwForm::focus('caso.titulo'); 
+            ?>
+        </div>
+    </div>
+</div>
+
+<!--      //////////////////////////////////  SEGUNDA PESTAÑA-->
+<div class="tab-pane <?php echo $tab_2_active; ?>" id="tab2">
+
+</div>
+<!--      //////////////////////////////////  TERCERA PESTAÑA-->
+
+<div class="tab-pane <?php echo $tab_3_active; ?>" id="tab3">
+
+</div>
+
+
+<!--      //////////////////////////////////  CUARTA PESTAÑA-->
+
+<div class="tab-pane <?php echo $tab_4_active; ?>" id="tab4">
+
+</div>
+
+
+
+</div>
+<?php echo DwForm::close(); ?>
+</div>
+<div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar-localidad" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Los cambios del daño al territorio se han guardado con exito.
+    </div>
+</div>
+<script type="text/javascript">
+    $("#div_advertencia").hide();
+
+    function deshabilitarBotonLocalidades() {
+        $("#btn_caso_localidad_corregimiento").prop('disabled', true);
+        $("#btn_caso_localidad_vereda").prop('disabled', true);
+        $("#btn_caso_localidad_inspeccion").prop('disabled', true);
+    }
+    deshabilitarBotonLocalidades();
+
+    $("#caso_tipo_caso_id").on('change', function(e) {
+        var tipo_caso_id = $('#caso_tipo_caso_id').val();
+        if (tipo_caso_id === '2') {
+            $("#div_advertencia").show();
+            //$("#caso_cantidad_victima").val('3');
+        } else {
+            $("#div_advertencia").hide();
+            //$("#caso_cantidad_victima").val('1');
+        }
+    });
+
+    $("#caso_departamento_id").on('change', function(e) {
+        jsSpinner('show');
+        limpiarLocalidades();
+        deshabilitarBotonLocalidades();
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_municipios/'; ?>";
+        var departamento_id = $('#caso_departamento_id').val();
+        let datos = new FormData();
+        datos.append('departamento_id', departamento_id);
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('data = ', data);
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                console.error(err);
+            });
+    });
+
+
+    function limpiarLocalidades() {
+        $("#caso_localidad_corregimiento").empty();
+        $("#caso_localidad_vereda").empty();
+        $("#caso_localidad_inspeccion").empty();
+        $("#caso_territorio_id").empty();
+    }
+
+    let tipo_localidad = '';
+
+    function mostrarModalLocalidad(tipo) {
+        tipo_localidad = tipo;
+        let modal = $("#modal_agregar_localidad");
+        modal.modal('show');
+        modal.find('.modal-title').text('Crear ' + tipo);
+        modal.find('#titulo_localidad').text('Nombre ' + tipo);
+        /*$("#localidad_nombre").val('hola');
+        $("#localidad_nombre").focus();*/
+        $("#localidad_nombre").val('');
+        $("#btn-guardar-localidad").attr("disabled", "true");
+    }
+
+    function validarNombreLocalidad() {
+        let nombre = $('#localidad_nombre').val().trim();
+        if ($('#localidad_nombre').val() === '' || nombre.length <= 3) {
+            $("#btn-guardar-localidad").prop('disabled', true);
+        } else {
+            $("#btn-guardar-localidad").prop('disabled', false);
+        }
+    }
+
+    function agregarLocalidad() {
+        $("#btn-cancelar-guardar-localidad").hide();
+        let btn = $('#btn-guardar-localidad');
+        btn.button('loading');
+        let modal = $("#modal_agregar_localidad");
+        let nombre_localidad = $("#localidad_nombre").val();
+        let municipio_id = $("#caso_municipio_id").val();
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/agregar_localidad/'; ?>";
+
+        let datos = {
+            "municipio_id": municipio_id,
+            "nombre": nombre_localidad,
+            "tipo": tipo_localidad
+        };
+        let localidad_id = '';
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                if (tipo_localidad === 'corregimiento') {
+                    $("#div_corregimiento").html(data);
+                    $("#caso_localidad_inspeccion").val('');
+                    $("#caso_localidad_vereda").val('');
+                    localidad_id = $("#caso_localidad_corregimiento").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                } else if (tipo_localidad === 'vereda') {
+                    $("#div_vereda").html(data);
+                    $("#caso_localidad_corregimiento").val('');
+                    $("#caso_localidad_inspeccion").val('');
+                    localidad_id = $("#caso_localidad_vereda").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                } else if (tipo_localidad === 'inspeccion') {
+                    $("#div_inspeccion").html(data);
+                    $("#caso_localidad_corregimiento").val('');
+                    $("#caso_localidad_vereda").val('');
+                    localidad_id = $("#caso_localidad_inspeccion").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                }
+                //$("#div_lista_localidads").html(data);
+                mostrarAlertGuardaLocalidad(tipo_localidad, nombre_localidad);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-localidad").show();
+                $("#localidad_nombre").val('');
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en agregarLocalidad()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function gestionCampoBarrios(accion) {
+        if (accion === 'ocultar') {
+            $("#div_barrio").hide();
+            $("#caso_comunidad_id").val('');
+            $("#caso_territorio_id").val('');
+            $("#div_territorio").removeClass("col-md-3");
+            $("#div_territorio").addClass("col-md-6");
+        }
+    }
+
+    function gestionSelectLocalidades(tipo_localidad_in) {
+        let localidad_id = '';
+        if (tipo_localidad_in === 'corregimiento') {
+            $("#caso_localidad_inspeccion").val('');
+            $("#caso_localidad_vereda").val('');
+            localidad_id = $("#caso_localidad_corregimiento").val();
+            $("#caso_localidad_id").val(localidad_id);
+        } else if (tipo_localidad_in === 'vereda') {
+            $("#caso_localidad_corregimiento").val('');
+            $("#caso_localidad_inspeccion").val('');
+            localidad_id = $("#caso_localidad_vereda").val();
+            $("#caso_localidad_id").val(localidad_id);
+        } else if (tipo_localidad_in === 'inspeccion') {
+            $("#caso_localidad_corregimiento").val('');
+            $("#caso_localidad_vereda").val('');
+            localidad_id = $("#caso_localidad_inspeccion").val();
+            $("#caso_localidad_id").val(localidad_id);
+        }
+    }
+
+    function mostrarAlertGuardaLocalidad(tipo_localidad_in, nombre_localidad_in) {
+        if (tipo_localidad_in === 'corregimiento') {
+            $("#alert-id-guardar-localidad").text('El ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creado con exito');
+        } else if (tipo_localidad_in === 'vereda') {
+            $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+        } else if (tipo_localidad_in === 'inspeccion') {
+            $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+        }
+        $("#alert-id-guardar-localidad").show();
+        $("#alert-id-guardar-localidad").hide().fadeIn(500).delay(4000).fadeOut(500);
+    }
+</script>

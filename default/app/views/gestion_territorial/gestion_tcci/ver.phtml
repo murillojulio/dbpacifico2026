@@ -1,0 +1,103 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    
+    <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Cabildos</a></li>
+        <li class="<?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Acciones de Exigibilidad de derechos</a></li>       
+        <li class="<?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Iniciativas empresariales</a></li> 
+        <!--<li class="<?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Fuente(s) de la información</a></li>--> 
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Cabildos</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Acciones de Exigibilidad de derechos</a></li>        
+        <li class="tab-pane <?php echo $tab_3_active; ?>" ><a href="#tab3" data-toggle="tab">Iniciativas empresariales</a></li>
+        <!--<li class="tab-pane <?php echo $tab_4_active; ?>" ><a href="#tab4" data-toggle="tab">Fuente(s) de la información</a></li>-->
+    </ul>
+    
+    <div class="tab-content"> 
+        <div class="tab-pane <?php echo $tab_1_active; ?>" id="tab1">
+        <div class="row">
+                 <div class="col-md-12">
+                     <?php View::partial('gestion_territorial/cabildo/ver', false, 
+            array('cabildos'=>$cabildos, 'obj_territorio'=>$obj_territorio, 'key'=>$key, 'sub_tab'=>$sub_tab,
+                'order'=>$order, 'page'=>$page)); ?>            
+                 </div>
+             </div>
+              <div class="row">
+            <div class="form-actions">
+                 <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+    </div>
+        
+<!--      //////////////////////////////////  SEGUNDA PESTAÑA-->
+ <div class="tab-pane <?php echo $tab_2_active; ?>" id="tab2">            
+                 <!-- TABULACION INTERNA  -->
+            <div class="row">
+                 <div class="col-md-12">
+                     <?php View::partial('gestion_territorial/accion_exigibilidad_derecho/ver', false, 
+            array('accion_exigibilidad_derechos'=>$accion_exigibilidad_derechos, 'obj_territorio'=>$obj_territorio, 'key'=>$key, 'sub_tab'=>$sub_tab,
+                'order'=>$order, 'page'=>$page, 'controller'=>$controller)); ?>            
+                 </div>
+             </div>
+             <div class="form-actions">
+                 <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+    </div> 
+
+
+<!--      //////////////////////////////////  TERCERA PESTAÑA-->
+
+ <div class="tab-pane <?php echo $tab_3_active; ?>" id="tab3">
+            <!-- TABULACION INTERNA  -->
+   <div class="row">
+                 <div class="col-md-12">
+                     <?php View::partial('gestion_territorial/iniciativa_empresarial/ver', false, 
+            array('iniciativa_empresarials'=>$iniciativa_empresarials, 'obj_territorio'=>$obj_territorio, 'key'=>$key, 'sub_tab'=>$sub_tab,
+                'order'=>$order, 'page'=>$page, 'controller'=>$controller)); ?>       
+                 </div>
+             </div>
+             <div class="form-actions">
+                 <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+    </div> 
+
+
+<!--      //////////////////////////////////  CUARTA PESTAÑA-->
+
+<!-- <div class="tab-pane <?php echo $tab_4_active; ?>" id="tab4">
+             <div class="row">
+                 <div class="col-md-12">
+                     <?php 
+//                     View::partial('accion_seguimiento_control/ver', false, 
+//            array('accion_seguimiento_controls'=>$accion_seguimiento_controls, 'megaproyecto'=>$megaproyecto, 'key'=>$key, 'sub_tab'=>$sub_tab)); 
+                     ?>  
+                 
+                 </div>
+             </div>
+              <div class="row">
+            <div class="form-actions">
+                 <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+    </div>-->
+  <?php echo DwForm::close(); ?> 
+        </div>
+    </div>
+    
+    <script type='text/javascript'>
+       
+</script>

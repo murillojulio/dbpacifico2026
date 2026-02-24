@@ -1,0 +1,159 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process_estado_nivel('politica_publica', $politica_publica, $page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::open(); ?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <label for="panel_info_basica">
+                <h3 class="panel-title">Información básica</h3>
+            </label>
+            <div id="panel_info_basica" class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo DwForm::hidden('politica_publica.megaproyecto_id', NULL, NULL) ?>
+                            <?php echo DwForm::hidden('politica_publica.id', NULL, NULL) ?>
+                            <?php echo DwForm::text('politica_publica.nombre', array('class' => 'input-required'), NULL, 'Nombre del documento'); ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <?php
+                        if ($politica_publica->documento == '') {
+                            echo '<div class="col-md-3">';
+                            echo DwForm::upload_V2('documento_politica_publica', array('data-to' => PUBLIC_PATH . 'afectacion/politica_publica/upload/documento_politica_publica/', 'data-size' => Session::get('max_size_file_upload'), 'data-files' => 'doc', 'data-success' => 'loadDocumentoPolitica'), 'Adjuntar documento de política pública', 'text_con', 'icon_con');
+                            echo '</div>  
+                      <div class="col-md-9">                        
+                         <a id="enlace_documento_politica" target="_blank" href="">                            
+                         </a>                            
+                      </div>';
+                            echo DwForm::hidden('politica_publica.documento', NULL, '');
+                        } else {
+                            echo '<div class="col-md-3">';
+                            echo DwForm::upload_V2('documento_politica_publica', array('data-to' => PUBLIC_PATH . 'afectacion/politica_publica/upload/documento_politica_publica/', 'data-size' => Session::get('max_size_file_upload'), 'data-files' => 'doc', 'data-success' => 'loadDocumentoPolitica'), 'Cambiar documento de política pública', 'text_con', 'icon_con');
+                            echo '</div>';
+                            echo '<div class="col-md-9">';
+                            echo '<a id="enlace_documento_politica" class="btn btn-info" target="_blank" href="' . PUBLIC_PATH . 'files/upload/politica_publica/' . $politica_publica->documento . '">';
+                            echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento adjunto</a>';
+                            echo '</div>';
+                            echo DwForm::hidden('politica_publica.documento', NULL, $politica_publica->documento);
+                        }
+                        ?>
+                    </div>
+
+                    <script type="text/javascript">
+                        function loadDocumentoPolitica(result, input) {
+
+                            $("#politica_publica_documento").val(result.name);
+                            $("#enlace_documento_politica").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/politica_publica/' + result.name);
+                            $("#enlace_documento_politica").attr('class', 'btn btn-info');
+
+                            //$("#enlace_documento").attr('innerHTML', result.name);
+                            document.getElementById('enlace_documento_politica').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - ' + result.size;
+                            document.getElementById('text_con').innerHTML = 'Cambiar documento de política pública';
+                            $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+                        }
+                    </script>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('politica_publica.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoDBS', ''), NULL, array('class' => 'input-required'), NULL, 'Seleccione el sector de la política pública'); ?>
+                        </div>
+                        <div id="div_subtipo_megaproyecto" class="col-md-6">
+                            <?php echo DwForm::dbSelect('politica_publica.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $politica_publica->tipo_megaproyecto_id), NULL, array('class' => 'input-required'), NULL, 'Seleccione el subsector de la política pública'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <?php echo DwForm::textarea('politica_publica.contenido_politica', array('class' => 'input-lower', 'style' => "height: 200px;"), NULL, 'Contenido de la política pública(Breve descripción)'); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo DwForm::textarea('politica_publica.descripcion_politica', array('class' => 'input-lower', 'style' => "height: 200px;"), NULL, 'Estado de implementación'); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <?php echo DwForm::textarea('politica_publica.antecedente_politica', array('class' => 'input-lower', 'style' => "height: 200px;"), NULL, 'Antecedentes de la política pública'); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php /*echo DwForm::date('politica_publica.fecha_vigencia_inicio', array('class'=>''), date('d-m-Y', strtotime($politica_publica->fecha_vigencia_inicio)), 'Fecha en que inicia la vigencia de la política pública');*/ ?>
+                            <div class="form-group">
+                                <label for="politica_publica_fecha_vigencia_inicio">Fecha en que inicia la vigencia de la política pública | DD-MM-AAAA</label>
+                                <div class="input-group date datepicker" id="dp_politica_publica_fecha_vigencia_inicio">
+                                    <input id="politica_publica_fecha_vigencia_inicio" name="politica_publica[fecha_vigencia_inicio]" type="text" value="<?php if ($politica_publica->fecha_vigencia_inicio != null) {
+                                                                                                                                                                echo date('d-m-Y', strtotime($politica_publica->fecha_vigencia_inicio));
+                                                                                                                                                            } ?>" class="js-datepicker input-date form-control">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <p class="help-block">
+                                    <small class="help-error"></small>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="politica_publica_fecha_vigencia_fin">Fecha en que finaliza la vigencia de la política pública | DD-MM-AAAA</label>
+                                <div class="input-group date datepicker" id="dp_politica_publica_fecha_vigencia_fin">
+                                    <input id="politica_publica_fecha_vigencia_fin" name="politica_publica[fecha_vigencia_fin]" type="text" value="<?php if ($politica_publica->fecha_vigencia_fin != null) {
+                                                                                                                                                        echo date('d-m-Y', strtotime($politica_publica->fecha_vigencia_fin));
+                                                                                                                                                    } ?>" class="js-datepicker input-date form-control">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <p class="help-block">
+                                    <small class="help-error"></small>
+                                </p>
+                            </div>
+                            <?php /*echo DwForm::date('politica_publica.fecha_vigencia_fin', array('class'=>''), NULL, 'Fecha en que finaliza la vigencia de la política pública'); */ ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <label for="panel_fuente">
+                <h3 class="panel-title">Fuente(s) de la información</h3>
+            </label>
+            <div id="panel_fuente" class="panel panel-default">
+                <div class="panel-body">
+                    <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="form-actions">
+            <?php echo DwForm::send('Guardar política pública'); ?>
+            <?php echo DwForm::cancel('afectacion/politica_publica/listar/'); ?>
+            <?php echo DwForm::focus('politica_publica.nombre'); ?>
+        </div>
+    </div>
+
+    <?php echo DwForm::close(); ?>
+
+    <script type='text/javascript'>
+        $("#politica_publica_tipo_megaproyecto_id").on('change', function(e) {
+            $("#div_micro_subtipo_megaproyecto").hide();
+            //$("#div_micro_subtipo_megaproyecto").val('');
+            var tipo_megaproyecto_id = $('#politica_publica_tipo_megaproyecto_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_subtipo_megaproyecto_politica/'; ?>" + tipo_megaproyecto_id + "/",
+                data: "tipo_megaproyecto_id=" + tipo_megaproyecto_id,
+            }).done(function(data) {
+                $("#div_subtipo_megaproyecto").html(data);
+                $("#politica_publica_subtipo_megaproyecto_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+    </script>
+</div>

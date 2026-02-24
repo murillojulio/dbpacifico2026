@@ -1,0 +1,65 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'opcion/sector_programa_social/buscar/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"opcion/sector_programa_social/listar/"            
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/sector_programa_social/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($sector_programa_socials->items as $sector_programa_social): ?>
+                    <?php $key_show = Security::setKey($sector_programa_social->id, 'show_sector_programa_social'); ?>
+                    <?php $key_upd = Security::setKey($sector_programa_social->id, 'upd_sector_programa_social'); ?>
+                    <?php $key_inac = Security::setKey($sector_programa_social->id, 'inactivar_sector_programa_social'); ?>
+                    <?php $key_reac = Security::setKey($sector_programa_social->id, 'reactivar_sector_programa_social'); ?>
+                    <?php $key_del = Security::setKey($sector_programa_social->id, 'eliminar_sector_programa_social'); ?>
+                    <tr>
+                        <td><?php echo $sector_programa_socials->counter; ?></td>
+                        <td><?php echo $sector_programa_social->nombre; ?></td>
+                        <td><?php echo $sector_programa_social->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver sector programa social', "opcion/sector_programa_social/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar sector programa social', "opcion/sector_programa_social/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($sector_programa_social->estado == SectorProgramaSocial::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar sector programa social', "opcion/sector_programa_social/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar sector programa social', "opcion/sector_programa_social/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar sector programa social', "opcion/sector_programa_social/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar sector programa social', 'msg'=>'Está seguro de eliminar este sector programa social? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $sector_programa_socials->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$sector_programa_socials, 'url'=>"opcion/sector_programa_social/listar/$order/")); ?>
+</div>

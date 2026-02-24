@@ -1,0 +1,149 @@
+<?php ?> 
+<div class="col-md-12"> 
+                       <div class="row">
+                        <div class="col-md-3">                             
+                            <?php echo DwForm::text('tituladosi.resolucion_constitucion', array('class'=>'input-lower input-readonly'), $array_titulado_si['resolucion_constitucion'], 'Resolución constitución'); ?>                          
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tituladosi_area_titulada">Area titulada</label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_area_titulada" name="tituladosi[area_titulada]" type="text" value="<?php echo number_format($array_titulado_si['area_titulada'], 2, '.', ','); ?>" class="form-control formato_punto_coma input-readonly" readonly="readonly" data-invalid="">                                          
+                                          <div class="input-group-addon">ha</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                           <div class="col-md-6">
+                                   <?php echo DwForm::textarea('tituladosi.limite_lindero', array('class'=>'input-lower input-readonly'), $array_titulado_si['limite_lindero'], 'Límite / lindero'); ?>                            
+                        </div>  
+                            </div> 
+       <div class="row">    
+         <?php 
+            if($array_titulado_si['documento_constitucion'] != '')            
+            {                
+                echo '<div class="col-md-9">';                        
+                echo '<a id="enlace_documento_con" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/territorio/resolucion/documento_constitucion/'.$array_titulado_si['documento_constitucion'].'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento de constitución</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('tituladosi.documento_constitucion', NULL, $array_titulado_si['documento_constitucion']);
+                                  
+            }
+         ?>
+     </div>
+    <div class="row">&nbsp;</div>
+                    
+           <div id="div_solicitud_ampliacion"> 
+               <?php echo DwForm::hidden('tituladosi.solicitud_ampliacion_si_no', NULL, $array_titulado_si['solicitud_ampliacion_si_no']);?>
+                <label for="panel_solicitud_ampliacion"><h3 class="panel-title">Solicitud ampliación</h3></label>   
+                <div id="panel_solicitud_ampliacion" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">
+                              
+                            <?php echo DwForm::date('tituladosi.solicitud_ampliacion_fecha', array('class'=>'input-readonly'), substr($array_titulado_si['solicitud_ampliacion_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                        </div> 
+                          <div class="col-md-3">
+                              
+                                    <?php echo DwForm::text('tituladosi.solicitud_ampliacion_resolucion', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_ampliacion_resolucion'], 'Resolución'); ?>
+
+                          </div>
+                           <div class="col-md-3">
+                            <label for="tituladosi_solicitud_ampliacion_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_solicitud_ampliacion_area" name="tituladosi[solicitud_ampliacion_area]" type="text" value="<?php echo number_format($array_titulado_si['solicitud_ampliacion_area'], 2, '.', ',')?>" class="form-control formato_punto_coma input-readonly" readonly="readonly" data-invalid="">                                          
+                                          <div class="input-group-addon">ha</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_ampliacion_lindero_limite', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_ampliacion_lindero_limite'], 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_ampliacion_observacion', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_ampliacion_observacion'], 'Observaciones'); ?>                  
+                        </div>                          
+                      </div>
+                      <div class="row">    
+         <?php 
+            if($array_titulado_si['solicitud_ampliacion_documento'] != '')            
+            {
+                echo '<div class="col-md-8">';                        
+                echo '<a id="enlace_documento_sol_amp" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/territorio/resolucion/documento_ampliacion/'.$array_titulado_si['solicitud_ampliacion_documento'].'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento de solicitud ampliación</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('tituladosi.solicitud_ampliacion_documento', NULL, $array_titulado_si['solicitud_ampliacion_documento']);                                  
+            }
+         ?>
+     </div>
+    <div class="row">&nbsp;</div>
+                  </div>
+                </div>    
+</div>
+        <div id="div_solicitud_saneamiento">
+            <?php echo DwForm::hidden('tituladosi.solicitud_saneamiento_si_no', NULL, $array_titulado_si['solicitud_saneamiento_si_no']);?>
+                <label for="panel_solicitud_saneamiento"><h3 class="panel-title">Solicitud saneamiento</h3></label>   
+                <div id="panel_solicitud_saneamiento" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">                              
+                            <?php echo DwForm::date('tituladosi.solicitud_saneamiento_fecha', array('class'=>'input-readonly'), substr($array_titulado_si['solicitud_saneamiento_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                        </div> 
+                          <div class="col-md-3">                              
+                                <?php echo DwForm::text('tituladosi.solicitud_saneamiento_resolucion', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_saneamiento_resolucion'], 'Resolución'); ?>
+                          </div>
+                           <div class="col-md-3">
+                            <label for="tituladosi_solicitud_saneamiento_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_solicitud_saneamiento_area" name="tituladosi[solicitud_saneamiento_area]" type="text" value="<?php echo number_format($array_titulado_si['solicitud_saneamiento_area'], 2, '.', ',');?>" class="form-control formato_punto_coma input-readonly" readonly="readonly" data-invalid="">                                          
+                                          <div class="input-group-addon">Hectáreas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_saneamiento_lindero_limite', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_saneamiento_lindero_limite'], 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_saneamiento_observacion', array('class'=>'input-lower input-readonly'), $array_titulado_si['solicitud_saneamiento_observacion'], 'Observaciones'); ?>                  
+                        </div>
+                          
+                      </div>
+                       <div class="row">    
+         <?php 
+            if($array_titulado_si['solicitud_saneamiento_documento'] != '')
+            {  
+                echo '<div class="col-md-8">';                        
+                echo '<a id="enlace_documento_sol_san" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/territorio/resolucion/documento_saneamiento/'.$array_titulado_si['solicitud_saneamiento_documento'].'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento de solicitud saneamiento</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('tituladosi.solicitud_saneamiento_documento', NULL, $array_titulado_si['solicitud_saneamiento_documento']);
+                                  
+            }
+         ?>
+     </div>
+     <div class="row">&nbsp;</div>
+                  </div>
+                </div>  
+</div>
+                 
+  </div>
+
+<script type="text/javascript">
+    
+    if($("#tituladosi_solicitud_saneamiento_si_no").val() == 'NO')
+        {$("#div_solicitud_saneamiento").hide();}
+        
+        if($("#tituladosi_solicitud_ampliacion_si_no").val() == 'NO')
+            {$("#div_solicitud_ampliacion").hide();}
+    
+</script>
+ 
+<?php //echo time(); ?>

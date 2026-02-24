@@ -1,0 +1,32 @@
+<?php View::flash(); ?>
+<div id="div_gestion_danos">
+    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>TERRITORIO</th>
+                <th>TIPO DE DAÑO</th>
+                <th>DAÑO</th>  
+                <th>DESCRIPCION</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+                <?php
+                    foreach($CasoDanoTerritorio as $danos):
+                ?>
+                <tr>
+                    <td><?php echo $danos->territorio; ?></td>
+                    <td><?php echo $danos->getDano()->getTipoDano()->nombre; ?></td>
+                    <td><?php echo $danos->dano; ?></td>
+                    <td><?php echo $danos->descripcion; ?></td>
+                    <td class="btn-actions">                                                
+                        <button id="btn-editar-dano-<?php echo $danos->id?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="cargarModalEditarCasoDanoTerritorio(<?php echo $danos->id; ?>)"></button>
+                        <button id="btn-eliminar-dano-<?php echo $dano->id?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariablesEliminar(<?php echo $danos->id; ?>)" data-toggle="modal" data-target="#modal_eliminar_dano" title="Eliminar"></button>
+                    </td>
+                </tr>
+                <?php
+                endforeach;                
+                ?>
+            </tbody>
+    </table>
+</div>

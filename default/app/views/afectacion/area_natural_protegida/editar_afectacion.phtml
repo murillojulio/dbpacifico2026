@@ -1,0 +1,32 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('afectacion_area_natural_protegida', $afectacion_area_natural_protegida,$page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-4">
+                        <?php echo DwForm::hidden('afectacion_area_natural_protegida.id', NULL, NULL) ?>
+                        <?php echo DwForm::hidden('afectacion_area_natural_protegida.area_natural_protegida_id', NULL, NULL) ?>                        
+                        <?php echo DwForm::dbSelect('afectacion_area_natural_protegida.tipo_afectacion_area_natural_protegida_id', 'nombre', array('opcion/tipo_afectacion_area_natural_protegida', 'getListadoTipoAfectacionAreaNaturalProtegidaDBS'), NULL, array('class'=>'input-required'), NULL, 'Tipo de afectación'); ?>          
+                    </div>                
+                  <div class="col-md-8">
+                        <?php echo DwForm::textarea('afectacion_area_natural_protegida.descripcion', array('class'=>'input-lower input-required'), NULL, 'Descripción de la afectación'); ?>
+                    </div>           
+                </div>
+    
+          
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Actualizar afectación'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('afectacion_area_natural_protegida.tipo_afectacion_area_natural_protegida_id'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

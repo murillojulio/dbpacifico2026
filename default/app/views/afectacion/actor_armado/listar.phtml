@@ -1,0 +1,205 @@
+<?php View::flash(); ?>
+<div class="modal fade" id="modal_agregar_dano">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar Actor Armado</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="actor_armado_presunto_responsable_id">Actor Armado <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('actor_armado.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', ''), NULL, array('onchange' => 'validarBotonAgregarActorArmado()'), NULL, 'Seleccione el tipo de cultivo'); ?>
+                        </div>
+                        <div class="form-group">
+                            <label for="actor_armado_descripcion">Descripción del actor armado <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::textarea('actor_armado.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonAgregarActorArmado()'), NULL, 'Descripción del actor armado'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="actor_armado_fecha_llegada">Fecha de llegada DD-MM-AAAA <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::date('actor_armado.fecha_llegada', array('onkeyup' => 'ValidarBotonAgregarActorArmado()', 'onchange' => 'ValidarBotonAgregarActorArmado()'), NULL, 'Fecha de la fuente'); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="actor_armado_fecha_salida">Fecha de salida DD-MM-AAAA </label>
+                            <?php echo DwForm::date('actor_armado.fecha_salida', array('onkeyup' => 'ValidarBotonAgregarActorArmado()', 'onchange' => 'ValidarBotonAgregarActorArmado()'), NULL, 'Fecha de la fuente'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="panel_fuente">Fuente de la información</label>
+                        <div id="panel_fuente" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="fuente_fecha">Fecha de la fuente DD-MM-AAAA <span style="color: red;" class="req">*</span></label>
+                                            <?php echo DwForm::date('fuente.fecha', array('onkeyup' => 'ValidarBotonAgregarActorArmado()', 'onchange' => 'ValidarBotonAgregarActorArmado()'), NULL, 'Fecha de la fuente'); ?>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="fuente_descripcion">Descripción de la fuente <span style="color: red;" class="req">*</span></label>
+                                            <?php echo DwForm::textarea('fuente.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonAgregarActorArmado()'), NULL, 'Descripción de la fuente'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-guardar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-actor_armado" type="button" class="btn btn-success" onclick="agregarActorArmado()" data-loading-text="Guardando...">Continuar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button(NULL, 'agregar', array('class' => 'btn-success', "data-toggle" => "modal", "data-target" => "#modal_agregar_dano"), 'fa-check-square-o', NULL); ?>
+                <?php /* echo DwHtml::button("afectacion/actor_armado/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);*/ ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="datatable table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">ACTOR ARMADO</th>
+                    <th class="col-hidden">DESCRIPCION</th>
+                    <th class="col-hidden">FECHA LLEGADA</th>
+                    <th class="col-hidden">FECHA SALIDA</th>
+                    <th class="col-hidden">UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num=1; ?>
+                <?php foreach ($actor_armados as $actor_armado) : ?>
+                    <?php $key_show = Security::setKey($actor_armado->id, 'show_actor_armado'); ?>
+                    <?php $key_upd = Security::setKey($actor_armado->id, 'upd_actor_armado'); ?>
+                    <?php $key_del = Security::setKey($actor_armado->id, 'del_actor_armado'); ?>
+                    <?php //$key_inac = Security::setKey($actor_armado->id, 'inactivar_actor_armado'); 
+                    ?>
+                    <?php //$key_reac = Security::setKey($actor_armado->id, 'reactivar_actor_armado'); 
+                    ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $actor_armado->presunto_responsable; ?></td>
+                        <td><?php echo $actor_armado->descripcion; ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($actor_armado->fecha_llegada)); ?></td>
+                        <td><?php echo date('d-m-Y', strtotime($actor_armado->fecha_salida)); ?></td>
+                        <td>
+                            <?php if (!empty($actor_armado->ubicaciones)): ?>
+                                <ul>
+                                    <?php foreach (explode(' | ', $actor_armado->ubicaciones) as $u): ?>
+                                        <li><?= $u ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </td>
+
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $actor_armado->nivel, 'estado' => $actor_armado->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial(
+                                'opcion/ver',
+                                false,
+                                array(
+                                    'elemento' => 'actor armado',
+                                    "nombre" => $actor_armado->presunto_responsable,
+                                    "url_ver" => NULL,
+                                    "url_editar" => "afectacion/actor_armado/editar/$key_upd/",
+                                    "url_eliminar" => "afectacion/actor_armado/eliminar/$actor_armado->presunto_responsable/$key_del/$actor_armado->afectacion_id/"
+                                )
+                            ); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page' => $actor_armados, 'url' => "afectacion/actor_armado/listar/$order/")); ?>
+
+</div>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $("#btn-agregar-actor_armado").prop('disabled', true);
+        $("monto_inversion").priceFormat({
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+    });
+
+    function validarBotonAgregarActorArmado() {
+        var presunto_responsable = $('#actor_armado_presunto_responsable_id').val();
+        var fecha = $('#fuente_fecha').val();
+        var descripcion = $('#fuente_descripcion').val();
+        var fecha_llegada = $('#actor_armado_fecha_llegada').val();
+        var descripcion_actor = $('#actor_armado_descripcion').val();
+
+
+        if (presunto_responsable !== '' && fecha !== '' && descripcion_actor !== '' && descripcion !== '' && fecha_llegada !== '') {
+            $("#btn-agregar-actor_armado").prop('disabled', false);
+        } else {
+            $("#btn-agregar-actor_armado").prop('disabled', true);
+        }
+    }
+
+    function agregarActorArmado() {
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/actor_armado/agregar_desde_modal/'; ?>";
+
+        let presunto_responsable_id = $('#actor_armado_presunto_responsable_id').val();
+        let fuente_fecha = $('#fuente_fecha').val();
+        let fuente_descripcion = $('#fuente_descripcion').val();
+        let descripcion = $('#actor_armado_descripcion').val();
+        let fecha_llegada = $('#actor_armado_fecha_llegada').val();
+        let fecha_salida = $('#actor_armado_fecha_salida').val();
+        let datos = new FormData();
+        datos.append('presunto_responsable_id', presunto_responsable_id);
+        datos.append('fuente_fecha', fuente_fecha);
+        datos.append('descripcion', descripcion);
+        datos.append('fecha_llegada', fecha_llegada);
+        datos.append('fecha_salida', fecha_salida);
+        datos.append('fuente_descripcion', fuente_descripcion);
+
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                url = "<?php echo PUBLIC_PATH . 'afectacion/actor_armado/editar/'; ?>" + data + "/";
+                $(location).attr('href', url);
+            })
+            .catch(function(err) {
+
+                alert('ERROR en agregarActorArmado() ' + err);
+
+                console.error(err);
+            });
+    }
+</script>

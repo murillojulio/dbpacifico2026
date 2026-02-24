@@ -1,0 +1,180 @@
+  <!-- Modal Borrar ubicacion -->
+<div class="modal fade" id="myModalDeleteUbicacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Eliminar ubicación</h4>
+      </div>
+      <div class="modal-body">
+          ¿Esta seguro que desea eliminar esta ubicación?       
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button id="btn_borrar_ubicacion" type="button" class="btn btn-success">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  
+    <!-- Modal Adicionar Ubicacion -->
+<div class="modal fade" id="myModalAddUbicacion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Adicionar ubicación</h4>
+      </div>
+      <div class="modal-body">
+          <div class="row">
+               <div class="col-md-12" id="div_departamento"> 
+                    <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>''), NULL, 'Departamento'); ?>                           
+                </div>
+          </div>
+          <div class="row">
+              <div class="col-md-12" id="div_municipio">                    
+                <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento', '0'), NULL, array('class' => ''), NULL, 'Municipio'); ?>                        
+              </div>
+          </div>                
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button id="btn_anadir_ubicacion" type="button" class="btn btn-success disabled">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+                           
+                            <label for="panel_ubicacion_proyecto">Ubicación <?echo $titulo;?></label>
+                            <div id="panel_ubicacion_proyecto" class="panel panel-default">
+                                <div class="panel-body">
+                                
+                      <?php echo DwForm::hidden('territorio_id', NULL, $territorio_id) ?>
+                     <?php echo DwForm::hidden('id_a_borrar_ubicacion', NULL, '') ?>
+
+    <div id="div_ubicaciones" class="container-overflow">
+        <div class="btn-toolbar btn-toolbar-top">
+            <div class="row">
+                <div class="btn-actions">    
+                    <button title="Agregar ubicación" type="button" class="btn btn-success btn-default" data-toggle="modal" data-target="#myModalAddUbicacion">
+                         AGREGAR UBICACIÓN<!-- <i class="btn-icon-only fa fa-minus"></i>-->
+                    </button>
+                </div>            
+            </div>
+        </div>
+                         
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>DEPARTAMENTO</th>
+                    <th>SUBREGION</th>
+                    <th>MUNICIPIO</th>                                        
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>                
+                <?php
+                 
+                $contador_ubicacion = 1;
+                foreach($ubicaciones as $ubicacion):                  
+                    
+                        ?>
+                        <tr>                       
+                        <td><?php echo $ubicacion->departamento_nombre; ?></td>
+                        <td><?php echo $ubicacion->subregion_nombre; ?></td>
+                        <td><?php echo $ubicacion->municipio_nombre; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver ubicacion', "observatorio/territorios/ver_ubicacion/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                           <?php 
+                                    echo '<button onclick="setIdBorrarUbicacion(this.value)" title="Eliminar ubicación" value="'.$ubicacion->id.'" id="btn_delete_ubicacion'.$ubicacion->id.'" type="button" class="btn btn-danger btn-small" data-toggle="modal" data-target="#myModalDeleteUbicacion">';
+                                    echo '<i class="btn-icon-only fa fa-minus"></i></button></div>';
+                            ?>                           
+                        </td>
+                    </tr>
+                                  
+                    <?php $contador_ubicacion++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+                      
+                                </div>
+                            </div>                           
+                                                
+                      
+
+ <script type='text/javascript'>
+        
+          
+ $("#caso_departamento_id").on('change', function(e) {
+                 
+            var departamento_id = $('#caso_departamento_id').val();
+            if(departamento_id != '')
+            {                    
+                $("#btn_anadir_ubicacion").attr('class', 'btn btn-success');            
+            }
+            else
+            {                    
+                $("#btn_anadir_ubicacion").attr('class', 'btn btn-success disabled');            
+            }
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>"+departamento_id+"/caso.municipio_id/Municipio/no/no/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_required=no&cargar_territorio=no",
+            }).done(function(data) {
+                
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();                
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        
+        $("#btn_anadir_ubicacion").on('click', function(e) {
+            $("#btn_anadir_ubicacion").attr('class', 'btn btn-success disabled');
+            var id = '';
+            var territorio_id = $('#territorio_id').val();
+                       
+            var municipio_id = $('#caso_municipio_id').val();
+            if(municipio_id == ''){municipio_id = 0;}
+                         
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_ubicacion_territorio/create/0/'; ?>"+territorio_id+"/"+municipio_id+"/",
+                data: "metodo=create&id=0&territorio_id="+territorio_id+"&municipio_id="+municipio_id,
+            }).done(function(data) {
+                $("#div_ubicaciones").html(data);
+                $("#btn_anadir_ubicacion").attr('class', 'btn btn-success disabled');
+                $('#caso_departamento_id').val('');
+                $('#caso_municipio_id').val('');                
+                $('#myModalAddUbicacion').modal('hide'); 
+            }).fail(function() {
+                alert("error:  "+municipio_id+" "+territorio_id);
+            });
+        });
+        
+    function setIdBorrarUbicacion(id)
+    {
+        $('#id_a_borrar_ubicacion').val(id); 
+    }
+    
+     $("#btn_borrar_ubicacion").on('click', function(e) {
+            
+            var id = $('#id_a_borrar_ubicacion').val(); 
+            var territorio_id = $('#territorio_id').val();
+                
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_ubicacion_territorio/delete/'; ?>"+id+"/"+territorio_id+"/",
+                data: "metodo=delete&id="+id+"&territorio_id="+territorio_id,
+            }).done(function(data) {
+                $('#myModalDeleteUbicacion').modal('hide'); 
+                $("#div_ubicaciones").html(data);
+                
+            }).fail(function() {
+                alert("error: "+territorio_id);
+            });
+        });
+                </script>

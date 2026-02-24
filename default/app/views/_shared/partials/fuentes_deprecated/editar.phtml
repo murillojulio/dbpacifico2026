@@ -1,0 +1,15 @@
+
+              <?php $contador = 1; ?>
+               <?php foreach($fuentes as $fuente): ?>         
+                    <?php echo "<div class='row'>"; ?>                                
+                       <?php echo "<div  class='col-md-2'>"; ?>  
+              <?php echo DwForm::hidden('fuente.id'.$contador, NULL, $fuente->id); ?>                        
+              <?php echo DwForm::date('fuente.fecha'.$contador, array('class'=>'input-required'), substr($fuente->fecha, 0, 10), 'Fecha de la fuente'); ?>                   
+              <?php echo "</div> <div class='col-md-10'>"; ?>    
+              <?php echo DwForm::text('fuente.nombre'.$contador, array('class'=>'input-lower input-required'), $fuente->nombre, 'Descripción de la fuente'); ?>      
+              <?php echo "</div></div>"; ?>   
+               <?php $contador++; ?>
+              
+                <?php endforeach; ?>
+               <input id="fuente_cantidad" name="fuente[cantidad]" type="hidden" value=" <?php echo $contador-1; ?>"> 
+         

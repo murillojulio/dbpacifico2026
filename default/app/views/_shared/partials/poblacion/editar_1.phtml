@@ -1,0 +1,143 @@
+<?php 
+
+$col_md = 'col-md-4';
+if($para_territorio == 'si' || $para_territorio == 'comunidad')
+{
+    $col_md = 'col-md-3';
+}
+?>
+
+<div class="row">
+    <div class="<?echo $col_md; ?>">
+        <?php echo DwForm::hidden('poblacion.id', NULL, $array_poblacion['id']); ?>
+        <?php echo DwForm::text('poblacion.total', array('class'=>'formato_punto input-required'), $array_poblacion['total'], 'Total'); ?>
+    </div>
+    <div class="<?echo $col_md; ?>">
+        <?php echo DwForm::text('poblacion.hombre', array('class'=>'formato_punto'), $array_poblacion['hombre'], 'Hombres'); ?>
+    </div>
+       <div class="<?echo $col_md; ?>">
+        <?php echo DwForm::text('poblacion.mujer', array('class'=>'formato_punto'), $array_poblacion['mujer'], 'Mujeres'); ?>
+    </div>
+     <?php
+     if($para_territorio == 'si' || $para_territorio == 'comunidad')
+     {
+         echo '<div class="col-md-3">';
+        echo DwForm::text('poblacion.numero_familia', array('class'=>'formato_punto'), $array_poblacion['numero_familia'], 'Número de familias'); 
+        echo '</div>';
+     }
+    ?>
+</div>  
+
+<div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_edad">Edad</label>
+                            <div id="panel_edad" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e0_4', array('class'=>'formato_punto'), $array_poblacion['e0_4'], '0 - 4'); ?>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e5_9', array('class'=>'formato_punto'), $array_poblacion['e5_9'], '5 - 9'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e10_14', array('class'=>'formato_punto'), $array_poblacion['e10_14'], '10 - 14'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e15_19', array('class'=>'formato_punto'), $array_poblacion['e15_19'], '15 - 19'); ?>
+                                    </div>
+                                     <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e20_24', array('class'=>'formato_punto'), $array_poblacion['e20_24'], '20 - 24'); ?>
+                                    </div>
+                                     <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e25_29', array('class'=>'formato_punto'), $array_poblacion['e25_29'], '25 - 29'); ?>
+                                    </div>
+                                </div>        
+                                    <div class="row">                               
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e30_34', array('class'=>'formato_punto'), $array_poblacion['e30_34'], '30 - 34'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e35_39', array('class'=>'formato_punto'), $array_poblacion['e35_39'], '35 - 39'); ?>
+                                    </div>
+                                         <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e40_44', array('class'=>'formato_punto'), $array_poblacion['e40_44'], '40 - 44'); ?>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e45_49', array('class'=>'formato_punto'), $array_poblacion['e45_49'], '45 - 49'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e50_54', array('class'=>'formato_punto'), $array_poblacion['e50_54'], '50 - 54'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e55_59', array('class'=>'formato_punto'), $array_poblacion['e55_59'], '55 - 59'); ?>
+                                    </div>
+                                </div>   
+                                   
+                                    <div class="row">
+                                    <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e60_64', array('class'=>'formato_punto'), $array_poblacion['e60_64'], '60 - 64'); ?>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e65_69', array('class'=>'formato_punto'), $array_poblacion['e65_69'], '65 - 69'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e70_74', array('class'=>'formato_punto'), $array_poblacion['e70_74'], '70 - 74'); ?>
+                                    </div>
+                                       <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e75_79', array('class'=>'formato_punto'), $array_poblacion['e75_79'], '75 - 79'); ?>
+                                    </div>
+                                        <div class="col-md-2">
+                                        <?php echo DwForm::text('poblacion.e80_mas', array('class'=>'formato_punto'), $array_poblacion['e80_mas'], '80 ó mas'); ?>
+                                    </div>
+                                </div> 
+                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+
+<?
+    if ($para_territorio == 'no')
+    {
+?>
+<div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_etnia">Etnia</label>
+                            <div id="panel_etnia" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.afro', array('class'=>'formato_punto '), $array_poblacion['afro'], 'Afro'); ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.indigena', array('class'=>'formato_punto '), $array_poblacion['indigena'], 'Indigena'); ?>
+                                    </div>
+                                       <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.otro', array('class'=>'formato_punto '), $array_poblacion['otro'], 'Otro'); ?>
+                                    </div>
+                                       <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.no_info', array('class'=>'formato_punto '), $array_poblacion['no_info'], 'No informa'); ?>
+                                    </div>
+                                </div>                                
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+<?
+    }
+?>
+
+<script type='text/javascript'>        
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    });         
+</script>

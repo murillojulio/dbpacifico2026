@@ -1,0 +1,25 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('megaproyecto.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $tipo_megaproyecto_id), NULL, array('class'=>'input-required'), NULL, 'Seleccione el Sub tipo de megaproyecto'); ?>   
+<script type="text/javascript">
+    $(document).ready(function() 
+    {        
+    $("#megaproyecto_subtipo_megaproyecto_id").on('change', function(e) {
+        
+//        $("#div_micro_subtipo_megaproyecto").val('');
+            var subtipo_megaproyecto_id = $('#megaproyecto_subtipo_megaproyecto_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_micro_subtipo_megaproyecto/'; ?>"+subtipo_megaproyecto_id+"/",
+                data: "subtipo_megaproyecto_id=" + subtipo_megaproyecto_id,
+            }).done(function(data) {
+                $("#div_micro_subtipo_megaproyecto").html(data);
+                $("#div_micro_subtipo_megaproyecto").show();
+                //$("#megaproyecto_micro_subtipo_megaproyecto_id").focus();
+                //$('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+    });
+        
+</script>

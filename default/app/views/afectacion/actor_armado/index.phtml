@@ -1,0 +1,30 @@
+<?php View::flash(); ?>
+
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php //echo DwHtml::button("afectacion/megaproyectos/listar/agroindustria", 'AGROINDUSTRIA', array('class' => 'btn-danger btn-lg'), '', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container shell-view">
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwHtml::button("afectacion/actor_armado/listar_territorio_cn", Territorio::TERRITORIO_COMUNIDAD_NEGRA, array('class' => 'btn-info btn-lg btn-block'), '', APP_AJAX); ?>
+            </div> 
+            <div class="col-md-6">
+                <?php echo DwHtml::button("afectacion/actor_armado/listar_territorio_ci", Territorio::TERRITORIO_INDIGENA, array('class' => 'btn-info btn-lg btn-block'), '', APP_AJAX); ?>
+            </div>
+                  
+        </div>
+    </div>
+
+    
+
+</div>

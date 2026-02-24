@@ -1,0 +1,303 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::hidden('tipo_dano.id', NULL, ''); ?>
+                <?php echo DwForm::hidden('tipo_dano.documento_descripcion', NULL, $tipo_dano->documento_descripcion); ?>
+                <?php echo DwForm::text('tipo_dano.nombre', array('class'=>'input-required'), NULL, 'Nombre del tipo de daño'); ?>                 
+                <?php echo DwForm::textarea('tipo_dano.descripcion', array('class'=>'input-lower', 'required'=>'required', 'style'=>"height: 200px;"), '', 'Descripción del tipo de daño'); ?>
+                <div class="row">            
+         <?php 
+            if($tipo_dano->documento_descripcion === '')
+            {   
+                echo '<div class="col-md-6">';                 
+                echo DwForm::upload_V2('documento_descripcion', array('data-to'=>PUBLIC_PATH.'opcion/tipo_dano/upload/documento_descripcion/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocumentoDescripcion'), 'Adjuntar documento', 'texto_documento_descripcion', 'icono_descripcion');                
+                echo '</div>';
+                echo '<div class="col-md-6">'; 
+                echo '<a id="enlace_documento_descripcion" target="_blank" href=""></a>';
+                echo '</div>';                            
+            }
+            else
+            {
+                echo '<div class="col-md-6">';  
+                echo DwForm::upload_V2('documento_descripcion', array('data-to'=>PUBLIC_PATH.'opcion/tipo_dano/upload/documento_descripcion/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocumentoDescripcion'), 'Cambiar documento', 'texto_documento_descripcion', 'icono_descripcion');
+                echo '</div>';
+                echo '<div class="col-md-6">';                        
+                echo '<a id="enlace_documento_descripcion" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/opcion/tipo_dano/documento_descripcion/'.$tipo_dano->documento_descripcion.'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento adjunto</a>';   
+                echo '</div>';                              
+            }
+         ?>
+                    </div>
+            </div>  
+            <div class="modal fade" id="modal_agregar_dano">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Agregar daño</h4>
+                  </div>
+                  <div class="modal-body">
+                    <?php echo DwForm::text('dano.nombre', array('class'=>'', 'onkeyup'=>'funcionNombre()'), NULL, 'Nombre del daño'); ?>                 
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn-cancelar-guardar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-guardar-dano" type="button" class="btn btn-primary" onclick="agregarDano()" data-loading-text="Guardando...">Guardar</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div class="modal fade" id="modal_eliminar_dano">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Eliminar daño</h4>
+                  </div>
+                  <div class="modal-body">
+                    ¿Está seguro que desea eliminar este daño?                 
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn-cancelar-eliminar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-eliminar-dano" type="button" class="btn btn-primary" onclick="eliminarDano()" data-loading-text="Eliminando...">Eliminar</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div class="modal fade" id="modal_editar_dano">
+              <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Editar daño</h4>
+                  </div>
+                  <div class="modal-body">
+                    <?php echo DwForm::text('dano.nombre_editar', array('class'=>'', 'onkeyup'=>'funcionNombreEditar()'), NULL, 'Nombre del daño'); ?>                 
+                  </div>
+                  <div class="modal-footer">
+                    <button id="btn-cancelar-editar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-editar-dano" type="button" class="btn btn-primary" onclick="editarDano()" data-loading-text="Guardando cambios...">Guardar Cambios</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+            <div class="col-md-6">
+                <label for="panel_danos">Daños</label>
+                <div id="panel_danos" class="panel panel-default">
+                    <div class="panel-body">                                          
+                      <div class="row">                      
+                         <div class="col-md-12"> 
+                             <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modal_agregar_dano" onclick="deshabilitar()">Agregar daño</button>
+                             <div id="div_lista_danos">
+                            <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del daño</th>
+                                        <th>Veces usado</th>
+                                        <th class="btn-actions col-blocked text-center">Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($danos as $dano): ?>                                        
+                                        <tr>
+                                            <td><?php echo $dano->nombre; ?></td>
+                                            <td><?php echo $dano->veces_usado; ?></td>                                                
+                                            <td class="btn-actions">                                                
+                                                <button id="btn-editar-dano-<?php echo $dano->id?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="setVariablesEditar(<?php echo $tipo_dano->id.",".$dano->id.",'".$dano->nombre."'"; ?>)" data-toggle="modal" data-target="#modal_editar_dano"></button>
+                                                <button id="btn-eliminar-dano-<?php echo $dano->id?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariables(<?php echo $tipo_dano->id.",".$dano->id.",'".$dano->nombre."'"; ?>)" data-toggle="modal" data-target="#modal_eliminar_dano"></button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                      </div>                                    
+                    </div>
+                </div>
+            </div>
+        </div> 
+    <div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Nuevo daño creado con exito
+    </div>
+    </div>
+    <div id="flash-message" class="flash-message">
+    <div id="alert-id-eliminar" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        El daño ha sido eliminado.
+    </div>
+    </div>
+   
+    <script type="text/javascript">
+    let tipo_dano_id = '';
+    let dano_id = '';
+    let nombre_dano = '';
+    
+    function loadDocumentoDescripcion(result, input) 
+    {
+        $("#tipo_dano_documento_descripcion").val(result.name);
+        $("#enlace_documento_descripcion").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/opcion/tipo_dano/documento_descripcion/'+result.name);
+        $("#enlace_documento_descripcion").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_descripcion').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('texto_documento_descripcion').innerHTML = 'Cambiar documento';
+        $("#icono_descripcion").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+    
+    function agregarDano() {
+        $("#btn-cancelar-guardar-dano").hide();
+        let btn = $('#btn-guardar-dano');
+        btn.button('loading');
+        let modal = $("#modal_agregar_dano");
+        let nombre_dano = $("#dano_nombre").val();
+        let tipo_dano_id = <?php echo $tipo_dano->id;?>;  
+        let url = "<?php echo PUBLIC_PATH . 'opcion/tipo_dano/gestion_dano/'; ?>";    
+
+        let datos = {
+                    "accion" : "crear",
+                    "tipo_dano_id" : tipo_dano_id,
+                    "nombre_dano" : nombre_dano
+                    };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function (data, textStatus, jqXHR) {  
+                $("#div_lista_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-dano").show();
+                $("#dano_nombre").val('');                
+                $("#alert-id-guardar").show();
+                $("#alert-id-guardar").hide().fadeIn(500).delay(4000).fadeOut(500);                
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('ERROR en entregarPedido()');
+                btn.button('reset');
+            }
+        });
+        $("#btn-guardar-dano").prop('disabled', true);
+    }
+    
+    function eliminarDano() {
+        $("#btn-cancelar-eliminar-dano").hide();
+        let btn = $('#btn-eliminar-dano');
+        btn.button('loading');
+        let modal = $("#modal_eliminar_dano");
+        //let nombre_dano = $("#dano_nombre").val();
+        let url = "<?php echo PUBLIC_PATH . 'opcion/tipo_dano/gestion_dano/'; ?>";    
+
+        let datos = {
+                    "accion" : "eliminar",
+                    "tipo_dano_id" : tipo_dano_id,
+                    "dano_id" : dano_id,
+                    "nombre_dano" : nombre_dano
+                    };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function (data, textStatus, jqXHR) {  
+                $("#div_lista_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-eliminar-dano").show();
+                $("#alert-id-eliminar").show();
+                $("#alert-id-eliminar").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $("#btn-cancelar-eliminar-dano").show();
+                alert('ERROR en entregarPedido()');
+                btn.button('reset');
+            }
+        });
+    }
+    function editarDano() {
+        $("#btn-cancelar-editar-dano").hide();
+        let btn = $('#btn-editar-dano');
+        btn.button('loading');
+        let modal = $("#modal_editar_dano");
+        //let nombre_dano = $("#dano_nombre").val();
+        let url = "<?php echo PUBLIC_PATH . 'opcion/tipo_dano/gestion_dano/'; ?>";    
+
+        let datos = {
+                    "accion" : "editar",
+                    "tipo_dano_id" : tipo_dano_id,
+                    "dano_id" : dano_id,
+                    "nombre_dano" : $("#dano_nombre_editar").val()
+                    };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function (data, textStatus, jqXHR) {  
+                $("#div_lista_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-editar-dano").show();
+                $("#alert-id-eliminar").show();
+                $("#alert-id-eliminar").hide().fadeIn(500).delay(4000).fadeOut(500);
+                $('#dano_nombre_editar').val('');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $("#btn-cancelar-eliminar-dano").show();
+                alert('ERROR en entregarPedido()');
+                btn.button('reset');
+            }
+        });
+    }
+    function funcionNombre() {
+        if($('#dano_nombre').val() === ''){
+            $("#btn-guardar-dano").prop('disabled', true);
+        }else{
+            $("#btn-guardar-dano").prop('disabled', false);
+        }
+    }
+    function deshabilitar() {
+        $("#btn-guardar-dano").prop('disabled', true);    
+    }    
+    function setVariables(tipo_dano_id_, dano_id_, nombre_dano_) {
+        tipo_dano_id = tipo_dano_id_;
+        dano_id = dano_id_;
+        nombre_dano = nombre_dano_;
+    }
+    
+    
+    function funcionNombreEditar() {
+        if($('#dano_nombre_editar').val() === ''){
+            $("#btn-editar-dano").prop('disabled', true);
+        }else{
+            $("#btn-editar-dano").prop('disabled', false);
+        }
+    }
+    function deshabilitarEditar() {
+        $("#btn-editar-dano").prop('disabled', true);    
+    }
+    function setVariablesEditar(tipo_dano_id_, dano_id_, nombre_dano_) {
+        $("#dano_nombre_editar").val(nombre_dano_);
+        tipo_dano_id = tipo_dano_id_;
+        dano_id = dano_id_;
+        nombre_dano = nombre_dano_;
+    }
+    
+</script>
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar Tipo de Daño'); ?>
+                <?php echo DwForm::cancel('opcion/tipo_dano/listar/'); ?>
+                <?php echo DwForm::focus('tipo_dano.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

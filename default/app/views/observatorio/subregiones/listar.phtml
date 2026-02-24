@@ -1,0 +1,54 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/subregiones/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+         <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="col-hidden" data-order="cant_municipio">CANTIDAD DE MUNICIPIOS</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num=1; ?>
+                <?php foreach($subregiones as $subregion): ?>
+                    <?php $key_show = Security::setKey($subregion->id, 'show_subregion'); ?>
+                    <?php $key_upd = Security::setKey($subregion->id, 'upd_subregion'); ?>
+                    <?php $key_inac = Security::setKey($subregion->id, 'inactivar_subregion'); ?>
+                    <?php $key_reac = Security::setKey($subregion->id, 'reactivar_subregion'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $subregion->nombre; ?></td>
+                        <td><?php echo $subregion->departamento; ?></td>                        
+                        <td><a href="<?php echo PUBLIC_PATH.'observatorio/territorios/listar_territorio/'.$subregion->id.'/'.$subregion->nombre.'/';?>"><span class="badge btn-primary" data-toggle="tooltip" data-placement="top" title="Ver municipios"><?php echo $subregion->cant_municipio; ?></span></a></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver subregion', "observatorio/subregiones/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar subregion', "observatorio/subregiones/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+</div>

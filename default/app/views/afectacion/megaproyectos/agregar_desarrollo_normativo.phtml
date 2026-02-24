@@ -1,0 +1,168 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <label for="panel_info_basica">
+                <h3 class="panel-title">Información básica</h3>
+            </label>
+            <div id="panel_info_basica" class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo DwForm::text('desarrollo_normativo.nombre', array('class' => 'input-required'), NULL, 'Nombre del documento'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php echo DwForm::upload_V2('documento_desarrollo_normativo', array('data-to' => PUBLIC_PATH . 'upload/upload/upload_document/documento_desarrollo_normativo/desarrollo_normativo/', 'data-size' => Session::get('max_size_file_upload'), 'data-files' => 'doc', 'data-success' => 'loadDocumentoPolitica'), 'Adjuntar documento de desarrollo normativo', 'text_con', 'icon_con'); ?>
+                        </div>
+                        <div class="col-md-8">
+                            <a id="enlace_documento_desarrollo" target="_blank" href="">
+                            </a>
+                        </div>
+                        <?php echo DwForm::hidden('desarrollo_normativo.documento', NULL, ''); ?>
+                    </div>
+
+                    <script type="text/javascript">
+                        function loadDocumentoPolitica(result, input) {
+
+                            $("#desarrollo_normativo_documento").val(result.name);
+                            $("#enlace_documento_desarrollo").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/desarrollo_normativo/' + result.name);
+                            $("#enlace_documento_desarrollo").attr('class', 'btn btn-info');
+
+                            //$("#enlace_documento").attr('innerHTML', result.name);
+                            document.getElementById('enlace_documento_desarrollo').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - ' + result.size;
+                            document.getElementById('text_con').innerHTML = 'Cambiar documento de desarrollo normativo';
+                            $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+                        }
+                    </script>
+                    <div class="row">
+                        <div class="col-md-6">
+                        <?php echo DwForm::textarea('desarrollo_normativo.descripcion', array('class' => 'input-lower', 'rows'=>'6'), NULL, 'Descripción del Desarrollo Normativo'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('desarrollo_normativo.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoDBS', ''), NULL, array('class' => 'input-required'), NULL, 'Seleccione el sector del desarrollo normativo'); ?>
+                        </div>
+                        <div id="div_subtipo_megaproyecto" class="col-md-6">
+                            <?php echo DwForm::dbSelect('desarrollo_normativo.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', '0'), NULL, array('class' => 'input-required'), NULL, 'Seleccione el subsector del desarrollo normativo'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php echo DwForm::select(
+                                'desarrollo_normativo.tipo',
+                                array(
+                                    '' => 'Seleccione', 'LEY' => 'LEY', 'DECRETO' => 'DECRETO',
+                                    'RESOLUCIÓN' => 'RESOLUCIÓN', 'ORDENANZA' => 'ORDENANZA',
+                                    'ACUERDO' => 'ACUERDO', 'JURISPRUDENCIA' => 'JURISPRUDENCIA'
+                                ),
+                                array('class' => ''),
+                                NULL,
+                                'Tipo'
+                            ); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('desarrollo_normativo.numero', array('class' => ''), NULL, 'Número'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha', array('class' => ''), '', 'Fecha'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha_vigencia_inicio', array('class' => ''), '', 'Fecha en que inicia la vigencia del desarrollo normativo'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha_vigencia_fin', array('class' => ''), '', 'Fecha en que finaliza la vigencia del desarrollo normativo'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <label for="panel_fuente">
+                <h3 class="panel-title">Fuente(s) de la información</h3>
+            </label>
+            <div id="panel_fuente" class="panel panel-default">
+                <div class="panel-body">
+                    <?php View::partial('fuentes/agregar', false, NULL); ?>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="form-actions">
+            <?php echo DwForm::send('Guardar desarrollo normativo'); ?>
+            <?php echo DwForm::cancel($url_redir_back); ?>
+            <?php echo DwForm::focus('desarrollo_normativo.nombre'); ?>
+        </div>
+    </div>
+
+    <?php echo DwForm::close(); ?>
+
+    <script type='text/javascript'>
+        $("#caso_departamento_id").on('change', function(e) {
+            var departamento_id = $('#caso_departamento_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>" + departamento_id + "/caso.municipio_id/Municipio/no/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_required=no",
+            }).done(function(data) {
+
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                $('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+
+        $("#caso_municipio_id").on('change', function(e) {
+            var municipio_id = $('#caso_municipio_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>" + municipio_id + "/caso.territorio_id/Territorio/",
+                data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio",
+            }).done(function(data) {
+                $("#div_territorio").html(data);
+                $("#caso_territorio_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+
+
+        $("#desarrollo_normativo_tipo_megaproyecto_id").on('change', function(e) {
+            $("#div_micro_subtipo_megaproyecto").hide();
+            //$("#div_micro_subtipo_megaproyecto").val('');
+            var tipo_megaproyecto_id = $('#desarrollo_normativo_tipo_megaproyecto_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_subtipo_megaproyecto_desarrollo/'; ?>" + tipo_megaproyecto_id + "/",
+                data: "tipo_megaproyecto_id=" + tipo_megaproyecto_id,
+            }).done(function(data) {
+                $("#div_subtipo_megaproyecto").html(data);
+                $("#desarrollo_normativo_subtipo_megaproyecto_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+    </script>
+</div>

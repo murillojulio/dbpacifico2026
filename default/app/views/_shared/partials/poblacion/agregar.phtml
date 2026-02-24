@@ -1,0 +1,299 @@
+<?php 
+
+$col_md = 'col-md-4';
+if($para_territorio == 'si' || $para_territorio == 'comunidad')
+{
+    $col_md = 'col-md-3';
+}
+?>
+
+<div class="row">
+    <div class="<?php echo $col_md; ?>">
+        <?php echo DwForm::text('poblacion.total', array('class'=>'formato_punto input-required'), NULL, 'Total'); ?>
+    </div>
+    <div class="<?php echo $col_md; ?>">
+        <?php echo DwForm::text('poblacion.hombre', array('class'=>'formato_punto'), NULL, 'Hombres'); ?>
+    </div>
+       <div class="<?php echo $col_md; ?>">
+        <?php echo DwForm::text('poblacion.mujer', array('class'=>'formato_punto'), NULL, 'Mujeres'); ?>
+    </div>
+    <?php
+     if($para_territorio == 'si' || $para_territorio == 'comunidad')
+     {
+         echo '<div class="col-md-3">';
+        echo DwForm::text('poblacion.numero_familia', array('class'=>'formato_punto'), NULL, 'Número de familias'); 
+        echo '</div>';
+     }
+    ?>
+</div> 
+
+<div class="row">
+                           <div class="col-md-4">
+                            <label for="panel_edad">Total por edad</label>
+                            <div id="panel_edad" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e0_4', array('class'=>'formato_punto'), NULL, '0 - 4'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e5_9', array('class'=>'formato_punto'), NULL, '5 - 9'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e10_14', array('class'=>'formato_punto'), NULL, '10 - 14'); ?>
+                                    </div>
+                                </div>        
+                                <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e15_19', array('class'=>'formato_punto'), NULL, '15 - 19'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e20_24', array('class'=>'formato_punto'), NULL, '20 - 24'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e25_29', array('class'=>'formato_punto'), NULL, '25 - 29'); ?>
+                                    </div>
+                                </div>        
+                                    <div class="row">                               
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e30_34', array('class'=>'formato_punto'), NULL, '30 - 34'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e35_39', array('class'=>'formato_punto'), NULL, '35 - 39'); ?>
+                                    </div>
+                                         <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e40_44', array('class'=>'formato_punto'), NULL, '40 - 44'); ?>
+                                    </div>
+                                     </div>        
+                                    <div class="row">  
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e45_49', array('class'=>'formato_punto'), NULL, '45 - 49'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e50_54', array('class'=>'formato_punto'), NULL, '50 - 54'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e55_59', array('class'=>'formato_punto'), NULL, '55 - 59'); ?>
+                                    </div>
+                                </div>   
+                                   
+                                    <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e60_64', array('class'=>'formato_punto'), NULL, '60 - 64'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e65_69', array('class'=>'formato_punto'), NULL, '65 - 69'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e70_74', array('class'=>'formato_punto'), NULL, '70 - 74'); ?>
+                                    </div>
+                                         </div>        
+                                    <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e75_79', array('class'=>'formato_punto'), NULL, '75 - 79'); ?>
+                                    </div>
+                                        <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.e80_mas', array('class'=>'formato_punto'), NULL, '80 ó mas'); ?>
+                                    </div>
+                                </div> 
+                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+     <div class="col-md-4">
+                            <label for="panel_edad_h">Hombres por edad</label>
+                             <div id="panel_edad_h" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e0_4', array('class'=>'formato_punto'), NULL, '0 - 4'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e5_9', array('class'=>'formato_punto'), NULL, '5 - 9'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e10_14', array('class'=>'formato_punto'), NULL, '10 - 14'); ?>
+                                    </div>
+                                </div>        
+                                <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e15_19', array('class'=>'formato_punto'), NULL, '15 - 19'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e20_24', array('class'=>'formato_punto'), NULL, '20 - 24'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e25_29', array('class'=>'formato_punto'), NULL, '25 - 29'); ?>
+                                    </div>
+                                </div>        
+                                    <div class="row">                               
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e30_34', array('class'=>'formato_punto'), NULL, '30 - 34'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e35_39', array('class'=>'formato_punto'), NULL, '35 - 39'); ?>
+                                    </div>
+                                         <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e40_44', array('class'=>'formato_punto'), NULL, '40 - 44'); ?>
+                                    </div>
+                                     </div>        
+                                    <div class="row">  
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e45_49', array('class'=>'formato_punto'), NULL, '45 - 49'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e50_54', array('class'=>'formato_punto'), NULL, '50 - 54'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e55_59', array('class'=>'formato_punto'), NULL, '55 - 59'); ?>
+                                    </div>
+                                </div>   
+                                   
+                                    <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e60_64', array('class'=>'formato_punto'), NULL, '60 - 64'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e65_69', array('class'=>'formato_punto'), NULL, '65 - 69'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e70_74', array('class'=>'formato_punto'), NULL, '70 - 74'); ?>
+                                    </div>
+                                         </div>        
+                                    <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e75_79', array('class'=>'formato_punto'), NULL, '75 - 79'); ?>
+                                    </div>
+                                        <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.h_e80_mas', array('class'=>'formato_punto'), NULL, '80 ó mas'); ?>
+                                    </div>
+                                </div> 
+                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+    
+     <div class="col-md-4">
+                            <label for="panel_edad_m">Mujeres por edad</label>
+                            <div id="panel_edad_m" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e0_4', array('class'=>'formato_punto'), NULL, '0 - 4'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e5_9', array('class'=>'formato_punto'), NULL, '5 - 9'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e10_14', array('class'=>'formato_punto'), NULL, '10 - 14'); ?>
+                                    </div>
+                                </div>        
+                                <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e15_19', array('class'=>'formato_punto'), NULL, '15 - 19'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e20_24', array('class'=>'formato_punto'), NULL, '20 - 24'); ?>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e25_29', array('class'=>'formato_punto'), NULL, '25 - 29'); ?>
+                                    </div>
+                                </div>        
+                                    <div class="row">                               
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e30_34', array('class'=>'formato_punto'), NULL, '30 - 34'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e35_39', array('class'=>'formato_punto'), NULL, '35 - 39'); ?>
+                                    </div>
+                                         <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e40_44', array('class'=>'formato_punto'), NULL, '40 - 44'); ?>
+                                    </div>
+                                     </div>        
+                                    <div class="row">  
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e45_49', array('class'=>'formato_punto'), NULL, '45 - 49'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e50_54', array('class'=>'formato_punto'), NULL, '50 - 54'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e55_59', array('class'=>'formato_punto'), NULL, '55 - 59'); ?>
+                                    </div>
+                                </div>   
+                                   
+                                    <div class="row">
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e60_64', array('class'=>'formato_punto'), NULL, '60 - 64'); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e65_69', array('class'=>'formato_punto'), NULL, '65 - 69'); ?>
+                                    </div>
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e70_74', array('class'=>'formato_punto'), NULL, '70 - 74'); ?>
+                                    </div>
+                                         </div>        
+                                    <div class="row">  
+                                       <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e75_79', array('class'=>'formato_punto'), NULL, '75 - 79'); ?>
+                                    </div>
+                                        <div class="col-md-4">
+                                        <?php echo DwForm::text('poblacion.m_e80_mas', array('class'=>'formato_punto'), NULL, '80 ó mas'); ?>
+                                    </div>
+                                </div> 
+                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+
+
+<?php
+    if ($para_territorio == 'no')
+    {
+?>
+<div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_etnia">Etnia</label>
+                            <div id="panel_etnia" class="panel panel-default">
+                                <div class="panel-body">
+                                 <div class="row">
+                                    <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.afro', array('class'=>'formato_punto '), NULL, 'Afro'); ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.indigena', array('class'=>'formato_punto '), NULL, 'Indigena'); ?>
+                                    </div>
+                                       <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.otro', array('class'=>'formato_punto '), NULL, 'Otro'); ?>
+                                    </div>
+                                       <div class="col-md-3">
+                                        <?php echo DwForm::text('poblacion.no_info', array('class'=>'formato_punto '), NULL, 'No informa'); ?>
+                                    </div>
+                                </div>                                
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+<?php
+    }
+?>
+
+<script type='text/javascript'>        
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+    
+    
+       
+</script>

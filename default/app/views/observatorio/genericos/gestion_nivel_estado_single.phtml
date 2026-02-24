@@ -1,0 +1,94 @@
+<?php DwForm::open() ?>
+<?php
+if ($objeto->nivel == '1') //1=PUBLICO, 2=PRIVADO
+{
+    //echo DwHtml::buttonTable('Privatizar', "", null, 'default', 'fa-lock').'&nbsp;';  
+    echo '<button title="Pasar a privado" id="btn_privado_' . $tabla . '" type="button" class="btn btn-default btn-xs">
+            <i class="btn-icon-only fa fa-lock"></i>
+            </button>&nbsp;';
+} else {
+    //echo DwHtml::buttonTable('Publicar', "", null, 'default', 'fa-unlock').'&nbsp;';
+    echo '<button title="Pasar a público" id="btn_publico_' . $tabla . '" type="button" class="btn btn-default btn-xs">
+            <i class="btn-icon-only fa fa-unlock"></i>
+            </button>&nbsp;';
+}
+if ($objeto->estado == '2') //1=BORRADOR, 2=COMPLETADO
+{
+    //echo DwHtml::buttonTable('Borrador', "", null, 'default', 'fa-eraser').'&nbsp;';
+    echo '<button title="Pasar a borrador" id="btn_borrador_' . $tabla . '" type="button" class="btn btn-default btn-xs">
+            <i class="btn-icon-only fa fa-eraser"></i>
+            </button>';
+} else {
+    //echo DwHtml::buttonTable('Completar', "", null, 'default', 'fa-check').'&nbsp;';
+    echo '<button title="Pasar a completo" id="btn_completo_' . $tabla . '" type="button" class="btn btn-default btn-xs">
+            <i class="btn-icon-only fa fa-check"></i>
+            </button>';
+}
+?>
+<?php
+echo ($objeto->nivel == '2') ? '<span class="label label-danger">Privado</span>' : '<span class="label label-success">Público</span>';
+echo '&nbsp;';
+echo ($objeto->estado == '1') ? '<span class="label label-default">Borrador</span>' : '<span class="label label-success">Completado</span>';
+?>
+<script type='text/javascript'>
+    var id = '<?php echo $objeto->id; ?>';
+    var tabla = '<?php echo $tabla; ?>';
+    var modulo = '<?php echo ucfirst($modulo); ?>';
+    var nombre = '<?php echo $objeto->nombre; ?>';
+
+    $("#btn_privado_<?php echo $tabla; ?>").on('click', function(e) {
+        $("#btn_privado_<?php echo $tabla; ?>").attr('class', 'btn btn-default btn-xs disabled');
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_nivel_estado_single/privado/'; ?>" + tabla + "/" + id + "/" + modulo + "/" + nombre + "/",
+            data: "nivel_estado=privado&tabla=" + tabla + "&id=" + id + "&modulo=" + modulo + "&nombre=" + nombre,
+        }).done(function(data) {
+            $("#div_nivel_estado_<?php echo $tabla; ?>").html(data);
+        }).fail(function() {
+            alert("error: " + id + " " + tabla);
+        });
+    });
+
+    $("#btn_publico_<?php echo $tabla; ?>").on('click', function(e) {
+        $("#btn_publico_<?php echo $tabla; ?>").attr('class', 'btn btn-default btn-xs disabled');
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_nivel_estado_single/publico/'; ?>" + tabla + "/" + id + "/" + modulo + "/" + nombre + "/",
+            data: "nivel_estado=publico&tabla=" + tabla + "&id=" + id + "&modulo=" + modulo + "&nombre=" + nombre,
+        }).done(function(data) {
+            $("#div_nivel_estado_<?php echo $tabla; ?>").html(data);
+        }).fail(function() {
+            alert("error: " + id + " " + tabla);
+        });
+    });
+
+    $("#btn_borrador_<?php echo $tabla; ?>").on('click', function(e) {
+        $("#btn_borrador_<?php echo $tabla; ?>").attr('class', 'btn btn-default btn-xs disabled');
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_nivel_estado_single/borrador/'; ?>" + tabla + "/" + id + "/" + modulo + "/" + nombre + "/",
+            data: "nivel_estado=borrador&tabla=" + tabla + "&id=" + id + "&modulo=" + modulo + "&nombre=" + nombre,
+        }).done(function(data) {
+            $("#div_nivel_estado_<?php echo $tabla; ?>").html(data);
+        }).fail(function() {
+            alert("error: " + id + " " + tabla);
+        });
+    });
+
+    $("#btn_completo_<?php echo $tabla; ?>").on('click', function(e) {
+        $("#btn_completo_<?php echo $tabla; ?>").attr('class', 'btn btn-default btn-xs disabled');
+
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/gestion_nivel_estado_single/completo/'; ?>" + tabla + "/" + id + "/" + modulo + "/" + nombre + "/",
+            data: "nivel_estado=completo&tabla=" + tabla + "&id=" + id + "&modulo=" + modulo + "&nombre=" + nombre,
+        }).done(function(data) {
+            $("#div_nivel_estado_<?php echo $tabla; ?>").html(data);
+        }).fail(function() {
+            alert("error: " + id + " " + tabla);
+        });
+    });
+</script>

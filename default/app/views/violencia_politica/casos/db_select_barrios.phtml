@@ -1,0 +1,9 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('caso.comunidad_id', 'nombre', array('observatorio/comunidad', 'getBarriosByTerritorioIdSelect',  $territorio_id), NULL, array('class'=>''), NULL, 'Barrio'); ?>
+
+<script type='text/javascript'>
+$(document).ready(function() 
+{ 
+    
+});
+</script>

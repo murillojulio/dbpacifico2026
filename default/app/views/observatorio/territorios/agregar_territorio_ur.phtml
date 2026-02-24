@@ -1,0 +1,169 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    
+    
+    <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="active"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li><a href="#tab2" data-toggle="tab">Población</a></li>       
+        <li><a href="#tab3" data-toggle="tab">Fuentes de la información</a></li>  
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="active"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane fade" ><a href="#tab2" data-toggle="tab">Población</a></li>        
+        <li class="tab-pane fade" ><a href="#tab3" data-toggle="tab">Fuentes de la información</a></li> 
+    </ul>
+
+    <div class="tab-content"> 
+        <div class="tab-pane active" id="tab1"> 
+                <div class="row">                   
+                    <div class="col-md-6">
+                         <?php /*echo DwForm::dbCheck('nombre','nombre',array('observatorio/departamento','find'))*/ ?>
+                        <?php echo DwForm::hidden('territorio.tipo', NULL, 'urbano') ?>
+                        <?php echo DwForm::text('territorio.nombre', array('class'=>'input-readonly'), $territorio_nombre, 'Nombre'); ?>
+                    </div>
+                     <div class="col-md-6">  
+                         <?php echo DwForm::oneSelect('territorio.titulado', $territorio_titulado, array('class'=>' input-readonly'), '¿Titulado?'); ?>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <?php echo DwForm::hidden('territorio.departamento_id', NULL, $departamento_id); ?>
+                    <?php echo DwForm::text('territorio.departamento_nombre', array('class'=>'input-readonly'), $departamento_nombre, 'Departamento'); ?>
+                </div>
+                 <div class="col-md-9">
+                    <?php echo DwForm::text('territorio.str_municipios', array('class'=>'input-readonly'), substr($str_municipios, 0, -3), 'Municipio(s)'); ?>
+                </div>
+            </div>     
+           
+                <div class="row">
+                    
+                        <?php
+                            if ($territorio_titulado == 'SI')
+                            {
+                                echo View::partial('titulado_si/agregar', false, NULL); 
+                            }
+                            else {
+                                echo View::partial('titulado_no/agregar', false, NULL);                                 
+                            }
+
+                        ?>                    
+                                  
+                </div>
+              
+       
+             <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::nextTab(); ?>
+                </div>
+            </div>
+        
+    </div>
+         <div class="tab-pane" id="tab2">
+                              
+                  <?php  echo View::partial('poblacion/agregar', false, array('para_territorio' => 'si')); ?>                                                  
+                    
+                   <div class="row">
+                         <div class="col-md-6">
+                            <?php echo DwForm::text('territorio.cant_ninos_primera_inf', array('class'=>'formato_punto'), '0', 'Cantidad de niños con registro civil en edad de primera infancia'); ?>
+                        </div>
+                       <div class="col-md-6">
+                            <?php echo DwForm::text('territorio.cant_sin_ninos_primera_inf', array('class'=>'formato_punto'), '0', 'Cantidad de niños sin registro civil en edad de primera infancia'); ?>
+                        </div>
+                   </div>
+              <div class="row">
+                  <div class="row">
+                <div class="form-actions">
+                    <?php echo DwForm::nextTab(); ?>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+          <div class="tab-pane" id="tab3"> 
+               <div class="row">   
+                   <div class="col-md-12">
+                <?php View::partial('fuentes/agregar', false, NULL); ?>  
+                   </div>
+               </div>
+              <div class="form-actions">
+                <div class="pull-left">
+                        <?php echo DwForm::prevTab(); ?>                        
+                    </div>  
+                <?php echo DwForm::send('Guardar territorio'); ?>
+                <?php echo DwForm::cancel(); ?>
+                <?php echo DwForm::focus('panel.departamento'); ?>
+            </div>
+        
+    </div>
+        
+<!--         <div class="tab-pane" id="tab3">
+            
+            <div class="row fileupload-buttonbar">
+
+                <div class="col-md-6" style="margin-bottom: 20px;">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <?php echo DwForm::upload('fotografia', array('data-to'=>PUBLIC_PATH.'sistema/usuarios/upload/', 'data-size'=>5000000, 'data-files'=>'images', 'data-success'=>'loadImg'), 'Fotografía'); ?>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="picture-profile text-center text-middle shadow-dark" style="margin: 5px auto 0px;">
+                                <?php echo DwHtml::img("upload/personas/default.png", "Fotografía", array('id'=>'img-usuario')); ?>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+            <?php echo DwForm::hidden('usuario.fotografia', NULL, 'default.png'); ?>
+            
+            <div class="row">
+                <div class="form-actions">
+                    <div class="pull-left">
+                        <?php echo DwForm::prevTab(); ?>                        
+                    </div>                    
+                    <?php echo DwForm::send('Crear usuario'); ?>
+                    <?php echo DwForm::cancel(); ?>
+                    <?php echo DwForm::focus('usuario.nombre'); ?>
+                </div>
+            </div>
+            
+        </div>      -->
+        
+        
+    </div>  
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+
+<script type='text/javascript'>        
+    $(".formato_punto_coma").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 2,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+    
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+    
+    
+       
+</script>

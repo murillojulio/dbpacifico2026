@@ -1,0 +1,33 @@
+<?php View::flash(); ?>
+    <div class="modal fade" id="modal-editar-promotor">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Editar promotor</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php echo DwForm::hidden("cultivo_ilicito_presunto_responsable.id", NULL, $cultivo_ilicito_presunto_responsable_id); ?>
+                            <div class="form-group">
+                                <label for="editar_cultivo_ilicito_presunto_responsable_presunto_responsable_id">Promotor del cultivo<span class="req">*</span></label>
+                                <?php echo DwForm::dbSelect('editar_cultivo_ilicito_presunto_responsable.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonEditarPromotor()'), $CultivoIlicitoPresuntoResponsable->presunto_responsable_id, 'Promotor del cultivo <span class="req">*</span>'); ?>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editar_cultivo_ilicito_presunto_responsable_descripcion">Descripción del promotor<span class="req">*</span></label>
+                                <?php echo DwForm::textarea('editar_cultivo_ilicito_presunto_responsable.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonEditarPromotor()', 'style' => "height: 130px;"), $CultivoIlicitoPresuntoResponsable->descripcion_presunto_responsable, 'Descripción del promotor <span class="req">*</span>'); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cancelar-guardar-cambio-promotor" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-guardar-cambio-promotor" type="button" class="btn btn-success" onclick="guardarCambiosPromotor()" data-loading-text="Guardando...">Guardar cambios</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

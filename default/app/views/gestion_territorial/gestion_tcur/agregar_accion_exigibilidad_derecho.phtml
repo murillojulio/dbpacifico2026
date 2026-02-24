@@ -1,0 +1,90 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-3">
+                 <?php echo DwForm::hidden('accion_exigibilidad_derecho.territorio_id', NULL, $territorio_id) ?>
+                 <?php echo DwForm::dbSelect('accion_exigibilidad_derecho.tipo_accion_exigibilidad_derecho_id', 'nombre', array('opcion/tipo_accion_exigibilidad_derecho', 'getListadoTipoAccionExigibilidadDerechoDBS', TipoAccionExigibilidadDerecho::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Tipo de acción de exigibilidad de derecho'); ?>
+             </div> 
+            <div class="col-md-3">
+            <?php echo DwForm::date('accion_exigibilidad_derecho.fecha_accion_inicio', array('class'=>'input-required'), '', 'Fecha inició la acción'); ?>                        
+        </div>
+            <div class="col-md-3">
+                        <?php echo DwForm::select('accion_exigibilidad_derecho.accion_termino', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, '¿La acción ha terminado?'); ?>
+                    </div>
+            <div id="fecha_accion_termino" class="col-md-3">
+            <?php echo DwForm::date('accion_exigibilidad_derecho.fecha_accion_termino', array('class'=>''), '', 'Fecha terminó la acción'); ?>                        
+        </div>
+         </div>
+    <div class="row">        
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.lugar', array('class'=>'input-lower'), '', 'Lugar'); ?>
+             </div>  
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.causa', array('class'=>'input-lower'), '', 'Causa'); ?>
+             </div>
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.participantes_demandantes', array('class'=>'input-lower'), '', 'Participantes o demandantes'); ?>
+             </div>
+    </div>
+    <div class="row">        
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.ante_que_instancia', array('class'=>'input-lower'), '', 'Ante que instancia'); ?>
+             </div>  
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.descripcion_accion', array('class'=>'input-lower'), '', 'Descripción de la acción de exigibilidad de derecho'); ?>
+             </div>
+        <div class="col-md-4">
+                 <?php echo DwForm::textarea('accion_exigibilidad_derecho.descripcion_resultado', array('class'=>'input-lower'), '', 'Descripción del resultado'); ?>
+             </div>
+    </div>
+    <br>
+     <div class="row">
+    <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+                
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/agregar', false, NULL); ?>
+                    </div>                    
+                </div>
+            </div> 
+     </div>
+    <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar accion_exigibilidad_derecho'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('accion_exigibilidad_derecho.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+    $('#fecha_accion_termino').hide();
+    $('#accion_exigibilidad_derecho_fecha_accion_termino').attr("required", "");
+    
+    $("#accion_exigibilidad_derecho_accion_termino").on('change', function(e) {
+            var data = $('#accion_exigibilidad_derecho_accion_termino').val();
+            if(data == 'SI')
+            {
+                $('#fecha_accion_termino').show();
+                $('#accion_exigibilidad_derecho_fecha_accion_termino').attr("required", "required");
+                $('#accion_exigibilidad_derecho_fecha_accion_termino').focus();
+            }
+            else
+            {
+                $('#fecha_accion_termino').hide();
+                $('#accion_exigibilidad_derecho_fecha_accion_termino').attr("required", "");
+            }            
+        });
+    });
+</script>

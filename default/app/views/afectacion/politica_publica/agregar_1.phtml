@@ -1,0 +1,176 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">
+                    <div class="col-md-12">                                                
+                        <?php echo DwForm::text('politica_publica.nombre', array('class'=>'input-required'), NULL, 'Nombre del documento'); ?>
+                    </div>                                   
+                </div>
+                      <div class="row">                    
+                          <div class="col-md-4">                                
+                                   <?php echo DwForm::upload_V2('documento_politica_publica', array('data-to'=>PUBLIC_PATH.'upload/upload/upload_document/documento_politica_publica/politica_publica/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocumentoPolitica'), 'Adjuntar documento de política pública', 'text_con', 'icon_con'); ?>
+                            </div>  
+                          <div class="col-md-8">                               
+                              <a id="enlace_documento_politica" target="_blank" href="">                                       
+                              </a>                            
+                           </div>
+                          <?php echo DwForm::hidden('politica_publica.documento', NULL, ''); ?>
+                      </div>                     
+                      
+                      <script type="text/javascript">
+    
+    function loadDocumentoPolitica(result, input) 
+    {
+        
+        $("#politica_publica_documento").val(result.name);
+        $("#enlace_documento_politica").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/politica_publica/'+result.name);
+        $("#enlace_documento_politica").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_politica').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('text_con').innerHTML = 'Cambiar documento de política pública';
+        $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+</script>
+
+                       <div class="row">
+                           <div class="col-md-6">
+                        <?php echo DwForm::dbSelect('politica_publica.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoDBS', ''), NULL, array('class'=>'input-required'), NULL, 'Seleccione el sector de la política pública'); ?>                        
+                    </div>  
+                           <div id="div_subtipo_megaproyecto" class="col-md-6">
+                        <?php echo DwForm::dbSelect('politica_publica.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', '0'), NULL, array('class'=>'input-required'), NULL, 'Seleccione el subsector de la política pública'); ?>                        
+                    </div>   
+                      </div>             
+                      
+                       <div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_ubicacion_proyecto">Ubicación de la política pública</label>
+                            <div id="panel_ubicacion_proyecto" class="panel panel-default">
+                                <div class="panel-body">
+                                
+                      
+                      <div class="row">
+                        <div class="col-md-3" id="div_departamento"> 
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class'=>''), NULL, 'Departamento'); ?>                           
+                        </div>
+                        <div class="col-md-3" id="div_municipio">                    
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  ''), NULL, array('class' => ''), NULL, 'Municipio'); ?>                        </div>
+                       <div class="col-md-6" id="div_territorio">                                                
+                           <?php echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', ''), NULL, array('class' => ''), NULL, 'Territorio'); ?>
+                        </div>  
+                          
+                </div>
+                      
+                                </div>
+                            </div>                           
+                        </div>                          
+                      </div>
+                      
+                                     
+                      <div class="row">
+                    <div class="col-md-12">
+                        <?php echo DwForm::textarea('politica_publica.contenido_politica', array('class'=>'input-lower'), '', 'Contenido de la política pública'); ?>
+                    </div>                
+                    </div> 
+                       <div class="row">                       
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('politica_publica.fecha_vigencia_inicio', array('class'=>''), '', 'Fecha en que inicia la vigencia de la política pública'); ?>
+                        </div> 
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('politica_publica.fecha_vigencia_fin', array('class'=>''), '', 'Fecha en que finaliza la vigencia de la política pública'); ?>
+                        </div> 
+                    </div>                     
+                  </div>
+               </div>
+            </div>
+      
+            <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>               
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/agregar', false, NULL); ?>
+                    </div>                    
+                </div>
+            </div> 
+           
+                          
+                    
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar política pública'); ?>
+                <?php echo DwForm::cancel('afectacion/politica_publica/listar/'); ?>
+                <?php echo DwForm::focus('politica_publica.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+    
+    <script type='text/javascript'>
+        
+ $("#caso_departamento_id").on('change', function(e) {
+            var departamento_id = $('#caso_departamento_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_municipios/'; ?>"+departamento_id+"/caso.municipio_id/Municipio/no/",
+                data: "departamento_id=" + departamento_id + "&field=caso.municipio_id&label=Municipio&input_required=no",
+            }).done(function(data) {
+                
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                $('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        $("#caso_municipio_id").on('change', function(e) {
+            var municipio_id = $('#caso_municipio_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>"+municipio_id+"/caso.territorio_id/Territorio/",
+                data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio",
+            }).done(function(data) {
+                $("#div_territorio").html(data);
+                $("#caso_territorio_id").focus();
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+                  
+        $("#politica_publica_tipo_megaproyecto_id").on('change', function(e) {
+            $("#div_micro_subtipo_megaproyecto").hide();
+            //$("#div_micro_subtipo_megaproyecto").val('');
+            var tipo_megaproyecto_id = $('#politica_publica_tipo_megaproyecto_id').val();
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_subtipo_megaproyecto/'; ?>"+tipo_megaproyecto_id+"/",
+                data: "tipo_megaproyecto_id=" + tipo_megaproyecto_id,
+            }).done(function(data) {
+                $("#div_subtipo_megaproyecto").html(data);
+                $("#politica_publica_subtipo_megaproyecto_id").focus();
+                $("#megaproyecto_subtipo_megaproyecto_id").focus();
+                //$('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+        
+        
+        
+        
+</script>
+</div>

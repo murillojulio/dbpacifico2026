@@ -1,0 +1,72 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'afectacion/actor_armado/buscar_territorio_cn/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"afectacion/actor_armado/buscar_territorio_cn/"
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::hidden('tipo', NULL, 'comunidad_negra') ?>
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+               
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE DEL TERRITORIO</th>
+                    <th class="col-hidden" data-order="cant_actor_armado_reg">ACTORES ARMADOS</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($territorios->items as $territorio): ?>
+                    <?php $key_show = Security::setKey($territorio->id, 'show_actor_armado'); ?>
+                    <?php $key_upd = Security::setKey($territorio->id, 'upd_actor_armado'); ?>
+                    <?php $key_inac = Security::setKey($territorio->id, 'inactivar_actor_armado'); ?>
+                    <?php $key_reac = Security::setKey($territorio->id, 'reactivar_actor_armado'); ?>
+                    <?php $key_del = Security::setKey($territorio->id, 'eliminar_actor_armado'); ?>
+                    <tr>
+                        <td><?php echo $territorios->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $territorio->nombre) : $territorio->nombre;?></td>
+                        <td><?php echo $territorio->cant_actor_armado_reg; ?></td>                        
+                        <td><?php echo $territorio->departamento; ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver Actores Armados', "afectacion/actor_armado/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar Actores Armados', "afectacion/actor_armado/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php //echo DwHtml::buttonTable('Agregar comunidad', "observatorio/territorios/agregar_comunidad/$territorio->id/$territorio->nombre/$territorio->tipo/", null, 'success', 'fa-plus'); ?>
+                            <?php 
+//                                $perfil = Session::get('perfil');
+//                                if($perfil == 'ADMINISTRADOR' || $perfil == 'Super Usuario')
+//                                {
+//                                    echo DwHtml::buttonTable('Eliminar territorio', "observatorio/territorios/eliminar/$key_del/buscar_actor_armado_cn/$order/page.$page/",
+//                                            array('class'=>'js-confirm', 'msg-title'=>'Eliminar territorio: '.$territorio->nombre, 'msg'=>'Está seguro de eliminar este territorio? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban');
+//                                }
+                            ?>
+                        </td>
+                    </tr>
+                    <?php $territorios->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+       
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$territorios, 'url'=>"afectacion/actor_armado/buscar_territorio_cn/$field/$value/$order/")); ?>
+
+</div>

@@ -1,0 +1,84 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({            
+            form_to         : $.KumbiaPHP.publicPath+'afectacion/area_natural_protegida/buscar_area_natural_protegida/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'afectacion/area_natural_protegida/buscar_area_natural_protegida/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                 <?php echo DwHtml::button("afectacion/area_natural_protegida/listar", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("afectacion/area_natural_protegida/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >SECTOR</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+               <?php foreach($area_natural_protegidas->items as $area_natural_protegida): ?>
+                    <?php $key_show = Security::setKey($area_natural_protegida->id, 'show_area_natural_protegida'); ?>
+                    <?php $key_upd = Security::setKey($area_natural_protegida->id, 'upd_area_natural_protegida'); ?>
+                    <?php $key_inac = Security::setKey($area_natural_protegida->id, 'inactivar_area_natural_protegida'); ?>
+                    <?php $key_reac = Security::setKey($area_natural_protegida->id, 'reactivar_area_natural_protegida'); ?>
+                    <tr>
+                        <td><?php echo $area_natural_protegidas->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $area_natural_protegida->nombre) : $area_natural_protegida->nombre; ?></td>
+                        <td><?php echo $area_natural_protegida->tipo_area_natural_protegida_nombre; ?></td>                        
+                        <td><?php
+                        $ubicaciones = $area_natural_protegida->getAfectacion()->getUbicacion();
+                        foreach($ubicaciones as $ubicacion):
+                            echo $ubicacion->getDepartamento()->nombre.' - ';
+                            echo $ubicacion->getMunicipio()->nombre.' - ';
+                            echo $ubicacion->getTerritorio()->nombre.'<br>';
+                        endforeach;
+                        
+                         ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver área natural protegida', "afectacion/area_natural_protegida/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar área natural protegida', "afectacion/area_natural_protegida/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($area_natural_protegida->estado == AreaNaturalProtegida::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar área natural protegida', "afectacion/area_natural_protegida/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar área natural protegida', "afectacion/area_natural_protegida/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <?php $area_natural_protegidas->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$area_natural_protegidas, 'url'=>"afectacion/area_natural_protegida/buscar_area_natural_protegida/$field/$value/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/area_natural_protegida/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>

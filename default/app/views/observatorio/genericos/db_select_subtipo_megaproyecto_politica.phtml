@@ -1,0 +1,2 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('politica_publica.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $tipo_megaproyecto_id), NULL, array('class'=>'input-required'), NULL, 'Seleccione el subsector de la política pública'); ?>   

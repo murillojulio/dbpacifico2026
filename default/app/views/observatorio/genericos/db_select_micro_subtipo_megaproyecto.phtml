@@ -1,0 +1,17 @@
+<?php DwForm::open() ?>
+<?php   
+//        echo DwForm::dbSelect('megaproyecto.micro_subtipo_megaproyecto_id', 'nombre', 
+//             array('opcion/micro_subtipo_megaproyecto', 'getMicroSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $subtipo_megaproyecto_id), 
+//             NULL, array('class'=>'input-required'), NULL, 'Seleccione la capacidad o cantidad o ambito del sub tipo de megaproyecto'); 
+//        
+   
+?>   
+<?php echo DwForm::dbRadioId('micro_subtipo_megaproyecto','nombre',array('opcion/micro_subtipo_megaproyecto', 'getMicroSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $subtipo_megaproyecto_id), array('onclick'=>'myFunction(this.value)'), NULL); ?>
+
+<script type="text/javascript">
+  /*function myFunction(valor) {
+    $('#megaproyecto_micro_subtipo_megaproyecto_id').val(valor);
+}*/
+</script>
+        
+</script>

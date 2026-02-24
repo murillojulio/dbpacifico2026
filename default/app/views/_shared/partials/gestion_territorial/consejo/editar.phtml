@@ -1,0 +1,72 @@
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php
+                $comunitario = $array_validacion_consejo['comunitario'];
+                $comunitario_mayor = $array_validacion_consejo['comunitario_mayor'];
+                $comunitario_local = $array_validacion_consejo['comunitario_local'];
+                
+                if($comunitario == 1 && $comunitario_mayor == 0)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario mayor', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario local', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                }
+                if($comunitario == 0 && $comunitario_mayor == 0)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario', array('class' => 'btn-success', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario mayor', array('class' => 'btn-success', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario local', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                }                
+                if($comunitario == 0 && $comunitario_mayor == 1)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario mayor', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);                    
+                    echo DwHtml::button("gestion_territorial/gestion_tccn/agregar_consejo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar consejo comunitario local', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                }
+                ?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE DEL CONSEJO</th>                    
+                    <th>REPRESENTANTE LEGAL</th>
+                    <th>TIPO DE CONSEJO</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_consejo = 1;
+                foreach($consejos as $consejo): ?>                    
+                    <?php //$key_show = Security::setKey($consejo->id, 'show_consejo'); ?>
+                    <?php $key_upd = Security::setKey($consejo->id, 'upd_consejo'); ?>                    
+                    <?php $key_del = Security::setKey($consejo->id, 'del_consejo'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_consejo; ?></td>                        
+                        <td><?php echo $consejo->nombre; ?></td>
+                        <td><?php echo $consejo->nombre_representante_legal; ?></td>
+                        <td><?php echo $consejo->tipo_consejo; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$consejo->nivel, 'estado'=>$consejo->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'consejo',
+                                        "nombre"=>$consejo->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"gestion_territorial/gestion_tccn/editar_consejo/$key_upd/$key/$order/$page/",
+                                        "url_eliminar"=>"gestion_territorial/gestion_tccn/eliminar_consejo/$consejo->nombre/$obj_territorio->nombre/$key_del/$key/$order/$page/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver consejo', "gestion_territorial/gestion_tccn/ver_consejo/$key_show/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar consejo', "gestion_territorial/gestion_tccn/editar_consejo/$key_upd/$key/$order/$page/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_consejo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+   <br>

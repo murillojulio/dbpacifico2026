@@ -1,0 +1,229 @@
+<?php View::flash(); ?>
+
+<div class="modal fade" id="modal_agregar_megaproyecto">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar Megaproyecto</h4>
+            </div>
+            <div class="modal-body">
+            <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="megaproyecto_nombre">Nombre del Megaproyecto <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::text('megaproyecto.nombre', array('onkeyup' => 'validarBotonAgregarMegaproyecto()'), NULL, 'Nombre del Megaproyecto'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="megaproyecto_clase_megaproyecto_id">Seleccione el tipo de megaproyecto <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('megaproyecto.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoByClaseMegaproyectoDBS', $clase_megaproyecto), NULL, array('onchange' => 'validarBotonAgregarMegaproyecto()'), NULL, 'Seleccione el tipo de megaproyecto'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="div_subtipo_megaproyecto" class="col-md-12">
+                        <div class="form-group">
+                            <label for="megaproyecto_tipo_megaproyecto_id">Seleccione el Sub tipo de megaproyecto <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('megaproyecto.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', '0'), NULL, array('onchange' => 'validarBotonAgregarMegaproyecto()'), NULL, 'Seleccione el Sub tipo de megaproyecto'); ?>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="panel_fuente">Fuente de la información</label>
+                        <div id="panel_fuente" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">                                
+                                    <div class="col-md-12">
+                                    <div class="form-group">                            
+                                        <label for="fuente_fecha">Fecha de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::date('fuente.fecha', array('onkeyup' => 'ValidarBotonAgregarMegaproyecto()', 'onchange'=>'ValidarBotonAgregarMegaproyecto()'), NULL, 'Fecha de la fuente'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fuente_descripcion">Descripción de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::textarea('fuente.descripcion', array('class' => 'input-lower', 'onkeyup'=>'validarBotonAgregarMegaproyecto()'), NULL, 'Descripción de la fuente'); ?>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-guardar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-megaproyecto" type="button" class="btn btn-success" onclick="agregarMegaproyecto()" data-loading-text="Guardando...">Continuar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+            <?php echo DwHtml::button(NULL, 'agregar', array('class' => 'btn-success', "data-toggle"=>"modal", "data-target"=>"#modal_agregar_megaproyecto"), 'fa-check-square-o', NULL); ?>
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar/$clase_megaproyecto", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE</th>
+                    <th>EMPRESA</th>
+                    <th>UBICACIÓN</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num=1; ?>
+                <?php foreach($megaproyectos as $megaproyecto): ?>
+                    <?php $key_show = Security::setKey($megaproyecto->id, 'show_megaproyecto'); ?>
+                    <?php $key_upd = Security::setKey($megaproyecto->id, 'upd_megaproyecto'); ?>
+                    <?php $key_del = Security::setKey($megaproyecto->id, 'del_megaproyecto'); ?>
+                    <?php //$key_inac = Security::setKey($megaproyecto->id, 'inactivar_megaproyecto'); ?>
+                    <?php //$key_reac = Security::setKey($megaproyecto->id, 'reactivar_megaproyecto'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $megaproyecto->nombre; ?></td>
+                        <td><?php echo $megaproyecto->nombre_empresa; ?></td>
+                       <td>
+                           <?php if (!empty($megaproyecto->ubicacion)): ?>
+                                <ul>
+                                    <?php foreach (explode(' | ', $megaproyecto->ubicacion) as $u): ?>
+                                        <li><?= $u ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                                <?php else: ?>
+                                    <span class="text-muted">Sin ubicación registrada</span>
+                            <?php endif; ?>
+                        </td>
+
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$megaproyecto->nivel, 'estado'=>$megaproyecto->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'megaproyecto',
+                                        "nombre"=>$megaproyecto->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/megaproyectos/editar/$key_upd/$clase_megaproyecto/1/",
+                                        "url_eliminar"=>"afectacion/megaproyectos/eliminar/$megaproyecto->nombre/$key_del/$megaproyecto->afectacion_id/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver megaproyecto', "afectacion/megaproyectos/ver/$key_show/$clase_megaproyecto/1/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar megaproyecto', "afectacion/megaproyectos/editar/$key_upd/$clase_megaproyecto/1/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($megaproyecto->estado == Megaproyecto::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar megaproyecto', "afectacion/megaproyectos/estado/inactivar/$key_inac/$clase_megaproyecto/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar megaproyecto', "afectacion/megaproyectos/estado/reactivar/$key_reac/$clase_megaproyecto/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/megaproyectos/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+            $("#btn-agregar-megaproyecto").prop('disabled', true);
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+
+
+        function validarBotonAgregarMegaproyecto() {
+        var megaproyecto_nombre = $('#megaproyecto_nombre').val();
+        var megaproyecto_tipo_megaproyecto_id = $('#megaproyecto_tipo_megaproyecto_id').val();
+        var megaproyecto_subtipo_megaproyecto_id = $('#megaproyecto_subtipo_megaproyecto_id').val();  
+        var fecha = $('#fuente_fecha').val();
+        var descripcion = $('#fuente_descripcion').val();
+
+        if (megaproyecto_nombre !== '' && megaproyecto_tipo_megaproyecto_id !== '' && megaproyecto_subtipo_megaproyecto_id !== '' && fecha !== '' && descripcion !== '') {
+            $("#btn-agregar-megaproyecto").prop('disabled', false);
+        } else {
+            $("#btn-agregar-megaproyecto").prop('disabled', true);
+        }
+    }
+
+    function agregarMegaproyecto() {
+        $("#btn-agregar-megaproyecto").prop('disabled', true);
+        jsSpinner('show');
+
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/megaproyectos/agregar_desde_modal/'; ?>";
+
+        let megaproyecto_nombre = $('#megaproyecto_nombre').val();
+        let megaproyecto_tipo_megaproyecto_id = $('#megaproyecto_tipo_megaproyecto_id').val();
+        let megaproyecto_subtipo_megaproyecto_id = $('#megaproyecto_subtipo_megaproyecto_id').val(); 
+        let megaproyecto_clase_megaproyecto = '<?php echo $clase_megaproyecto;?>';
+        let fuente_fecha = $('#fuente_fecha').val();
+        let fuente_descripcion = $('#fuente_descripcion').val();
+        let datos = new FormData();
+        datos.append('megaproyecto_nombre', megaproyecto_nombre);
+        datos.append('megaproyecto_tipo_megaproyecto_id', megaproyecto_tipo_megaproyecto_id);
+        datos.append('megaproyecto_subtipo_megaproyecto_id', megaproyecto_subtipo_megaproyecto_id);
+        datos.append('megaproyecto_clase_megaproyecto', megaproyecto_clase_megaproyecto);
+        datos.append('fuente_fecha', fuente_fecha);
+        datos.append('fuente_descripcion', fuente_descripcion);
+
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                url = "<?php echo PUBLIC_PATH . 'afectacion/megaproyectos/editar/'; ?>" + data + "/";
+                $(location).attr('href', url);
+            })
+            .catch(function(err) {
+                alert('ERROR en agregarMegaproyecto() ' + err);
+                $("#btn-agregar-megaproyecto").prop('disabled', false);     
+                console.error(err);
+            });
+    }
+    $("#megaproyecto_tipo_megaproyecto_id").on('change', function(e) {
+            $("#div_micro_subtipo_megaproyecto").hide();
+            var tipo_megaproyecto_id = $('#megaproyecto_tipo_megaproyecto_id').val();
+            
+            $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_subtipo_megaproyecto/'; ?>"+tipo_megaproyecto_id+"/",
+                data: "tipo_megaproyecto_id=" + tipo_megaproyecto_id,
+            }).done(function(data) {
+                $("#div_subtipo_megaproyecto").html(data);
+                $("#megaproyecto_subtipo_megaproyecto_id").focus();
+                //$('#caso_territorio_id').val('');
+            }).fail(function() {
+                alert("error");
+            });
+        });
+</script>

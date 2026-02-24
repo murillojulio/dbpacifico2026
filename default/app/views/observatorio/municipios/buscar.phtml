@@ -1,0 +1,63 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to         : $.KumbiaPHP.publicPath+'observatorio/municipios/buscar/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'observatorio/municipios/buscar/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/municipios/listar/", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("observatorio/municipios/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+         <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="subregion" data-order="subregion">SUBREGION</th>
+                    <th data-search="departamento" class="col-hidden" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="col-hidden" data-order="cant_territorio">CANTIDAD TERRITORIOS</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($municipios->items)) { ?>
+                <?php foreach($municipios->items as $municipio): ?>
+                    <?php $key_show = Security::setKey($municipio->id, 'show_municipio'); ?>
+                    <?php $key_upd = Security::setKey($municipio->id, 'upd_municipio'); ?>
+                    <?php $key_inac = Security::setKey($municipio->id, 'inactivar_municipio'); ?>
+                    <?php $key_reac = Security::setKey($municipio->id, 'reactivar_municipio'); ?>
+                    <tr>
+                        <td><?php echo $municipios->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $municipio->nombre) : $municipio->nombre; ?></td>
+                        <td><?php echo ($field=='subregion') ? DwUtils::resaltar($value, $municipio->subregion) : $municipio->subregion; ?></td>
+                        <td><?php echo ($field=='departamento') ? DwUtils::resaltar($value, $municipio->departamento) : $municipio->departamento; ?></td>                        
+                        <td><?php echo ($field=='cant_territorio') ? DwUtils::resaltar($value, $municipio->cant_territorio) : $municipio->cant_territorio; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver municipio', "observatorio/municipios/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar municipio', "observatorio/municipios/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $municipios->counter++; ?>
+                <?php endforeach; ?>
+                      <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$municipios, 'url'=>"observatorio/municipios/buscar/$field/$value/$order/")); ?>
+</div>

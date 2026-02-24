@@ -1,0 +1,139 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process_estado_nivel('organizacion', $organizacion, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo DwForm::hidden('organizacion.id', NULL, $organizacion->id) ?>
+            <?php echo DwForm::hidden('organizacion.territorio_id', NULL, $organizacion->territorio_id) ?>
+            <?php echo DwForm::text('organizacion.nombre', array('class' => 'input-required'), NULL, 'Organización que gestiona el territorio'); ?>
+        </div>
+        <div class="col-md-3">
+            <?php echo DwForm::text('organizacion.sigla', array('class' => ''), $organizacion->sigla, 'Sigla'); ?>
+        </div>
+        <div class="col-md-3">
+            <?php echo DwForm::text('organizacion.integrantes', array('class' => ''), $organizacion->integrantes, 'Número integrantes'); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo DwForm::text('organizacion.nombre_representante_legal', array('class' => 'input-required'), $organizacion->nombre_representante_legal, 'Nombre del representante legal'); ?>
+            <?php //echo DwForm::dbSelect('organizacion.mads_car_id', 'nombre', array('opcion/mads_car', 'getListadoMadsCarDBS', MadsCar::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Entidad que ejecuta la acción de seguimiento y control');  
+            ?>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="caso_fecha_desde">Representante legal desde | DD-MM-AAAA<span class="req">*</span></label>
+                <div class="input-group date datepicker" id="dp_organizacion_fecha_inicio_representante_legal">
+                    <input id="organizacion_fecha_inicio_representante_legal" name="organizacion[fecha_inicio_representante_legal]" type="text" value="<?php echo date('d-m-Y', strtotime($organizacion->fecha_inicio_representante_legal)); ?>" class="js-datepicker input-date form-control input-required" required="required">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+                <p class="help-block">
+                    <small class="help-error"></small>
+                </p>
+            </div>
+            <div class="row">
+            </div>
+            <?php //echo DwForm::date('caso.fecha_desde', array('class'=>'input-required'), date('d-m-Y', strtotime($caso->fecha_desde)), 'Fecha en que ocurrió el caso | AAAA-MM-DD'); 
+            ?>
+        </div>
+        <div class="col-md-3">
+            <?php echo DwForm::select('organizacion.frecuencia_asamblea', array('' => 'Seleccione', 'CADA AÑO' => 'CADA AÑO', 'CADA 2 AÑOS' => 'CADA 2 AÑOS', 'CADA 3 AÑOS O MAS' => 'CADA 3 AÑOS O MAS'), array('class' => 'input-required'), $organizacion->frecuencia_asamblea, 'Frecuencia de la asamblea'); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo DwForm::textarea('organizacion.descripcion', array('class' => 'input-lower', 'rows' => '9'), $organizacion->descripcion, 'Descripción de la estructura de la junta directiva y misión de la organización'); ?>
+        </div>
+        <div class="col-md-6">
+            <label for="panel_comite">Seleccione los campos de gestión del territorio</label>
+            <div id="panel_comite" class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <?php echo DwForm::dbCheckId('campo_gestion', 'nombre', array('opcion/campo_gestion', 'getCampoGestionDBS'), array('onchange' => 'validarCampoGestionOtro()'), $campo_gestion, 2, '6'); ?>
+                        <div id="div_organizacion_campo_gestion_otros" style="display:none;">
+                            <?php echo DwForm::text('organizacion.campo_gestion_otros', array('class' => 'input-lower'), $organizacion->campo_gestion_otros, 'Descripción otros campos de gestión<span class="req">*</span>'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <label for="panel_comite">Seleccione los campos de acción</label>
+            <div id="panel_comite" class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <?php echo DwForm::dbCheckId('campo_accion', 'nombre', array('opcion/campo_accion', 'getCampoAccionDBS'), NULL, $campo_accion, 2, '6'); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label for="panel_fuente">
+                <h3 class="panel-title">Fuente(s) de la información</h3>
+            </label>
+
+            <div id="panel_fuente" class="panel panel-default">
+                <div class="panel-body">
+                    <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="form-actions">
+            <?php echo DwForm::send('Guardar organizacion'); ?>
+            <?php echo DwForm::cancel($url_redir_back); ?>
+            <?php //echo DwForm::focus('organizacion.nombre'); 
+            ?>
+        </div>
+    </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+var caracterizacion = false;
+        var valor = '';
+        $('[name="campo_gestion[]"]:checked').each(function() {
+            valor = $(this).val();
+            if (valor === '8') {
+                caracterizacion = true;
+            }
+        });
+        if (caracterizacion) {
+            $("#div_organizacion_campo_gestion_otros").show();
+            $("#organizacion_campo_gestion_otros").focus();
+        } else {
+            $("#div_organizacion_campo_gestion_otros").hide();
+            $("#organizacion_campo_gestion_otros").val('');
+        }
+    });
+    
+    function validarCampoGestionOtro() {
+        var caracterizacion = false;
+        var valor = '';
+        $('[name="campo_gestion[]"]:checked').each(function() {
+            valor = $(this).val();
+            if (valor === '8') {
+                caracterizacion = true;
+            }
+        });
+        if (caracterizacion) {
+            $("#div_organizacion_campo_gestion_otros").show();
+            $("#organizacion_campo_gestion_otros").focus();
+        } else {
+            $("#div_organizacion_campo_gestion_otros").hide();
+            $("#organizacion_campo_gestion_otros").val('');
+        }
+    }
+</script>

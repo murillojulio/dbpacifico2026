@@ -1,0 +1,58 @@
+<?php View::flash(); ?>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php echo DwHtml::button("opcion/tipo_dano/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>TIPO DE DAÑO</th>
+                    <th>DESCRIPCION</th>
+                    <th>DOCUMENTO</th>
+                    <th>VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($tipos_danos->items as $tipo_dano): ?>
+                    <?php $key_show = Security::setKey($tipo_dano->id, 'show_tipo_dano'); ?>
+                    <?php $key_upd = Security::setKey($tipo_dano->id, 'upd_tipo_dano'); ?>
+                    <?php $key_inac = Security::setKey($tipo_dano->id, 'inactivar_tipo_dano'); ?>
+                    <?php $key_reac = Security::setKey($tipo_dano->id, 'reactivar_tipo_dano'); ?>
+                    <?php $key_del = Security::setKey($tipo_dano->id, 'eliminar_tipo_dano'); ?>
+                    <tr>
+                        <td><?php echo $tipos_danos->counter; ?></td>
+                        <td><?php echo $tipo_dano->nombre; ?></td>
+                        <td><?php echo $tipo_dano->descripcion; ?></td>
+                        <td><a id="enlace_documento_descripcion" target="_blank" href="<?php echo PUBLIC_PATH.'files/upload/opcion/tipo_dano/documento_descripcion/'.$tipo_dano->documento_descripcion; ?>"><button type="button" class="btn btn-primary btn-xs">Ver documento</button></a></td>
+                        <td><?php echo $tipo_dano->veces_usado; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver tipo daño', "opcion/tipo_dano/ver/$key_show/", array('class'=>'btn-xs'), 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar tipo daño', "opcion/tipo_dano/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($tipo_dano->estado == TipoDano::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar tipo daño', "opcion/tipo_dano/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar tipo daño', "opcion/tipo_dano/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar tipo daño', "opcion/tipo_dano/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar tipo daño', 'msg'=>'Está seguro de eliminar este tipo daño? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $tipos_danos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+</div>

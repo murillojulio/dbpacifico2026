@@ -1,0 +1,45 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::text('tipo_dano.nombre', array('class'=>'input-required'), NULL, 'Nombre del tipo de daño'); ?>                 
+                <?php echo DwForm::upload_V2('documento_descripcion', array('data-to'=>PUBLIC_PATH.'opcion/tipo_dano/upload/documento_descripcion/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocumentoDescripcion'), 'Adjuntar documento descripción del Tipo', 'texto_documento_descripcion', 'icono_descripcion'); ?>
+                <a id="enlace_documento_descripcion" target="_blank" href=""></a> 
+                <?php echo DwForm::hidden('tipo_dano.documento_descripcion', NULL, ''); ?>
+            </div>  
+            <div class="col-md-6">
+                <?php echo DwForm::textarea('tipo_dano.descripcion', array('class'=>'input-lower', 'required'=>'required', 'style'=>"height: 200px;"), '', 'Descripción del tipo de daño'); ?>
+            </div>
+        </div>  
+    <script type="text/javascript">
+    
+    function loadDocumentoDescripcion(result, input) 
+    {
+        $("#tipo_dano_documento_descripcion").val(result.name);
+        $("#enlace_documento_descripcion").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/opcion/tipo_dano/documento_descripcion/'+result.name);
+        $("#enlace_documento_descripcion").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_descripcion').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('texto_documento_descripcion').innerHTML = 'Cambiar documento de descripción';
+        $("#icono_descripcion").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+</script>
+
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar Tipo de Daño'); ?>
+                <?php echo DwForm::cancel('opcion/tipo_dano/listar/'); ?>
+                <?php echo DwForm::focus('tipo_dano.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

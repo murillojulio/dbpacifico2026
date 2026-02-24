@@ -1,0 +1,646 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-6">
+            <?php echo DwForm::text('iniciativa_empresarial.nombre', array('class'=>'input-required'), NULL, 'Nombre de la iniciativa empresarial'); ?>                 
+        </div>
+             <div class="col-md-3">
+                 <?php echo DwForm::hidden('iniciativa_empresarial.territorio_id', NULL, $territorio_id) ?>
+                 <?php echo DwForm::hidden('iniciativa_empresarial.territorio_nombre', NULL, $territorio_nombre) ?>
+                 <?php echo DwForm::dbSelect('iniciativa_empresarial.tipo_iniciativa_empresarial_id', 'nombre', array('opcion/tipo_iniciativa_empresarial', 'getListadoTipoIniciativaEmpresarialDBS', TipoIniciativaEmpresarial::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Tipo de iniciativa empresarial'); ?>
+             </div> 
+            
+            <div class="col-md-3">
+                        <?php echo DwForm::text('iniciativa_empresarial.cobertura_poblacion', array('class'=>'input-money'), NULL, 'Cobertura población vinculada a la iniciativa'); ?>                 
+                    </div>           
+         </div>
+    <div class="row"> 
+        <div class="col-md-12">
+        <label for="panel_actividad_productiva"><h3 class="panel-title">Actividad productiva</h3></label>   
+                <div id="panel_actividad_productiva" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('iniciativa_empresarial.tipo_actividad_productiva_id', 'nombre', array('opcion/tipo_actividad_productiva', 'getListadoTipoActividadProductivaDBS', TipoActividadProductiva::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Tipo de actividad productiva'); ?>
+                        </div>                    
+                              <div class="col-md-6">
+                 <label for="panel_alcance_iniciativa">Alcance de la actividad</label>
+                    <div id="panel_alcance_iniciativa" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                    <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_local', '1', NULL, NULL, 'LOCAL'); ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_regional', '1', NULL, NULL, 'REGIONAL'); ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_nacional', '1', NULL, NULL, 'NACIONAL'); ?>
+                                    </div>
+                                    <div class="col-md-3">
+                                    <?php echo DwForm::check('iniciativa_empresarial.alcance_actividad_internacional', '1', NULL, NULL, 'INTERNACIONAL'); ?>
+                                    </div>
+                                    
+                                    </div>
+                            </div>
+                        </div>
+                    </div> 
+             </div>                
+                      </div>
+                      <div class="row">
+                          <div class="col-md-12">
+                                <?php echo DwForm::textarea('iniciativa_empresarial.descripcion_actividad_productiva', array('class'=>''), NULL, 'Descripción actividad productiva'); ?>
+                            </div>
+                      </div>
+                  
+                  </div></div></div></div>
+                      
+            <div class="row"> 
+    <div class="col-md-12">
+        <label for="panel_gestion_recurso"><h3 class="panel-title">Gestión de recursos</h3></label>   
+                <div id="panel_gestion_recurso" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-12">
+                           <label for="panel_cooperacion_inter"></label>
+                    <div id="panel_cooperacion_inter" class="panel panel-default">
+                        <div class="panel-body">
+                            
+                                <div class="row">
+                          <div class="col-md-3">
+                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cooperacion_inter', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Cooperación internacional'); ?>
+                                    </div>
+                                    <div id="div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto" class="col-md-3">
+                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cooperacion_inter_monto', array('class'=>'input-money'), NULL, 'Monto'); ?>                 
+                                    </div>
+                                    <div id="div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien" class="col-md-6">
+                                <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cooperacion_inter_quien', array('class'=>''), NULL, 'Quienes'); ?>
+                            </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+                      </div>
+                      
+                      
+                      
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                           <label for="panel_cooperacion_nal"></label>
+                    <div id="panel_cooperacion_nal" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row">
+                          <div class="col-md-3">
+                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cooperacion_nal', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Cooperación nacional'); ?>
+                                    </div>
+                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto" class="col-md-3">
+                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cooperacion_nal_monto', array('class'=>'input-money'), NULL, 'Monto'); ?>                 
+                                    </div>
+                                <div id="div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien" class="col-md-6">
+                                <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cooperacion_nal_quien', array('class'=>''), NULL, 'Quienes'); ?>
+                            </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+                      </div>
+                      
+                      
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                           <label for="panel_cooperacion_cog"></label>
+                    <div id="panel_cooperacion_cog" class="panel panel-default">
+                        <div class="panel-body">
+                              <div class="row">
+                          <div class="col-md-3">
+                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_cogestionada', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Cogestionada'); ?>
+                                    </div>
+                                  <div id="div_iniciativa_empresarial_ges_rec_cogestionada_monto" class="col-md-3">
+                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_cogestionada_monto', array('class'=>'input-money'), NULL, 'Monto'); ?>                 
+                                    </div>
+                                  <div id="div_iniciativa_empresarial_ges_rec_cogestionada_quien" class="col-md-6">
+                                <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_cogestionada_quien', array('class'=>''), NULL, 'Quienes'); ?>
+                            </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+                      </div>
+                      
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                           <label for="panel_cooperacion_auto"></label>
+                    <div id="panel_cooperacion_auto" class="panel panel-default">
+                        <div class="panel-body">
+                            
+                    
+                      <div class="row">
+                          <div class="col-md-3">
+                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_autogestionada', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Autogestionada'); ?>
+                                    </div>
+                          <div id="div_iniciativa_empresarial_ges_rec_autogestionada_monto" class="col-md-3">
+                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_autogestionada_monto', array('class'=>'input-money'), NULL, 'Monto'); ?>                 
+                                    </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+                      </div>
+                      
+                      
+                      <div class="row">
+                          <div class="col-md-12">
+                           <label for="panel_cooperacion_ali"></label>
+                    <div id="panel_cooperacion_ali" class="panel panel-default">
+                        <div class="panel-body">
+                             
+                      <div class="row">
+                          <div class="col-md-3">
+                                    <?php echo DwForm::select('iniciativa_empresarial.ges_rec_alianza', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Alianza'); ?>
+                                    </div>
+                          <div id="div_iniciativa_empresarial_ges_rec_alianza_monto" class="col-md-3">
+                                    <?php echo DwForm::text('iniciativa_empresarial.ges_rec_alianza_monto', array('class'=>'input-money'), NULL, 'Monto'); ?>                 
+                                    </div>
+                          <div id="div_iniciativa_empresarial_ges_rec_alianza_quien" class="col-md-6">
+                                <?php echo DwForm::textarea('iniciativa_empresarial.ges_rec_alianza_quien', array('class'=>''), NULL, 'Quienes'); ?>
+                            </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+                      </div>                
+                      </div>
+                    </div>
+        </div>
+        </div>
+    <div class="row">
+        
+        
+        
+        
+        
+        <div class="col-md-12">
+                           <label for="panel_modelo_administracion"></label>
+                    <div id="panel_modelo_administracion" class="panel panel-default">
+                        <div class="panel-body">
+                             
+                      <div class="row">
+                         
+        
+        <div class="col-md-3">
+            <?php echo DwForm::select('iniciativa_empresarial.modelo_administracion', 
+                    array(''=>'Seleccione', 'EXTERNO'=>'EXTERNO', 'COMPARTIDO'=>'COMPARTIDO', 'AUTONÓMO'=>'AUTÓNOMO'), 
+                    array('class'=>'input-required'), NULL, 'Modelo de administración'); ?>
+        </div>
+        <div id="div_iniciativa_empresarial_modelo_administracion_quien" class="col-md-9">
+             <?php echo DwForm::textarea('iniciativa_empresarial.modelo_administracion_quien', array('class'=>''), NULL, 'Quiénes'); ?>             
+        </div>
+                      </div>
+                            
+                        </div>
+                    </div>
+                          </div>
+        
+        
+        
+        
+        
+        
+        <div class="col-md-12">
+           <label for="panel_afectacion_territorio">Afectaciones al territorio: <?php echo $territorio_nombre; ?></label>
+           <div id="panel_afectacion_territorio" class="panel panel-default">
+               <div class="panel-body">                            
+                  
+                              <div class="row">
+                                  <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_ambiental.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Ambiental'); ?>              
+            </div>
+            <div id="div_impacto_ambiental">
+                <div class="col-md-4">
+                    <label for="panel_ambiental">Seleccione los impactos ambientales</label>
+                    <div id="panel_ambiental" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_ambiental','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','1'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_ambiental.descripcion', array('class'=>''), '', 'Descripción del impacto ambiental'); ?>
+                </div>
+            </div>
+                    </div>
+                </div>
+                              </div>
+        </div> 
+        <div class="row">
+            <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_cultural.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Cultural'); ?>              
+            </div>
+            <div id="div_impacto_cultural">
+                <div class="col-md-4">
+                    <label for="panel_cultural">Seleccione los impactos culturales</label>
+                    <div id="panel_cultural" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_cultural','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','2'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_cultural.descripcion', array('class'=>''), '', 'Descripción del impacto cultural'); ?>
+                </div>
+            </div>
+                </div>
+            </div>
+            </div>
+        </div>       
+                 <div class="row">
+                     <div class="col-md-12">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_economico.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Económico'); ?>              
+            </div>
+            <div id="div_impacto_economico">
+                <div class="col-md-4">
+                    <label for="panel_economico">Seleccione los impactos economicoes</label>
+                    <div id="panel_economico" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_economico','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','3'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_economico.descripcion', array('class'=>''), '', 'Descripción del impacto economico'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+                     </div>
+        </div> 
+                 <div class="row">
+                     <div class="col-md-12">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_social.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Social'); ?>              
+            </div>
+            <div id="div_impacto_social">
+                <div class="col-md-4">
+                    <label for="panel_social">Seleccione los impactos sociales</label>
+                    <div id="panel_social" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_social','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','4'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_social.descripcion', array('class'=>''), '', 'Descripción del impacto social'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+                     </div>
+        </div>   
+                 <div class="row">
+                     <div class="col-md-12">
+                     <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_organizacion.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Organizacional'); ?>              
+            </div>
+            <div id="div_impacto_organizacion">
+                <div class="col-md-4">
+                    <label for="panel_organizacion">Seleccione los impactos organizaciones</label>
+                    <div id="panel_organizacion" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_organizacion','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','5'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_organizacion.descripcion', array('class'=>''), '', 'Descripción del impacto organizacion'); ?>
+                </div>
+            </div>
+                </div>
+                     </div>
+                     </div>
+        </div>        
+          <div class="row">
+              <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-body">
+            <div class="col-md-2">         
+                <?php echo DwForm::select('impacto_territorial.si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, 'Impacto Territorial'); ?>              
+            </div>
+            <div id="div_impacto_territorial">
+                <div class="col-md-4">
+                    <label for="panel_territorial">Seleccione los impactos territoriales</label>
+                    <div id="panel_territorial" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('checks_impacto_territorial','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','6'),NULL, NULL, 3, '4'); ?>
+                            </div>
+                        </div>
+                    </div> 
+                    
+                </div>
+                <div class="col-md-6">
+                    <?php echo DwForm::textarea('impacto_territorial.descripcion', array('class'=>''), '', 'Descripción del impacto territorial'); ?>
+                </div>
+            </div>
+                </div>
+              </div>
+              </div>
+        </div>  
+                       
+                  
+               </div>
+           </div>
+        </div>
+        
+        
+        
+        
+        
+    </div>
+    
+    <br>
+     <div class="row">
+    <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+                
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                        <?php View::partial('fuentes/agregar', false, NULL); ?>
+                    </div>                    
+                </div>
+            </div> 
+     </div>
+    
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar iniciativa_empresarial'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('iniciativa_empresarial.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    
+    $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').hide();
+    $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').hide();
+    $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').hide();
+    $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').hide();
+    $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').hide();
+    $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').hide();
+    $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').hide();
+    $('#div_iniciativa_empresarial_ges_rec_alianza_monto').hide();
+    $('#div_iniciativa_empresarial_ges_rec_alianza_quien').hide();
+    $('#div_iniciativa_empresarial_modelo_administracion_quien').hide();
+    
+    
+$("#div_impactos").hide();
+$("#div_impacto_ambiental").hide();
+$("#div_impacto_cultural").hide();
+$("#div_impacto_social").hide();
+$("#div_impacto_economico").hide();
+$("#div_impacto_organizacion").hide();
+$("#div_impacto_territorial").hide();
+    
+    
+    $("#iniciativa_empresarial_ges_rec_cooperacion_inter").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cooperacion_inter').val();
+            if(data == 'SI')
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_inter_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_inter_quien').val('');                
+            }            
+        });
+        
+         $("#iniciativa_empresarial_ges_rec_cooperacion_nal").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cooperacion_nal').val();
+            if(data == 'SI')
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cooperacion_nal_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cooperacion_nal_quien').val('');                
+            }            
+        });
+        
+         $("#iniciativa_empresarial_ges_rec_cogestionada").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_cogestionada').val();
+            if(data == 'SI')
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').show();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').show();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_cogestionada_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_cogestionada_quien').val('');                
+            }            
+        });
+        
+         $("#iniciativa_empresarial_ges_rec_autogestionada").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_autogestionada').val();
+            if(data == 'SI')
+            {
+                $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').show();
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').val('');
+                //$('#div_iniciativa_empresarial_ges_rec_autogestionada_quien').show();
+                //$('#iniciativa_empresarial_ges_rec_autogestionada_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_ges_rec_autogestionada_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_autogestionada_monto').val('');
+                //$('#div_iniciativa_empresarial_ges_rec_autogestionada_quien').hide();
+                //$('#iniciativa_empresarial_ges_rec_autogestionada_quien').val('');                
+            }            
+        });
+        
+         $("#iniciativa_empresarial_ges_rec_alianza").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_ges_rec_alianza').val();
+            if(data == 'SI')
+            {
+                $('#div_iniciativa_empresarial_ges_rec_alianza_monto').show();
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_alianza_quien').show();
+                $('#iniciativa_empresarial_ges_rec_alianza_quien').val('');
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_ges_rec_alianza_monto').hide();
+                $('#iniciativa_empresarial_ges_rec_alianza_monto').val('');
+                $('#div_iniciativa_empresarial_ges_rec_alianza_quien').hide();
+                $('#iniciativa_empresarial_ges_rec_alianza_quien').val('');                
+            }            
+        });
+        $("#iniciativa_empresarial_modelo_administracion").on('change', function(e) {
+            var data = $('#iniciativa_empresarial_modelo_administracion').val();
+            if(data == 'EXTERNO' || data == 'COMPARTIDO')
+            {
+                $('#div_iniciativa_empresarial_modelo_administracion_quien').show();
+                $('#iniciativa_empresarial_modelo_administracion_quien').val('');
+                $('#iniciativa_empresarial_modelo_administracion_quien').focus();                
+            }
+            else
+            {
+                $('#div_iniciativa_empresarial_modelo_administracion_quien').hide();
+                $('#iniciativa_empresarial_modelo_administracion_quien').val('');                             
+            }            
+        });
+        
+        
+        
+        
+     
+$("#impacto_ambiental_si_no").change(function(){
+	var si_no = $("#impacto_ambiental_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_ambiental").show();
+        }
+        else{
+            $("#div_impacto_ambiental").hide();
+            $("input[name='checks_impacto_ambiental[]']").attr('checked', false);
+            $("#impacto_ambiental_descripcion").val('');
+        }
+        
+});
+$("#impacto_cultural_si_no").change(function(){
+	var si_no = $("#impacto_cultural_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_cultural").show();
+        }
+        else{
+            $("#div_impacto_cultural").hide();
+            $("input[name='checks_impacto_cultural[]']").attr('checked', false);
+            $("#impacto_cultural_descripcion").val('');
+        }
+        
+});
+$("#impacto_social_si_no").change(function(){
+	var si_no = $("#impacto_social_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_social").show();
+        }
+        else{
+            $("#div_impacto_social").hide();
+            $("input[name='checks_impacto_social[]']").attr('checked', false);
+            $("#impacto_social_descripcion").val('');
+        }
+        
+});
+$("#impacto_economico_si_no").change(function(){
+	var si_no = $("#impacto_economico_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_economico").show();
+        }
+        else{
+            $("#div_impacto_economico").hide();
+            $("input[name='checks_impacto_economico[]']").attr('checked', false);
+            $("#impacto_economico_descripcion").val('');
+        }
+        
+});
+$("#impacto_organizacion_si_no").change(function(){
+	var si_no = $("#impacto_organizacion_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_organizacion").show();
+        }
+        else{
+            $("#div_impacto_organizacion").hide();
+            $("input[name='checks_impacto_organizacion[]']").attr('checked', false);
+            $("#impacto_organizacion_descripcion").val('');
+        }
+        
+});
+$("#impacto_territorial_si_no").change(function(){
+	var si_no = $("#impacto_territorial_si_no").val();
+        
+        if(si_no == 'SI'){
+            $("#div_impacto_territorial").show();
+        }
+        else{
+            $("#div_impacto_territorial").hide();
+            $("input[name='checks_impacto_territorial[]']").attr('checked', false);
+            $("#impacto_territorial_descripcion").val('');
+        }
+        
+});
+        
+        
+    });
+</script>

@@ -1,0 +1,84 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({            
+            form_to         : $.KumbiaPHP.publicPath+'afectacion/politica_publica/buscar_politica_publica/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'afectacion/politica_publica/buscar_politica_publica/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                 <?php echo DwHtml::button("afectacion/politica_publica/listar", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("afectacion/politica_publica/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >SECTOR</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($politica_publicas->items as $politica_publica): ?>
+                    <?php $key_show = Security::setKey($politica_publica->id, 'show_politica_publica'); ?>
+                    <?php $key_upd = Security::setKey($politica_publica->id, 'upd_politica_publica'); ?>
+                    <?php $key_inac = Security::setKey($politica_publica->id, 'inactivar_politica_publica'); ?>
+                    <?php $key_reac = Security::setKey($politica_publica->id, 'reactivar_politica_publica'); ?>
+                    <tr>
+                        <td><?php echo $politica_publicas->counter; ?></td>                         
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $politica_publica->nombre) : $politica_publica->nombre; ?></td>
+                        <td><?php echo $politica_publica->sector; ?></td>                        
+                        <td><?php
+                        $ubicaciones = $politica_publica->getAfectacion()->getUbicacion();
+                        foreach($ubicaciones as $ubicacion):
+                            echo $ubicacion->getDepartamento()->nombre.' - ';
+                            echo $ubicacion->getMunicipio()->nombre.' - ';
+                            echo $ubicacion->getTerritorio()->nombre.'<br>';
+                        endforeach;
+                        
+                         ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver politica publica', "afectacion/politica_publica/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar politica publica', "afectacion/politica_publica/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($politica_publica->estado == PoliticaPublica::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar politica publica', "afectacion/politica_publica/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar politica publica', "afectacion/politica_publica/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <?php $politica_publicas->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$politica_publicas, 'url'=>"afectacion/politica_publica/buscar_politica_publica/$field/$value/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/politica_publica/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>

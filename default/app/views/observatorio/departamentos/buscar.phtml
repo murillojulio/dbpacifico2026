@@ -1,0 +1,93 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({            
+            form_to         : $.KumbiaPHP.publicPath+'observatorio/departamentos/buscar/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'observatorio/departamentos/buscar/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/departamentos/listar/", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("observatorio/departamentos/agregar/", 'agregar', NULL, 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-order="cant_municipio_reg">MUNICIPIOS</th>
+                    <th class="col-hidden" data-order="cant_territorio_reg">TERRITORIOS</th>
+                    <th class="col-hidden" data-order="cant_territorio_comunidad_negra">TERRITORIOS COMUNIDAD NEGRA</th>
+                    <th class="col-hidden" data-order="cant_territorio_indigena">TERRITORIOS INDIGENA</th>                    
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($departamentos->items)) { ?>
+                <?php foreach($departamentos->items as $departamento): ?>
+                    <?php $key_show = Security::setKey($departamento->id, 'show_departamento'); ?>
+                    <?php $key_upd = Security::setKey($departamento->id, 'upd_departamento'); ?>
+                    <?php $key_inac = Security::setKey($departamento->id, 'inactivar_departamento'); ?>
+                    <?php $key_reac = Security::setKey($departamento->id, 'reactivar_departamento'); ?>
+                    <tr>
+                        <td><?php echo $departamentos->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $departamento->nombre) : $departamento->nombre; ?></td>
+                        <td><?php echo ($field=='cant_municipio_reg') ? DwUtils::resaltar($value, $departamento->cant_municipio_reg) : $departamento->cant_municipio_reg; ?></td>
+                        <td><?php echo ($field=='cant_territorio_reg') ? DwUtils::resaltar($value, $departamento->cant_territorio_reg) : $departamento->cant_territorio_reg; ?></td>
+                        <td><?php echo ($field=='cant_territorio_comunidad_negra') ? DwUtils::resaltar($value, $departamento->cant_territorio_comunidad_negra) : $departamento->cant_territorio_comunidad_negra; ?></td>
+                        <td><?php echo ($field=='cant_territorio_indigena') ? DwUtils::resaltar($value, $departamento->cant_territorio_indigena) : $departamento->cant_territorio_indigena; ?></td>                        
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver departamento', "observatorio/departamentos/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar departamento', "observatorio/departamentos/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                            <?php echo DwHtml::buttonTable('Agregar municipio', "observatorio/municipios/agregar/$departamento->id/$departamento->nombre", null, 'success', 'fa-plus'); ?>
+                        </td>
+                    </tr>
+                    <?php $departamentos->counter++; ?>
+                <?php endforeach; ?>
+                     <?php } ?>
+            </tbody>
+<!--            <tbody>
+                <?php foreach($departamentos->items as $departamento): ?>
+                    <?php $key_show = Security::setKey($departamento->id, 'show_departamento'); ?>
+                    <?php $key_upd = Security::setKey($departamento->id, 'upd_departamento'); ?>
+                    <?php $key_inac = Security::setKey($departamento->id, 'inactivar_departamento'); ?>
+                    <?php $key_reac = Security::setKey($departamento->id, 'reactivar_departamento'); ?>
+                    <tr>
+                        <td><?php echo $departamentos->counter; ?></td>
+                        <td><?php echo $departamento->nombre; ?></td>
+                        <td><?php echo $departamento->cant_municipio_pacifico; ?></td>
+                        <td><?php echo ($departamento->estado == Departamento::ACTIVO) ? '<span class="label label-success">Activo</span>' : '<span class="label label-danger">Bloqueado</span>';?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver departamento', "observatorio/departamentos/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar departamento', "observatorio/departamentos/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($departamento->estado == Departamento::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar departamento', "observatorio/departamentos/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar departamento', "observatorio/departamentos/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Agregar municipio', "observatorio/municipios/agregar/$departamento->id/$departamento->nombre", null, 'success', 'fa-plus'); ?>
+                        </td>
+                    </tr>
+                    <?php $departamentos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>-->
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$departamentos, 'url'=>"observatorio/departamentos/buscar/$field/$value/$order/")); ?>    
+</div>

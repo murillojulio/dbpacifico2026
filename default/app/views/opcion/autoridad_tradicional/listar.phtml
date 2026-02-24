@@ -1,0 +1,67 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+//    $(function() {
+//        $('table').kgrid({
+//            form_to:    $.KumbiaPHP.publicPath+'opcion/autoridad_tradicional/buscar/', 
+//            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+//            order_to:   $.KumbiaPHP.publicPath+"opcion/autoridad_tradicional/listar/"            
+//        });
+//    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/autoridad_tradicional/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="tipo_autoridad">TIPO DE AUTORIDAD TRADICIONAL</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE AUTORIDAD TRADICIONAL</th>                    
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($autoridad_tradicionals->items as $autoridad_tradicional): ?>
+                    <?php $key_show = Security::setKey($autoridad_tradicional->id, 'show_autoridad_tradicional'); ?>
+                    <?php $key_upd = Security::setKey($autoridad_tradicional->id, 'upd_autoridad_tradicional'); ?>
+                    <?php $key_inac = Security::setKey($autoridad_tradicional->id, 'inactivar_autoridad_tradicional'); ?>
+                    <?php $key_reac = Security::setKey($autoridad_tradicional->id, 'reactivar_autoridad_tradicional'); ?>
+                    <?php $key_del = Security::setKey($autoridad_tradicional->id, 'eliminar_autoridad_tradicional'); ?>
+                    <tr>
+                        <td><?php echo $autoridad_tradicionals->counter; ?></td>
+                        <td><?php echo $autoridad_tradicional->tipo_autoridad; ?></td>
+                        <td><?php echo $autoridad_tradicional->nombre; ?></td>                        
+                        <td><?php echo $autoridad_tradicional->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver', "opcion/autoridad_tradicional/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar', "opcion/autoridad_tradicional/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($autoridad_tradicional->estado == AutoridadTradicional::ACTIVO ) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar', "opcion/autoridad_tradicional/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar', "opcion/autoridad_tradicional/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar', "opcion/autoridad_tradicional/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar: '.$autoridad_tradicional->nombre, 'msg'=>'Está seguro de eliminar este? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $autoridad_tradicionals->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$autoridad_tradicionals, 'url'=>"opcion/autoridad_tradicional/listar/$order/")); ?>
+</div>

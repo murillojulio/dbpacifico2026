@@ -1,0 +1,223 @@
+<?php ?> 
+<div class="col-md-12"> 
+                       <div class="row">
+                        <div class="col-md-3">                             
+                            <?php echo DwForm::text('tituladosi.resolucion_constitucion', array('class'=>''), '', 'Número de resolución constitución'); ?>                          
+                        </div>
+                        <div class="col-md-3">
+                            <label for="tituladosi_area_titulada">Area titulada</label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_area_titulada" name="tituladosi[area_titulada]" type="text" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">hectareas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                           <div class="col-md-6">
+                                   <?php echo DwForm::textarea('tituladosi.limite_lindero', array('class'=>'input-lower '), '', 'Límite / lindero'); ?>                            
+                        </div> 
+                       </div>
+                           <div class="row">                          
+                          <div class="col-md-4">                                
+                                   <?php echo DwForm::upload_V2('documento_constitucion', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_constitucion/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocCon'), 'Adjuntar documento de constitución', 'text_con', 'icon_con'); ?>
+                            </div>  
+                          <div class="col-md-8">                               
+                              <a id="enlace_documento_con" target="_blank" href="">                                       
+                              </a>                            
+                           </div>
+                          <?php echo DwForm::hidden('tituladosi.documento_constitucion', NULL, ''); ?>
+                      </div>                     
+                      
+                      <script type="text/javascript">
+    
+    function loadDocCon(result, input) 
+    {
+        
+        $("#tituladosi_documento_constitucion").val(result.name);
+        $("#enlace_documento_con").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/territorio/resolucion/documento_constitucion/'+result.name);
+        $("#enlace_documento_con").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_con').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('text_con').innerHTML = 'Cambiar documento de constitución';
+        $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+</script>
+                      
+                      
+                <label for="panel_solicitud_ampliacion"><h3 class="panel-title">Solicitud ampliación</h3></label>   
+                <div id="panel_solicitud_ampliacion" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">                          
+                            <?php echo DwForm::select('tituladosi.solicitud_ampliacion_si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>''), 'NO', '¿Tiene solicitud de ampliación?'); ?>              
+           
+                          </div>
+                      </div>
+                <div id="div_solicitud_ampliacion">                      
+                      
+                      <div class="row">
+                          <div class="col-md-3">                              
+                            <?php echo DwForm::date('tituladosi.solicitud_ampliacion_fecha', array('class'=>''), '', 'Fecha de la solicitud'); ?>
+                        </div> 
+                          <div class="col-md-3">
+                              
+                                    <?php echo DwForm::text('tituladosi.solicitud_ampliacion_resolucion', array('class'=>'input-lower '), '', 'Número de resolución'); ?>
+
+                          </div>
+                           <div class="col-md-3">
+                            <label for="tituladosi_solicitud_ampliacion_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_solicitud_ampliacion_area" name="tituladosi[solicitud_ampliacion_area]" type="text" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">hectareas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_ampliacion_lindero_limite', array('class'=>'input-lower '), '', 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_ampliacion_observacion', array('class'=>'input-lower '), '', 'Observaciones'); ?>                  
+                        </div>                          
+                      </div>
+                      
+                      <div class="row">                          
+                          <div class="col-md-4">                                
+                                   <?php echo DwForm::upload_V2('documento_ampliacion', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_ampliacion/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocSolAmp'), 'Adjuntar documento de solicitud ampliación', 'text_sol_amp', 'icon_sol_amp'); ?>
+                            </div>  
+                          <div class="col-md-8">                               
+                              <a id="enlace_documento_sol_amp" target="_blank" href="">                                       
+                              </a>                            
+                           </div>
+                          <?php echo DwForm::hidden('tituladosi.solicitud_ampliacion_documento', NULL, ''); ?>
+                      </div>    
+                </div>
+                      
+                      <script type="text/javascript">
+    
+    function loadDocSolAmp(result, input) 
+    {
+        $("#tituladosi_solicitud_ampliacion_documento").val(result.name);
+        $("#enlace_documento_sol_amp").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/territorio/resolucion/documento_ampliacion/'+result.name);
+        $("#enlace_documento_sol_amp").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_sol_amp').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('text_sol_amp').innerHTML = 'Cambiar documento de solicitud ampliación';
+        $("#icon_sol_amp").attr('class', 'fa fa-edit fa-pd-expand');
+        }
+        
+        $("#tituladosi_solicitud_ampliacion_si_no").change(function(){
+            var si_no = $("#tituladosi_solicitud_ampliacion_si_no").val();
+
+            if(si_no == 'SI'){
+                $("#div_solicitud_ampliacion").show();
+            }
+            else{
+                $("#div_solicitud_ampliacion").hide();
+            }
+
+        });
+        
+        if($("#tituladosi_solicitud_ampliacion_si_no").val() == 'NO')
+            {$("#div_solicitud_ampliacion").hide();}
+    
+</script>
+                  </div>
+                </div>               
+                <label for="panel_solicitud_saneamiento"><h3 class="panel-title">Solicitud saneamiento</h3></label>   
+                <div id="panel_solicitud_saneamiento" class="panel panel-default">
+                  <div class="panel-body">
+                       <div class="row">
+                          <div class="col-md-3">                          
+                            <?php echo DwForm::select('tituladosi.solicitud_saneamiento_si_no', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>''), 'NO', '¿Tiene solicitud de saneamiento?'); ?>              
+           
+                          </div>
+                      </div>
+                <div id="div_solicitud_saneamiento">
+                      <div class="row">
+                          <div class="col-md-3">
+                              
+                            <?php echo DwForm::date('tituladosi.solicitud_saneamiento_fecha', array('class'=>''), '', 'Fecha de la solicitud'); ?>
+                        </div> 
+                          <div class="col-md-3">
+                              
+                                    <?php echo DwForm::text('tituladosi.solicitud_saneamiento_resolucion', array('class'=>'input-lower '), '', 'Número de resolución'); ?>
+
+                          </div>
+                           <div class="col-md-3">
+                            <label for="tituladosi_solicitud_saneamiento_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladosi_solicitud_saneamiento_area" name="tituladosi[solicitud_saneamiento_area]" type="text" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Hectáreas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_saneamiento_lindero_limite', array('class'=>'input-lower '), '', 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladosi.solicitud_saneamiento_observacion', array('class'=>'input-lower '), '', 'Observaciones'); ?>                  
+                        </div>
+                          
+                      </div>
+                      
+                       <div class="row">                          
+                          <div class="col-md-4">                                
+                                   <?php echo DwForm::upload_V2('documento_saneamiento', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_saneamiento/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocSolSan'), 'Adjuntar documento de solicitud saneamiento', 'text_sol_san', 'icon_sol_san'); ?>
+                            </div>  
+                          <div class="col-md-8">                               
+                              <a id="enlace_documento_sol_san" target="_blank" href="">                                       
+                              </a>                            
+                           </div>
+                          <?php echo DwForm::hidden('tituladosi.solicitud_saneamiento_documento', NULL, ''); ?>
+                      </div>  
+                </div>
+                      
+                      <script type="text/javascript">
+    
+    function loadDocSolSan(result, input) 
+    {
+        $("#tituladosi_solicitud_saneamiento_documento").val(result.name);
+        $("#enlace_documento_sol_san").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/territorio/resolucion/documento_saneamiento/'+result.name);
+        $("#enlace_documento_sol_san").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_sol_san').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento adjunto - '+result.size;
+        document.getElementById('text_sol_san').innerHTML = 'Cambiar documento de solicitud saneamiento';
+        $("#icon_sol_san").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+        
+    $("#tituladosi_solicitud_saneamiento_si_no").change(function(){
+        var si_no = $("#tituladosi_solicitud_saneamiento_si_no").val();
+
+        if(si_no == 'SI'){
+            $("#div_solicitud_saneamiento").show();
+        }
+        else{
+            $("#div_solicitud_saneamiento").hide();
+        }
+
+    });
+    
+    if($("#tituladosi_solicitud_saneamiento_si_no").val() == 'NO')
+        {$("#div_solicitud_saneamiento").hide();}
+    
+</script>
+                  </div>
+                </div>                                                   
+                  
+  </div>
+ 
+<?php //echo time(); ?>

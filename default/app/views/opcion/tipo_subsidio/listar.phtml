@@ -1,0 +1,65 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'opcion/tipo_subsidio/buscar/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"opcion/tipo_subsidio/listar/"            
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/tipo_subsidio/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($tipo_subsidios->items as $tipo_subsidio): ?>
+                    <?php $key_show = Security::setKey($tipo_subsidio->id, 'show_tipo_subsidio'); ?>
+                    <?php $key_upd = Security::setKey($tipo_subsidio->id, 'upd_tipo_subsidio'); ?>
+                    <?php $key_inac = Security::setKey($tipo_subsidio->id, 'inactivar_tipo_subsidio'); ?>
+                    <?php $key_reac = Security::setKey($tipo_subsidio->id, 'reactivar_tipo_subsidio'); ?>
+                    <?php $key_del = Security::setKey($tipo_subsidio->id, 'eliminar_tipo_subsidio'); ?>
+                    <tr>
+                        <td><?php echo $tipo_subsidios->counter; ?></td>
+                        <td><?php echo $tipo_subsidio->nombre; ?></td>
+                        <td><?php echo $tipo_subsidio->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver tipo subsidio', "opcion/tipo_subsidio/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar tipo subsidio', "opcion/tipo_subsidio/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($tipo_subsidio->estado == TipoSubsidio::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar tipo subsidio', "opcion/tipo_subsidio/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar tipo subsidio', "opcion/tipo_subsidio/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar tipo subsidio', "opcion/tipo_subsidio/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar tipo subsidio', 'msg'=>'Está seguro de eliminar este tipo subsidio? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $tipo_subsidios->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$tipo_subsidios, 'url'=>"opcion/tipo_subsidio/listar/$order/")); ?>
+</div>

@@ -1,0 +1,331 @@
+<button style="margin-bottom: 5px;" id="btn-agregar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-agregar-dano" onclick="deshabilitar_modal_dano()">Agregar daño</button>
+<div id="div_gestion_danos">
+    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>TERRITORIO</th>
+                <th>TIPO DE DAÑO</th>
+                <th>DAÑO</th>
+                <th>DESCRIPCION</th>
+                <th style="width:80px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($AfectacionDanoTerritorio as $danos) :
+            ?>
+                <tr>
+                    <td><?php echo $danos->territorio; ?></td>
+                    <td><?php echo $danos->getDano()->getTipoDano()->nombre; ?></td>
+                    <td><?php echo $danos->dano; ?></td>
+                    <td><?php echo $danos->descripcion; ?></td>
+                    <td class="btn-actions">
+                        <button id="btn-editar-dano-<?php echo $danos->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" data-loading-text="Cargando..." onclick="cargarModalEditarAfectacionDanoTerritorio(<?php echo $danos->id; ?>)"></button>
+                        <!--<button id="btn-editar-dano-<?php echo $danos->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="setVariablesEditar(<?php echo $danos->id . "," . $dano->id . ",'" . $dano->nombre . "'"; ?>)" data-toggle="modal" data-target="#modal_editar_dano"></button>-->
+                        <button id="btn-eliminar-dano-<?php echo $danos->id ?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariablesEliminar(<?php echo $danos->id; ?>)" data-toggle="modal" data-target="#modal_eliminar_dano" title="Eliminar"></button>
+                    </td>
+                </tr>
+            <?php
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>
+<div id="div_modal_editar"></div>
+<div class="modal fade" id="modal_eliminar_dano">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Eliminar daño</h4>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este daño?
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-eliminar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-eliminar-dano" type="button" class="btn btn-primary" onclick="eliminarAfectacionDanoTerritorio()" data-loading-text="Eliminando...">Eliminar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal fade" id="modal-agregar-dano">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar daño</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="div_dbselect_recarga_territorios">
+                            <?php
+                            if (isset($territorio_id)) {
+                                echo DwForm::dbSelect('afectacion_dano_territorio.territorio_id', 'nombre', array('observatorio/territorio', 'getListadoTerritoriosDBS', $afectacion_id, $territorio_id), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Territorio afectado<span class="req">*</span>');
+                            } else {
+                                echo DwForm::dbSelect('afectacion_dano_territorio.territorio_id', 'nombre', array('observatorio/territorio', 'getListadoTerritoriosDBS', $afectacion_id), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Territorio afectado<span class="req">*</span>');
+                            }
+                            ?>
+                        </div>
+                        <?php echo DwForm::dbSelect('afectacion_dano_territorio.tipo_dano_id', 'nombre', array('opcion/tipo_dano', 'getListadoTipoDanoDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Tipo de daño<span class="req">*</span>'); ?>
+                        <div id="div_select_dano">
+                            <?php echo DwForm::dbSelect('caso_dano_territorio.dano_id', 'nombre', array('opcion/dano', 'getDanoByTipoDanoIdDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Daño<span class="req">*</span>'); ?>
+                        </div>
+                        <?php echo DwForm::textarea('afectacion_dano_territorio.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonAgregarDano()', 'style' => "height: 130px;"), NULL, 'Descripción del daño<span class="req">*</span>'); ?>
+                        <?php echo DwForm::hidden('campo_vacio.afectacion_id', NULL, NULL) ?>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-agregar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-dano" type="button" class="btn btn-primary" onclick="agregarDano()" data-loading-text="Agregando...">Agregar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<label for="panel_danos"></label>
+<script type='text/javascript'>
+    $("#btn-agregar-dano").prop('disabled', true);
+    let afectacion_dano_territorio_id = '';
+
+    function deshabilitar_modal_dano() {
+        $("#btn-agregar-dano").prop('disabled', true);
+        $('#afectacion_dano_territorio_descripcion').val('');
+        $('#afectacion_dano_territorio_territorio_id').val('');
+        $('#afectacion_dano_territorio_dano_id').val('');
+        $('#afectacion_dano_territorio_tipo_dano_id').val('');
+    }
+
+    function validarBotonAgregarDano() {
+        var territorio_id = $('#afectacion_dano_territorio_territorio_id').val();
+        var tipo_dano_id = $('#afectacion_dano_territorio_tipo_dano_id').val();
+        var dano_id = $('#caso_dano_territorio_dano_id').val();
+        var descripcion = $('#afectacion_dano_territorio_descripcion').val();
+
+        if (territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+            $("#btn-agregar-dano").prop('disabled', false);
+        } else {
+            $("#btn-agregar-dano").prop('disabled', true);
+        }
+    }
+
+    function agregarDano() {
+        $("#btn-cancelar-agregar-dano").prop('disabled', true);
+        let btn = $('#btn-agregar-dano');
+        btn.button('loading');
+        let modal = $("#modal-agregar-dano");
+        let afectacion_id = $('#<?php echo $nombre_tabla; ?>_afectacion_id').val();
+        let dano_id = $('#caso_dano_territorio_dano_id').val();
+        let territorio_id = $('#afectacion_dano_territorio_territorio_id').val();
+        let descripcion = $('#afectacion_dano_territorio_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/agregar_dano_afectacion/'; ?>";
+
+        let datos = {
+            "afectacion_id": afectacion_id,
+            "dano_id": dano_id,
+            "territorio_id": territorio_id,
+            "descripcion": descripcion
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-agregar-dano").prop('disabled', false);
+
+                $('#afectacion_dano_territorio_descripcion').val('');
+                $('#afectacion_dano_territorio_territorio_id').val('');
+                $('#afectacion_dano_territorio_dano_id').val('');
+                $('#afectacion_dano_territorio_tipo_dano_id').val('');
+                $("#alert-id-guardar-dano").show();
+                $("#alert-id-guardar-dano").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en agregarDano()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function setVariablesEliminar(afectacion_dano_territorio_id_) {
+        afectacion_dano_territorio_id = afectacion_dano_territorio_id_;
+    }
+
+    function eliminarAfectacionDanoTerritorio() {
+        let afectacion_id = $('#<?php echo $nombre_tabla; ?>_afectacion_id').val();
+        $("#btn-cancelar-eliminar-dano").hide();
+        let btn = $('#btn-eliminar-dano');
+        btn.button('loading');
+        let modal = $("#modal_eliminar_dano");
+        //let nombre_dano = $("#dano_nombre").val();
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/eliminar_dano_afectacion/'; ?>";
+
+        let datos = {
+            "afectacion_id": afectacion_id,
+            "afectacion_dano_territorio_id": afectacion_dano_territorio_id
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-eliminar-dano").show();
+                $("#alert-id-eliminar").show();
+                $("#alert-id-eliminar").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#btn-cancelar-eliminar-dano").show();
+                alert('ERROR en eliminarDano()');
+                btn.button('reset');
+            }
+        });
+    }
+    $("#afectacion_dano_territorio_tipo_dano_id").on('change', function(e) {
+        var tipo_dano_id = $('#afectacion_dano_territorio_tipo_dano_id').val();
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_danos/'; ?>" + tipo_dano_id + "/",
+            data: "tipo_dano_id=" + tipo_dano_id,
+        }).done(function(data) {
+            $("#div_select_dano").html(data);
+            $("#afectacion_dano_territorio_dano_id").focus();
+        }).fail(function() {
+            alert("error");
+        });
+    });
+
+    function cargarModalEditarAfectacionDanoTerritorio(afectacion_dano_territorio_id) {
+        jsSpinner('show');
+        let afectacion_id = $('#<?php
+                                if (isset($territorio_id)) {
+                                    echo 'campo_vacio';
+                                } else {
+                                    echo $nombre_tabla;
+                                } ?>_afectacion_id').val();
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/cargar_editar_dano_afectacion/'; ?>";
+        let territorio_id = "<?php
+                                if (isset($territorio_id)) {
+                                    echo $territorio_id;
+                                } else {
+                                    echo '';
+                                } ?>";
+        let datos = {
+            "afectacion_dano_territorio_id": afectacion_dano_territorio_id,
+            "afectacion_id": afectacion_id,
+            "territorio_id": territorio_id
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                jsSpinner('hide');
+                $("#div_modal_editar").html(data);
+                let modal = $("#modal-editar-dano");
+                modal.modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                jsSpinner('hide');
+                alert('ERROR en cargarModalEditarAfectacionDanoTerritorio()');
+            }
+        });
+    }
+
+    function validarBotonEditarDano() {
+        var territorio_id = $('#editar_afectacion_dano_territorio_territorio_id').val();
+        var tipo_dano_id = $('#editar_afectacion_dano_territorio_tipo_dano_id').val();
+        var dano_id = $('#editar_afectacion_dano_territorio_dano_id').val();
+        var descripcion = $('#editar_afectacion_dano_territorio_descripcion').val();
+
+        if (territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+            $("#btn-guardar-cambio-dano").prop('disabled', false);
+        } else {
+            $("#btn-guardar-cambio-dano").prop('disabled', true);
+        }
+    }
+
+    function onChangeTipoDanoEditar() {
+
+        var tipo_dano_id = $('#editar_afectacion_dano_territorio_tipo_dano_id').val();
+        var datos = {
+            "tipo_dano_id": tipo_dano_id
+        };
+        var url = "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_danos_editar/'; ?>";
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_select_dano_editar").html(data);
+                //let modal = $("#modal-editar-dano");
+                $("#div_select_dano_editar").html(data);
+                $("#editar_afectacion_dano_territorio_dano_id").focus();
+
+                var territorio_id = $('#editar_afectacion_dano_territorio_territorio_id').val();
+                var tipo_dano_id = $('#editar_afectacion_dano_territorio_tipo_dano_id').val();
+                var dano_id = $('#editar_afectacion_dano_territorio_dano_id').val();
+                var descripcion = $('#editar_afectacion_dano_territorio_descripcion').val();
+                if (territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+                    $("#btn-guardar-cambio-dano").prop('disabled', false);
+                } else {
+                    $("#btn-guardar-cambio-dano").prop('disabled', true);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en cargarDano');
+            }
+        });
+    }
+
+    function guardarCambiosDano() {
+        $("#btn-cancelar-guardar-cambio-dano").prop('disabled', true);
+        let btn = $('#btn-guardar-cambio-dano');
+        btn.button('loading');
+        let modal = $("#modal-editar-dano");
+        let afectacion_id = $('#<?php echo $nombre_tabla; ?>_afectacion_id').val();
+        let afectacion_dano_territorio_id = $('#afectacion_dano_territorio_id').val();
+        let dano_id = $('#editar_afectacion_dano_territorio_dano_id').val();
+        let territorio_id = $('#editar_afectacion_dano_territorio_territorio_id').val();
+        let descripcion = $('#editar_afectacion_dano_territorio_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/guardar_cambios_dano_afectacion/'; ?>";
+
+        let datos = {
+            "afectacion_id": afectacion_id,
+            "afectacion_dano_territorio_id": afectacion_dano_territorio_id,
+            "dano_id": dano_id,
+            "territorio_id": territorio_id,
+            "descripcion": descripcion
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-cambio-dano").prop('disabled', false);
+
+                //                $('#afectacion_dano_territorio_descripcion').val('');
+                //                $('#afectacion_dano_territorio_territorio_id').val('');
+                //                $('#afectacion_dano_territorio_dano_id').val('');
+                //                $('#afectacion_dano_territorio_tipo_dano_id').val('');                  
+                $("#alert-id-guardar-cambio-dano").show();
+                $("#alert-id-guardar-cambio-dano").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en guardarCambiosDano()');
+                btn.button('reset');
+            }
+        });
+    }
+</script>

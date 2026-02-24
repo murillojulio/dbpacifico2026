@@ -1,0 +1,68 @@
+<?php ?><div class="col-md-12">                      
+                      
+                <label for="panel_solicitud_titulo"><h3 class="panel-title">Solicitud de título</h3></label>   
+                <div id="panel_solicitud_titulo" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">
+                              <label for="tituladono_solicitud_titulo_fecha">Fecha de la solicitud<span class="req">*</span></label>
+                            <?php echo DwForm::date('tituladono.solicitud_titulo_fecha', array('class'=>''), '', ''); ?>
+                        </div> 
+                        <div class="col-md-3">
+                            <label for="tituladono_solicitud_titulo_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" class="form-control formato_punto_coma" data-invalid="">                                          
+                                          <div class="input-group-addon">Hectáreas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                <label for="tituladono_solicitud_titulo_limite_lindero">Límite / lindero<span class="req">*</span></label>
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_limite_lindero', array('class'=>'input-lower '), '', ''); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                <label for="tituladono_solicitud_titulo_observacion">Observaciones<span class="req">*</span></label>
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_observacion', array('class'=>'input-lower '), '', ''); ?>                  
+                        </div>
+                          
+                      </div>
+                      <div class="row">                          
+                          <div class="col-md-4">                                
+                                   <?php echo DwForm::upload_V2('documento_solicitud_titulo', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_solicitud_titulo/', 'data-size'=>28000000, 'data-files'=>'doc', 'data-success'=>'loadDocSolTit'), 'Adjuntar documento de solicitud de título', 'text_con', 'icon_con'); ?>
+                            </div>  
+                          <div class="col-md-8">                               
+                              <a id="enlace_documento_sol_tit" target="_blank" href="">                                       
+                              </a>                            
+                           </div>
+                          <?php echo DwForm::hidden('tituladono.documento_solicitud_titulo', NULL, ''); ?>
+                      </div>   
+                  </div>
+                </div>
+                
+                <script type="text/javascript">
+    
+    function loadDocSolTit(result, input) 
+    {
+        
+        $("#tituladono_documento_solicitud_titulo").val(result.name);
+        $("#enlace_documento_sol_tit").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/territorio/resolucion/documento_solicitud_titulo/'+result.name);
+        $("#enlace_documento_sol_tit").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_sol_tit').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento solicitud de título - '+result.size;
+        document.getElementById('text_con').innerHTML = 'Cambiar documento de solicitud de titulo';
+        $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+</script>
+                
+                                                   
+                  
+ </div>
+ 
+
+ 
+<?php //echo time(); ?>

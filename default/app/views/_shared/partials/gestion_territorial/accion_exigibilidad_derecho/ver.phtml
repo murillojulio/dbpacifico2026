@@ -1,0 +1,41 @@
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_accion_seguimiento_control/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar accion seguimiento control', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>TIPO DE ACCIÓN</th>
+                    <th>FECHA INICIO ACCIÓN</th>                                        
+                    <th>LA ACCIÓN HA TERMINADO</th>
+                    <th>FECHA TERMINÓ ACCIÓN</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_accion_exigibilidad_derecho = 1;
+                foreach($accion_exigibilidad_derechos as $accion_exigibilidad_derecho): ?>                    
+                    <?php $key_show = Security::setKey($accion_exigibilidad_derecho->id, 'show_accion_exigibilidad_derecho'); ?>
+                    <?php $key_upd = Security::setKey($accion_exigibilidad_derecho->id, 'upd_accion_exigibilidad_derecho'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_accion_exigibilidad_derecho; ?></td>                        
+                        <td><?php echo $accion_exigibilidad_derecho->accion_exigibilidad; ?></td>
+                        <td><?php echo $accion_exigibilidad_derecho->fecha_accion_inicio; ?></td>
+                        <td><?php echo $accion_exigibilidad_derecho->accion_termino; ?></td>
+                        <td><?php echo $accion_exigibilidad_derecho->fecha_accion_termino; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver acción exigibilidad derecho', "gestion_territorial/$controller/ver_accion_exigibilidad_derecho/$key_show/$key/$order/$page/", null, 'info', 'fa-search'); ?>
+                            <?php  //echo DwHtml::buttonTable('Modificar accion seguimiento control', "afectacion/megaproyectos/editar_accion_exigibilidad_derecho/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $contador_accion_exigibilidad_derecho++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+<br>

@@ -1,0 +1,565 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+  <?php View::process($page_module, $page_title, $set_title); ?>
+
+  <?php echo DwForm::open(); ?>
+
+  <?php echo DwForm::hidden('poblacion.municipio_id', NULL, $poblacion->municipio_id); ?>
+  <?php echo DwForm::hidden('poblacion.id', NULL, $poblacion->id); ?>
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Información general</a></li>
+    <li><a data-toggle="tab" href="#menu1">Corregimientos</a></li>
+    <li><a data-toggle="tab" href="#menu2">Veredas</a></li>
+    <li><a data-toggle="tab" href="#menu3">Inspecciones</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+      <div class="row">
+        <div class="col-md-12">
+          <label for="panel_info_basica">
+            <h3 class="panel-title">Información básica</h3>
+          </label>
+          &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $municipio->municipio_in; ?>
+          <div id="panel_info_basica" class="panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <?php echo DwForm::text('municipio.nombre', array('class' => 'input-lower input-required'), $municipio->nombre, 'Nombre del municipio'); ?>
+                </div>
+                <div class="col-md-3">
+                  <?php echo DwForm::text('municipio.cabecera', array('class' => 'input-lower input-required'), $municipio->cabecera, 'Cabecera'); ?>
+                </div>
+                <div class="col-md-3">
+                  <?php echo DwForm::dbSelect('municipio.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class' => 'input-required'), $municipio->departamento_id, 'Departamento'); ?>
+                </div>
+                <div class="col-md-3">
+                  <?php echo DwForm::text('municipio.subregion', array('class' => 'input-lower input-readonly'), $municipio->getSubregion()->nombre, 'Subregion'); ?>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <?php echo DwForm::select('municipio.certificado', array('' => 'Seleccione', 'SI' => 'Si', 'NO' => 'No'), array('class' => 'input-required'), $municipio->certificado, '¿El municipio está certificado?:'); ?>
+                </div>
+                <div class="col-md-3">
+                  <?php echo DwForm::date('municipio.fecha_creacion', array('class' => 'input-lower input-required'), substr($municipio->fecha_creacion, 0, 10), 'Fecha de fundación del municipio'); ?>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <label for="panel_area">Area superficie</label>
+                  <div id="panel_area" class="panel panel-default">
+                    <div class="panel-body">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <label for="municipio_area_total">Total<span class="req">*</span></label>
+                          <div class="form-group">
+                            <div class="input-group">
+                              <input id="municipio_area_total" name="municipio[area_total]" type="text" value="<?php echo number_format($municipio->area_total, 2, '.', ','); ?>" class="formato_punto_coma form-control" required="required" data-invalid="">
+                              <div class="input-group-addon">Km<sup>2</sup></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <label for="municipio_area_cabecera">Cabecera<span class="req">*</span></label>
+                          <div class="form-group">
+                            <div class="input-group">
+                              <input id="municipio_area_cabecera" name="municipio[area_cabecera]" type="text" value="<?php echo number_format($municipio->area_cabecera, 2, '.', ','); ?>" class="formato_punto_coma form-control" required="required" data-invalid="">
+                              <div class="input-group-addon">Km<sup>2</sup></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <label for="municipio_area_rural">Rural<span class="req">*</span></label>
+                          <div class="form-group">
+                            <div class="input-group">
+                              <input id="municipio_area_rural" name="municipio[area_rural]" type="text" value="<?php echo number_format($municipio->area_rural, 2, '.', ','); ?>" class="formato_punto_coma form-control" required="required" data-invalid="">
+                              <div class="input-group-addon">Km<sup>2</sup></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <label for="panel_poblacion">
+            <h3 class="panel-title">Población</h3>
+          </label>
+          &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $poblacion->poblacion_in; ?>
+          <div id="panel_poblacion" class="panel panel-default">
+            <div class="panel-body">
+              <?php
+              $array_poblacion = (array) $poblacion;
+              echo View::partial('poblacion/editar', false, array('array_poblacion' => $array_poblacion, 'para_territorio' => 'no'));
+              ?>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label for="panel_fuente">
+            <h3 class="panel-title">Fuente(s) de la información</h3>
+          </label>
+
+          <div id="panel_fuente" class="panel panel-default">
+            <div class="panel-body">
+              <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-actions">
+          <?php echo DwForm::send('Actualizar municipio'); ?>
+          <?php echo DwHtml::button("observatorio/municipios/listar/", 'cancelar', array('class' => 'btn-default', 'title'=>'Regresar a la lista de municipios'), 'fa-reply', APP_AJAX); ?>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modal_agregar_localidad">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Agregar Localidad</h4>
+          </div>
+          <div class="modal-body">
+            <?php echo DwForm::text('localidad.nombre', array('class' => '', 'onkeyup' => 'validarNombreLocalidad()'), NULL, '<div id=\'titulo_localidad\'>Nombre</div>'); ?>
+          </div>
+          <div class="modal-footer">
+            <button id="btn-cancelar-guardar-localidad" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button id="btn-guardar-localidad" type="button" class="btn btn-primary" onclick="agregarLocalidad()" data-loading-text="Guardando...">Guardar</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="div_modal_editar"></div>
+    <div class="modal fade" id="modal_eliminar_localidad">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Eliminar localidad</h4>
+          </div>
+          <div class="modal-body">
+            ¿Está seguro que desea eliminar esta localidad?
+          </div>
+          <div class="modal-footer">
+            <button id="btn-cancelar-eliminar-localidad" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button id="btn-modal-eliminar-localidad" type="button" class="btn btn-primary" onclick="eliminarLocalidad()" data-loading-text="Eliminando...">Eliminar</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <div id="menu1" class="tab-pane fade">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Corregimientos del municipio: <?php echo $municipio->nombre; ?></h3>
+          <button type="button" class="btn btn-success" onclick="mostrarModalLocalidad('corregimiento')">Agregar</button>
+          <div id="div_list_corregimientos">
+            <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre del Corregimiento</th>
+                  <th>Opcion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $contador = 1;
+                foreach ($localidades as $localidad) :
+                  if ($localidad->tipo === 'corregimiento') {
+                    echo '<tr>';
+                    echo "<td>$contador</td>";
+                    echo "<td>$localidad->nombre</td>";
+                    echo "<td class=\"btn-actions\">                                                
+                <button id=\"btn-editar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-warning btn-icon-only fa fa-edit\" data-loading-text=\"Cargando...\" onclick=\"cargarModalEditarLocalidad($localidad->id, '$localidad->tipo')\"></button>
+                <button id=\"btn-eliminar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-danger btn-icon-only fa fa-minus\" onclick=\"setLocalidadIdEliminar($localidad->id, '$localidad->tipo', '$localidad->nombre')\" data-toggle=\"modal\" data-target=\"#modal_eliminar_localidad\" title=\"Eliminar\"></button>
+            </td>";
+                    echo '</tr>';
+                    $contador++;
+                  }
+                endforeach;
+
+                ?>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!---//////\\\\\\\\\\//////////÷÷÷÷÷÷÷-->
+    <div id="menu2" class="tab-pane fade">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Veredas del municipio: <?php echo $municipio->nombre; ?></h3>
+          <button type="button" class="btn btn-success" onclick="mostrarModalLocalidad('vereda')">Agregar</button>
+          <div id="div_list_veredas">
+            <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre de la Vereda</th>
+                  <th>Opcion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $contador = 1;
+                foreach ($localidades as $localidad) :
+                  if ($localidad->tipo === 'vereda') {
+                    echo '<tr>';
+                    echo "<td>$contador</td>";
+                    echo "<td>$localidad->nombre</td>";
+                    echo "<td class=\"btn-actions\">                                                
+                <button id=\"btn-editar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-warning btn-icon-only fa fa-edit\" data-loading-text=\"Cargando...\" onclick=\"cargarModalEditarLocalidad($localidad->id, '$localidad->tipo')\"></button>
+                <button id=\"btn-eliminar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-danger btn-icon-only fa fa-minus\" onclick=\"setLocalidadIdEliminar($localidad->id, '$localidad->tipo', '$localidad->nombre')\" data-toggle=\"modal\" data-target=\"#modal_eliminar_localidad\" title=\"Eliminar\"></button>
+            </td>";
+                    echo '</tr>';
+                    $contador++;
+                  }
+                endforeach;
+
+                ?>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="menu3" class="tab-pane fade">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Inspecciones del municipio: <?php echo $municipio->nombre; ?></h3>
+          <button type="button" class="btn btn-success" onclick="mostrarModalLocalidad('inspeccion')">Agregar</button>
+          <div id="div_list_inspeccion">
+            <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre de la Inpección</th>
+                  <th>Opcion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $contador = 1;
+                foreach ($localidades as $localidad) :
+                  if ($localidad->tipo === 'inspeccion') {
+                    echo '<tr>';
+                    echo "<td>$contador</td>";
+                    echo "<td>$localidad->nombre</td>";
+                    echo "<td class=\"btn-actions\">                                                
+                <button id=\"btn-editar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-warning btn-icon-only fa fa-edit\" data-loading-text=\"Cargando...\" onclick=\"cargarModalEditarLocalidad($localidad->id, '$localidad->tipo')\"></button>
+                <button id=\"btn-eliminar-localidad-$localidad->id\" type=\"button\" class=\"btn btn-danger btn-icon-only fa fa-minus\" onclick=\"setLocalidadIdEliminar($localidad->id, '$localidad->tipo', '$localidad->nombre')\" data-toggle=\"modal\" data-target=\"#modal_eliminar_localidad\" title=\"Eliminar\"></button>
+            </td>";
+                    echo '</tr>';
+                    $contador++;
+                  }
+                endforeach;
+
+                ?>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <?php echo DwForm::close(); ?>
+
+</div>
+<div id="flash-message" class="flash-message">
+  <div id="alert-id-guardar-localidad" class="alert alert-block alert-success" style="display: none;">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    La localidad ha sido guardada con exito.
+  </div>
+</div>
+
+
+<script type='text/javascript'>
+    $(document).ready(function() {
+        /*initDataTables();*/
+    });
+    
+  let tipo_localidad_global = '';
+  let localidad_id_global = 0;
+  let nombre_localidad_global = '';
+
+  function mostrarModalLocalidad(tipo) {
+    tipo_localidad_global = tipo;
+    let modal = $("#modal_agregar_localidad");
+    modal.modal('show');
+    modal.find('.modal-title').text('Crear ' + tipo);
+    modal.find('#titulo_localidad').text('Nombre ' + tipo);
+    $("#localidad_nombre").val('');
+    $("#btn-guardar-localidad").attr("disabled", "true");
+  }
+
+  function validarNombreLocalidad() {
+    let nombre = $('#localidad_nombre').val().trim();
+    if ($('#localidad_nombre').val() === '' || nombre.length <= 3) {
+      $("#btn-guardar-localidad").prop('disabled', true);
+    } else {
+      $("#btn-guardar-localidad").prop('disabled', false);
+    }
+  }
+
+  function validarEditarNombreLocalidad() {
+    let nombre = $('#localidad_editar_nombre').val().trim();
+    if ($('#localidad_editar_nombre').val() === '' || nombre.length <= 3) {
+      $("#btn-guardar-editar-localidad").prop('disabled', true);
+    } else {
+      $("#btn-guardar-editar-localidad").prop('disabled', false);
+    }
+  }
+
+  function eliminarLocalidad() {
+    $("#btn-cancelar-eliminar-localidad").hide();
+    let btn = $('#btn-modal-eliminar-localidad');
+    btn.button('loading');
+    let modal = $("#modal_eliminar_localidad");
+
+    let url = "<?php echo PUBLIC_PATH . 'observatorio/municipios/eliminar_localidad/'; ?>";
+
+    let localidad_id = '';
+    let municipio_id = $("#poblacion_municipio_id").val();
+
+    let datos = new FormData();
+    datos.append('municipio_id', municipio_id);
+    datos.append('localidad_id', localidad_id_global);
+    datos.append('tipo', tipo_localidad_global);
+    fetch(url, {
+        method: 'POST',
+        body: datos
+      }).then(function(response) {
+        //console.log('response =', response);
+        return response.text();
+      })
+      .then(function(data) {
+        console.log('data = ', data);
+        if (tipo_localidad_global === 'corregimiento') {
+          $("#div_list_corregimientos").html(data);
+        } else if (tipo_localidad_global === 'vereda') {
+          $("#div_list_veredas").html(data);
+        } else if (tipo_localidad_global === 'inspeccion') {
+          $("#div_list_inspeccion").html(data);
+        }
+        mostrarAlertEliminarLocalidad(tipo_localidad_global, nombre_localidad_global);
+        btn.button('reset');
+        modal.modal('hide');
+        $("#btn-cancelar-eliminar-localidad").show();
+        initDataTables();
+      })
+      .catch(function(err) {
+        console.error(err);
+        alert('ERROR en eliminarLocalidad() ' + err);
+      });
+  }
+
+  function agregarLocalidad() {
+    $("#btn-cancelar-guardar-localidad").hide();
+    let btn = $('#btn-guardar-localidad');
+    btn.button('loading');
+    let modal = $("#modal_agregar_localidad");
+    let nombre_localidad = $("#localidad_nombre").val();
+    let municipio_id = $("#poblacion_municipio_id").val();
+
+    let url = "<?php echo PUBLIC_PATH . 'observatorio/municipios/agregar_localidad/'; ?>";
+
+    let localidad_id = '';
+
+    let datos = new FormData();
+    datos.append('municipio_id', municipio_id);
+    datos.append('nombre', nombre_localidad);
+    datos.append('tipo', tipo_localidad_global);
+    fetch(url, {
+        method: 'POST',
+        body: datos
+      }).then(function(response) {
+        //console.log('response =', response);
+        return response.text();
+      })
+      .then(function(data) {
+        console.log('data = ', data);
+        if (tipo_localidad_global === 'corregimiento') {
+          $("#div_list_corregimientos").html(data);
+        } else if (tipo_localidad_global === 'vereda') {
+          $("#div_list_veredas").html(data);
+        } else if (tipo_localidad_global === 'inspeccion') {
+          $("#div_list_inspeccion").html(data);
+        }
+        mostrarAlertGuardaLocalidad(tipo_localidad_global, nombre_localidad);
+        btn.button('reset');
+        modal.modal('hide');
+        $("#btn-cancelar-guardar-localidad").show();
+        $("#localidad_nombre").val('');
+        initDataTables();
+      })
+      .catch(function(err) {
+        console.error(err);
+        alert('ERROR en agregarLocalidad() ' + err);
+      });
+  }
+
+  function mostrarAlertGuardaLocalidad(tipo_localidad_in, nombre_localidad_in) {
+    if (tipo_localidad_in === 'corregimiento') {
+      $("#alert-id-guardar-localidad").text('El ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creado con exito');
+    } else if (tipo_localidad_in === 'vereda') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+    } else if (tipo_localidad_in === 'inspeccion') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+    }
+    $("#alert-id-guardar-localidad").show();
+    $("#alert-id-guardar-localidad").hide().fadeIn(500).delay(4000).fadeOut(500);
+  }
+
+  function cargarModalEditarLocalidad(localidad_id, tipo) {
+    tipo_localidad_global = tipo;
+    localidad_id_global = localidad_id;
+    jsSpinner('show');
+    let url = "<?php echo PUBLIC_PATH . 'observatorio/municipios/cargar_modal_editar_localidad/'; ?>";
+
+
+    let datos = new FormData();
+    datos.append('localidad_id', localidad_id);
+    fetch(url, {
+        method: 'POST',
+        body: datos
+      }).then(function(response) {
+        //console.log('response =', response);
+        return response.text();
+      })
+      .then(function(data) {
+        //console.log('data = ', data);jsSpinner('hide');
+        jsSpinner('hide');
+        $("#div_modal_editar").html(data);
+        let modal = $("#modal_editar_localidad");
+        modal.modal('show');
+      })
+      .catch(function(err) {
+        console.error(err);
+        jsSpinner('hide');
+        alert('ERROR en cargarModalEditarLocalidad() ' + err);
+      });
+  }
+
+  function guardarEditarLocalidad() {
+    $("#btn-cancelar-guardar-editar-localidad").hide();
+    let btn = $('#btn-guardar-editar-localidad');
+    btn.button('loading');
+    let modal = $("#modal_editar_localidad");
+    let nombre_localidad = $("#localidad_editar_nombre").val();
+    let municipio_id = $("#poblacion_municipio_id").val();
+
+    let url = "<?php echo PUBLIC_PATH . 'observatorio/municipios/editar_localidad/'; ?>";
+
+    let localidad_id = '';
+
+    let datos = new FormData();
+    datos.append('municipio_id', municipio_id);
+    datos.append('localidad_id', localidad_id_global);
+    datos.append('tipo', tipo_localidad_global);
+    datos.append('localidad_nombre', nombre_localidad);
+    fetch(url, {
+        method: 'POST',
+        body: datos
+      }).then(function(response) {
+        //console.log('response =', response);
+        return response.text();
+      })
+      .then(function(data) {
+        console.log('data = ', data);
+        if (tipo_localidad_global === 'corregimiento') {
+          $("#div_list_corregimientos").html(data);
+        } else if (tipo_localidad_global === 'vereda') {
+          $("#div_list_veredas").html(data);
+        } else if (tipo_localidad_global === 'inspeccion') {
+          $("#div_list_inspeccion").html(data);
+        }
+        mostrarAlertGuardaEditarLocalidad(tipo_localidad_global, nombre_localidad);
+        btn.button('reset');
+        modal.modal('hide');
+        $("#btn-cancelar-guardar-editar-localidad").show();
+        $("#localidad_editar_nombre").val('');
+        initDataTables();
+      })
+      .catch(function(err) {
+        console.error(err);
+        alert('ERROR en guardarEditarLocalidad() ' + err);
+      });
+
+  }
+
+  function mostrarAlertGuardaEditarLocalidad(tipo_localidad_in, nombre_localidad_in) {
+    if (tipo_localidad_in === 'corregimiento') {
+      $("#alert-id-guardar-localidad").text('El ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue actualizado con exito');
+    } else if (tipo_localidad_in === 'vereda') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue actualizada con exito');
+    } else if (tipo_localidad_in === 'inspeccion') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue actualizada con exito');
+    }
+    $("#alert-id-guardar-localidad").show();
+    $("#alert-id-guardar-localidad").hide().fadeIn(500).delay(4000).fadeOut(500);
+  }
+
+  function mostrarAlertEliminarLocalidad(tipo_localidad_in, nombre_localidad_in) {
+    if (tipo_localidad_in === 'corregimiento') {
+      $("#alert-id-guardar-localidad").text('El ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue eliminado con exito');
+    } else if (tipo_localidad_in === 'vereda') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue eliminada con exito');
+    } else if (tipo_localidad_in === 'inspeccion') {
+      $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue eliminada con exito');
+    }
+    $("#alert-id-guardar-localidad").show();
+    $("#alert-id-guardar-localidad").hide().fadeIn(500).delay(4000).fadeOut(500);
+  }
+
+  function setLocalidadIdEliminar(localidad_id_in, tipo, nombre) {
+    localidad_id_global = localidad_id_in;
+    tipo_localidad_global = tipo;
+    nombre_localidad_global = nombre;
+    let modal = $("#modal_eliminar_localidad");
+    modal.find('.modal-title').text('Eliminar ' + tipo);
+    modal.find('.modal-body').text('¿Está seguro que desea eliminar ' + tipo + ': ' + nombre + '?');
+  }
+
+
+  $("#form-1").submit(function() {
+    $(".formato_punto").priceFormat({
+      prefix: '',
+      centsLimit: 0,
+      centsSeparator: '',
+      thousandsSeparator: ''
+    });
+  });
+
+
+
+  $(".formato_punto_coma").priceFormat({
+    prefix: '',
+    centsLimit: 2,
+    centsSeparator: ',',
+    thousandsSeparator: '.'
+  });
+</script>

@@ -1,0 +1,32 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::hidden('id_a_borrar_territorio_cn', NULL, '') ?>
+             <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>TERRITORIOS COLECTIVOS COMUNIDADES NEGRAS EN CONFLICTO DE USO</th>                                      
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                 
+                $contador_conflicto_uso_cn = 1;
+                foreach($conflicto_usos_cn as $conflicto_uso_cn):                  
+                    
+                        ?>
+                        <tr>  
+                        <td><?php echo $conflicto_uso_cn->getTerritorio()->nombre; ?></td>
+                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver conflicto_uso_cn', "observatorio/territorios/ver_conflicto_uso_cn/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                            <?php  
+                                    echo '<button onclick="setIdBorrarTerritorioCN(this.value)" title="Eliminar territorio" value="'.$conflicto_uso_cn->id.'" id="btn_delete_conflicto_uso_cn'.$conflicto_uso_cn->id.'" type="button" class="btn btn-danger btn-small" data-toggle="modal" data-target="#myModalDeleteTerritorioCN">';
+                                    echo '<i class="btn-icon-only fa fa-minus"></i></button></div>';
+                             
+                                 ?>                            
+                        </td>
+                    </tr>
+                                  
+                    <?php $contador_conflicto_uso_cn++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>

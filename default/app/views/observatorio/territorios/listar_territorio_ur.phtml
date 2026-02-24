@@ -1,0 +1,61 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::hidden('tipo', NULL, 'urbano') ?>
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/territorios/index_agregar_territorio_urbano", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden">MUNICIPIO</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th>CASOS DE VIOLENCIA</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num = 1; ?>
+                <?php foreach($territorios as $territorio): ?>
+                    <?php $key_show = Security::setKey($territorio->id, 'show_territorio'); ?>
+                    <?php $key_upd = Security::setKey($territorio->id, 'upd_territorio'); ?>
+                    <?php $key_inac = Security::setKey($territorio->id, 'inactivar_territorio'); ?>
+                    <?php $key_reac = Security::setKey($territorio->id, 'reactivar_territorio'); ?>
+                    <?php $key_del = Security::setKey($territorio->id, 'eliminar_territorio'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $territorio->nombre; ?></td>
+                        <td><?php
+                        foreach($territorio->getTerritorioMunicipio() as $ter):
+                            echo $ter->getMunicipio()->nombre;
+                        endforeach;  ?></td>                        
+                        <td><?php echo $territorio->departamento; ?></td> 
+                        <td><?php echo $territorio->cant_caso_reg; ?></td>
+                        <td><?php View::partial('nivel_estado/ver', false, array('nivel'=>$territorio->nivel, 'estado'=>$territorio->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'territorio',
+                                        "nombre"=>$territorio->nombre,
+                                        'url_ver'=>"observatorio/territorios/ver/$key_show/1/$order/page.$page/",
+                                        'url_editar'=>"observatorio/territorios/editar_urbano/$key_upd/1/$order/page.$page/",
+                                        "url_eliminar"=>"observatorio/territorios/eliminar/$key_del/listar_territorio_ur/$order/page.$page/")); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+       
+    </div>
+</div>

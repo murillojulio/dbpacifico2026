@@ -1,0 +1,24 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                        <?php echo DwForm::text('sector_programa_social.nombre', array('class'=>'input-required'), NULL, 'Nombre'); ?>
+                    </div>             
+        </div>           
+
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar sector programa social'); ?>
+                <?php echo DwForm::cancel('opcion/sector_programa_social/listar'); ?>
+                <?php echo DwForm::focus('sector_programa_social.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

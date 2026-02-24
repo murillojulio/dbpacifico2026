@@ -1,0 +1,87 @@
+<?php ?><div class="col-md-12">
+     <?php echo DwForm::hidden('tituladono.territorio_id', NULL, $array_titulado_no['territorio_id']); ?>
+<?php echo DwForm::hidden('tituladono.id', NULL, $array_titulado_no['id']); ?>
+              
+                <label for="panel_solicitud_titulo"><h3 class="panel-title">Solicitud de título</h3></label>   
+                <div id="panel_solicitud_titulo" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">                              
+                            <?php echo DwForm::date('tituladono.solicitud_titulo_fecha', array('class'=>''), substr($array_titulado_no['solicitud_titulo_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                        </div> 
+                        <div class="col-md-3">
+                            <label for="tituladono_solicitud_titulo_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format($array_titulado_no['solicitud_titulo_area'], 2, '.', ','); ?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Hectáreas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_limite_lindero', array('class'=>'input-lower '), $array_titulado_no['solicitud_titulo_limite_lindero'], 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_observacion', array('class'=>'input-lower '), $array_titulado_no['solicitud_titulo_observacion'], 'Observaciones'); ?>                  
+                        </div>
+                          
+                      </div>
+        <div class="row">    
+         <?php 
+            if($array_titulado_no['documento_solicitud_titulo'] == '')
+            {
+                echo '<div class="col-md-3">';                                
+                echo DwForm::upload_V2('documento_solicitud_titulo', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_solicitud_titulo/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocCon'), 'Adjuntar documento de constitución', 'text_con', 'icon_con');
+                echo '</div>  
+                      <div class="col-md-9">                        
+                         <a id="enlace_documento_sol_tit" target="_blank" href="">                            
+                         </a>                            
+                      </div>';
+                echo DwForm::hidden('tituladono.documento_solicitud_titulo', NULL, '');
+                            
+            }
+            else
+            {
+                echo '<div class="col-md-3">';                                
+                echo DwForm::upload_V2('documento_solicitud_titulo', array('data-to'=>PUBLIC_PATH.'observatorio/territorios/upload/documento_solicitud_titulo/', 'data-size'=>5000000, 'data-files'=>'doc', 'data-success'=>'loadDocCon'), 'Cambiar documento de solicitud de título', 'text_con', 'icon_con');
+                echo '</div>';  
+                echo '<div class="col-md-9">';                        
+                echo '<a id="enlace_documento_sol_tit" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/territorio/resolucion/documento_solicitud_titulo/'.$array_titulado_no['documento_solicitud_titulo'].'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento solicitud de título</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('tituladono.documento_solicitud_titulo', NULL, $array_titulado_no['documento_solicitud_titulo']);
+                                  
+            }
+         ?>
+     </div>
+                  </div>
+                    
+                     <script type="text/javascript">
+    
+    function loadDocSolTit(result, input) 
+    {
+        
+        $("#tituladono_documento_solicitud_titulo").val(result.name);
+        $("#enlace_documento_sol_tit").attr('href', '<?php echo PUBLIC_PATH; ?>files/upload/territorio/resolucion/documento_solicitud_titulo/'+result.name);
+        $("#enlace_documento_sol_tit").attr('class', 'btn btn-info');
+        
+        //$("#enlace_documento").attr('innerHTML', result.name);
+        document.getElementById('enlace_documento_sol_tit').innerHTML = '<i class="fa fa-pd-expand fa-eye"></i> Ver documento solicitud de título - '+result.size;
+        document.getElementById('text_con').innerHTML = 'Cambiar documento de solicitud de titulo';
+        $("#icon_con").attr('class', 'fa fa-edit fa-pd-expand');
+    }
+    
+</script>
+                </div>
+                
+                                                   
+                  
+ </div>
+ 
+
+ 
+<?php //echo time(); ?>

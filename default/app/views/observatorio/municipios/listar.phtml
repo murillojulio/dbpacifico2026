@@ -1,0 +1,60 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/municipios/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+         <table class="table table-bordered table-hover table-striped table-condensed table-responsive datatable">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="subregion" data-order="subregion">SUBREGION</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="col-hidden" data-order="cant_territorio">CANTIDAD DE TERRITORIOS</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num = 1; ?>
+                <?php foreach($municipios as $municipio): ?>
+                    <?php $key_show = Security::setKey($municipio->id, 'show_municipio'); ?>
+                    <?php $key_upd = Security::setKey($municipio->id, 'upd_municipio'); ?>
+                    <?php $key_inac = Security::setKey($municipio->id, 'inactivar_municipio'); ?>
+                    <?php $key_reac = Security::setKey($municipio->id, 'reactivar_municipio'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $municipio->nombre; ?></td>
+                        <td><?php echo $municipio->subregion; ?></td>
+                        <td><?php echo $municipio->departamento; ?></td>                        
+                        <td><a href="<?php echo PUBLIC_PATH.'observatorio/territorios/listar_territorio/'.$municipio->id.'/'.$municipio->nombre.'/';?>"><span class="badge btn-primary" data-toggle="tooltip" data-placement="top" title="Ver territorios"><?php echo $municipio->cant_territorio; ?></span></a></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver municipio', "observatorio/municipios/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar municipio', "observatorio/municipios/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        //initDataTables();
+    });
+</script>

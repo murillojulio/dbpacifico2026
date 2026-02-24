@@ -1,0 +1,67 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to         : $.KumbiaPHP.publicPath+'gestion_territorial/gestion_tcci/buscar_territorio_ci/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'gestion_territorial/gestion_tcci/buscar_territorio_ci/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("gestion_territorial/gestion_tcci/listar_territorio_ci/", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("gestion_territorial/gestion_tcci/index_agregar_territorio/comunidad_negra", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="titulado" data-order="titulado">TITULADO</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($territorios->items)) { ?>
+                <?php foreach($territorios->items as $territorio): ?>
+                    <?php $key_show = Security::setKey($territorio->id, 'show_territorio'); ?>
+                    <?php $key_upd = Security::setKey($territorio->id, 'upd_territorio'); ?>
+                    <?php $key_inac = Security::setKey($territorio->id, 'inactivar_territorio'); ?>
+                    <?php $key_reac = Security::setKey($territorio->id, 'reactivar_territorio'); ?>
+                    <tr>
+                        <td><?php echo $territorios->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $territorio->nombre) : $territorio->nombre; ?></td>
+                        <td><?php echo ($field=='titulado') ? DwUtils::resaltar($value, $territorio->titulado) : $territorio->titulado; ?></td>                        
+                        <td><?php echo ($field=='departamento') ? DwUtils::resaltar($value, $territorio->departamento) : $territorio->departamento; ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTableIcons('Ver gestión territorial', "gestion_territorial/gestion_tcci/ver/$key_show/1/$order/$page/", null, 'info', array('fa-group','fa-eye')); ?>
+                            <?php echo DwHtml::buttonTableIcons('Modificar gestión territorial', "gestion_territorial/gestion_tcci/editar/$key_upd/1/$order/$page/", null, 'warning', array('fa-group','fa-edit')); ?>
+                            <?php //echo DwHtml::buttonTable('Agregar comunidad', "gestion_territorial/gestion_tcci/agregar_comunidad/$territorio->id/$territorio->nombre/$territorio->tipo/", null, 'success', 'fa-plus'); ?>
+                        </td>
+                    </tr>
+                    <?php $territorios->counter++; ?>
+                <?php endforeach; ?>
+                      <?php } ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$territorios, 'url'=>"gestion_territorial/gestion_tcci/buscar_territorio_ci/$field/$value/$order/")); ?>
+
+</div>

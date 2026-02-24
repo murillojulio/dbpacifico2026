@@ -1,0 +1,29 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-4">
+                        <?php echo DwForm::hidden('afectacion_area_natural_protegida.id', NULL, NULL) ?>
+                        <?php echo DwForm::hidden('afectacion_area_natural_protegida.area_natural_protegida_id', NULL, NULL) ?>                        
+                        <?php echo DwForm::dbSelect('afectacion_area_natural_protegida.tipo_afectacion_area_natural_protegida_id', 'nombre', array('opcion/tipo_afectacion_area_natural_protegida', 'getListadoTipoAfectacionAreaNaturalProtegidaDBS'), NULL, array('class'=>'input-readonly'), NULL, 'Tipo de afectación'); ?>          
+                    </div>                
+                  <div class="col-md-8">
+                        <?php echo DwForm::textarea('afectacion_area_natural_protegida.descripcion', array('class'=>'input-lower', 'readonly'=>'readonly'), NULL, 'Descripción de la afectación'); ?>
+                    </div>           
+                </div>
+     <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

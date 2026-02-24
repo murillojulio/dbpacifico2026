@@ -1,0 +1,24 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                        <?php echo DwForm::text('impacto.nombre', array('class'=>'input-readonly'), $impacto->nombre, 'Nombre'); ?>
+                    </div>             
+        </div>           
+
+       <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back(); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

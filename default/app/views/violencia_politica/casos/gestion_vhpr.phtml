@@ -1,0 +1,49 @@
+<?php View::flash(); ?>
+<div id="div_gestion_vhpr">
+        
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>VICTIMA</th>
+                    <th>HECHO VICTIMIZANTE</th>
+                    <th>PRESUNTO RESPONSABLE</th>  
+                    <th>DESCRIPCION PRESUNTO RESPONSABLE</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                 $Vhpr = new VictimaHechovictimizantePresuntoResponsable();
+                $contador_victima = 1;
+                foreach($victimas as $victima):  
+                    $nombre_victima = '';
+                    $nombre_presunto_resp = '';
+                    $contador_hechos = 1;
+                    foreach($Vhpr->getVictimaHechovictimizantePresuntoResponsableByVictimaId($victima->id) as $vhpr):   
+                        $cap_nombre_victima = $vhpr->nombre_victima;
+                        $cap_nombre_presunto_resp = $vhpr->nombre_presunto_responsable;                        
+                        ?>
+                        <tr <?php if ($contador_hechos === 1){echo 'style="border-top: red 2px solid;"';} ?>>                                                                       
+                        <td><?php if ($contador_hechos === 1){echo $cap_nombre_victima;} ?></td>                        
+                        <td><?php echo $vhpr->nombre_hechovictimizante; ?></td>
+                        <td><?php if ($cap_nombre_presunto_resp != $nombre_presunto_resp){ echo $cap_nombre_presunto_resp;} 
+                                  else {} ?></td>
+                        <td><?php if ($cap_nombre_presunto_resp != $nombre_presunto_resp){ echo $vhpr->descripcion_presunto_responsable;} 
+                                  else {} ?></td>
+                        <td>
+                            <?php //echo DwHtml::buttonTable('Ver victima', "observatorio/territorios/ver_victima/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Eliminar', "violencia_politica/casos/eliminar_vhpr/$caso_id/$vhpr->id/",
+                                            array('class'=>'js-confirm', 'msg-title'=>'Eliminar:', 'msg'=>'¿Está seguro de eliminar esta victimización? <br />Recuerda que esta operación no se puede reversar.'), 'default', 'fa-ban');
+                                 ?>                            
+                        </td>
+                    </tr>
+                        <?php
+                        $nombre_presunto_resp = $cap_nombre_presunto_resp;
+                        $contador_hechos++;
+                    endforeach;           
+                    ?>               
+                    <?php $contador_victima++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>

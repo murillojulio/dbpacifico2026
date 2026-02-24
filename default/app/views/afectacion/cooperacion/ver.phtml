@@ -1,0 +1,149 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                                  <div class="row">
+                    <div class="col-md-3">
+                         <?php echo DwForm::hidden('cooperacion.id', NULL, NULL); ?>
+                        <?php echo DwForm::hidden('cooperacion.afectacion_id', NULL, NULL); ?>
+       <?php echo DwForm::dbSelect('cooperacion.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS'), NULL, array('class'=>'input-readonly'), NULL, 'Departamento'); ?>          
+               </div>
+                 <div class="col-md-3">
+                        <?php echo DwForm::dbSelect('cooperacion.clase_cooperacion_id', 'nombre', array('opcion/clase_cooperacion', 'getListadoClaseCooperacionDBS', ''), NULL, array('class'=>'input-readonly'), NULL, 'Cooperación'); ?>                        
+                    </div>  
+                 <div class="col-md-3">
+                        <?php echo DwForm::text('cooperacion.nombre_clase_cooperacion', array('class'=>'input-readonly'), NULL, 'Nombre cooperación'); ?>
+                    </div>
+                 <div class="col-md-3">
+                        <?php echo DwForm::text('cooperacion.procedencia_clase_cooperacion', array('class'=>'input-readonly'), NULL, 'Procedencia cooperación'); ?>
+                    </div>  
+                <div class="col-md-9">
+                    <div id="div_municipiosd"></div>
+                </div>
+                    </div>
+                     <div class="row">                          
+                           <div class="col-md-6">
+                        <?php echo DwForm::dbSelect('cooperacion.tipo_cooperacion_id', 'nombre', array('opcion/tipo_cooperacion', 'getListadoTipoCooperacionDBS', ''), NULL, array('class'=>'input-readonly'), NULL, 'Tipo de cooperación'); ?>                        
+                    </div>  
+                          <div class="col-md-6">
+                        <?php echo DwForm::text('cooperacion.nombre_tipo_cooperacion', array('class'=>'input-readonly'), NULL, 'Nombre tipo de cooperación'); ?>
+                    </div>  
+                      </div>             
+                      
+                      <div class="row">                          
+                           <div class="col-md-12">
+                      <label for="panel_municipio">Tipo de proyectos</label>
+                        <div id="panel_municipio" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::dbCheckId('tipo_proyecto','nombre',array('opcion/tipo_proyecto_cooperacion','getListadoTipoProyectoCooperacionDBS','1'),array('onclick'=>'return false'), $array_tipo_proyecto); ?>
+                                    <?php //echo DwForm::dbCheckId('checks_impacto_ambiental','nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS','1'),NULL, $array_impacto_ambiental, 3, '4'); ?>
+                                </div>
+                            </div>
+                        </div> 
+                      </div>  
+                         
+                          </div>
+                      <div class="row">
+                           <div class="col-md-12">
+                              <?php echo DwForm::textarea('cooperacion.descripcion', array('class'=>'input-lower', 'readonly'=>'readonly'), NULL, 'Descripción'); ?>
+                          </div>
+                      </div>
+                       <div class="row">                       
+                        <div class="col-md-3">
+                           <?php echo DwForm::date('cooperacion.periodo_inicia', array('class'=>'input-readonly'), NULL, 'Fecha en que inicia la cooperación'); ?>
+                        </div> 
+                        <div class="col-md-3">
+                            <?php echo DwForm::date('cooperacion.periodo_fin', array('class'=>'input-readonly'), NULL, 'Fecha en que finaliza la cooperación'); ?>
+                        </div> 
+                           <div class="col-md-2">
+                        <?php echo DwForm::select('cooperacion.moneda_monto_inversion', array(''=>'- SELECCIONE -', '$' => '$ - PESOS', 'US' => 'US - DOLARES', '€' => '€ - EUROS'), array('class'=>'input-readonly'), NULL, 'Moneda monto de inversión') ?>   
+                    </div>
+                    <div class="col-md-4">
+                        <?php echo DwForm::text('cooperacion.monto_inversion', array('class'=>'input-money', 'readonly'=>'readonly'), number_format($cooperacion->monto_inversion, 2, '.', ','), 'Monto de inversión'); ?>
+                    </div>  
+                    </div>                                
+                      <div class="row">
+                           <div class="col-md-6">
+                                <div id="div_municipios">
+                                    <label for="panel_municipio">Seleccione el (los) municipio(s) que tienen cobertura de esta cooperación</label>
+<div id="panel_municipio" class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <?php echo DwForm::dbCheckId('municipio','nombre',array('observatorio/municipio','getMunicipioPorDepartamento',$cooperacion->departamento_id), array('onclick'=>'return false'), $array_municipio); ?>
+        </div>
+    </div>
+</div> 
+                                </div>
+                            </div>
+                          <div class="col-md-6">
+                      <label for="panel_operadores">Operadores</label>
+                        <div id="panel_operadores" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::dbCheckId('operador','nombre',array('opcion/operador_cooperacion','getListadoOperadorCooperacionDBS',''), array('onclick'=>'return false'), $array_operador); ?>
+                                </div>
+                            </div>
+                        </div> 
+                      </div>  
+                    </div> 
+                                       
+                  </div>
+               </div>
+            </div>
+        <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>               
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                       <?php View::partial('fuentes/ver', false, array('fuentes'=>$fuentes)); ?> 
+                    </div>                    
+                </div>
+            </div> 
+           
+                          
+                    
+        </div>                        
+ <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back($url_redir_back); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+    <script type='text/javascript'>
+$("#cooperacion_departamento_id").change(function(){
+	var regiones_id 	=	$('#cooperacion_departamento_id').val();
+        var departamento_id 	=	$('#cooperacion_departamento_id').val();
+        var titulo_panel        =       'Seleccione el (los) municipio(s) que tienen cobertura de esta cooperación';
+        //var departamento_nombre =	$('#cooperacion_departamento_id').attr('id');
+        var departamento_nombre = $("#cooperacion_departamento_id option:selected").attr('texto');        
+        $.ajax({
+          type: "POST",
+          url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_check_municipios/'; ?>"+departamento_id+"/"+departamento_nombre+"/"+titulo_panel+"/",
+          async: true,
+          data: "regiones_id=" + regiones_id,
+          success: function(html){
+            $("#div_municipios").html(html);
+          }
+        });
+});
+
+$("#cooperacion_monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 2,
+            centsSeparator: '.',
+            thousandsSeparator: ','
+        });
+</script>
+</div>

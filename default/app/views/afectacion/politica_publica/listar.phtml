@@ -1,0 +1,94 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'afectacion/politica_publica/buscar_politica_publica/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"afectacion/politica_publica/listar_politica_publica/"
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("afectacion/politica_publica/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >SECTOR</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($politica_publicas->items as $politica_publica): ?>
+                    <?php $key_show = Security::setKey($politica_publica->id, 'show_politica_publica'); ?>
+                    <?php $key_upd = Security::setKey($politica_publica->id, 'upd_politica_publica'); ?>
+                    <?php $key_del = Security::setKey($politica_publica->id, 'del_politica_publica'); ?>
+                    <?php //$key_inac = Security::setKey($politica_publica->id, 'inactivar_politica_publica'); ?>
+                    <?php //$key_reac = Security::setKey($politica_publica->id, 'reactivar_politica_publica'); ?>
+                    <tr>
+                        <td><?php echo $politica_publicas->counter; ?></td>
+                        <td><?php echo $politica_publica->nombre; ?></td>
+                        <td><?php echo $politica_publica->sector; ?></td>                        
+                        <td><?php
+                        $ubicaciones = $politica_publica->getAfectacion()->getUbicaciones($politica_publica->afectacion_id);
+                        foreach($ubicaciones as $ubicacion):
+                            echo $ubicacion->departamento.' - ';
+                            echo $ubicacion->subregion.' - ';
+                            echo $ubicacion->municipio.' - ';
+                            echo $ubicacion->territorio.'<br>';
+                        endforeach;
+                        
+                         ?></td> 
+                         <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$politica_publica->nivel, 'estado'=>$politica_publica->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'política pública',
+                                        "nombre"=>$politica_publica->nombre,
+                                        "url_ver"=>"afectacion/politica_publica/ver/$key_show/",
+                                        "url_editar"=>"afectacion/politica_publica/editar/$key_upd/",
+                                        "url_eliminar"=>"afectacion/politica_publica/eliminar/$politica_publica->nombre/$key_del/$politica_publica->afectacion_id/")); ?>
+                        </td>
+                    </tr>
+                    <?php $politica_publicas->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$politica_publicas, 'url'=>"afectacion/politica_publica/listar/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/politica_publica/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+</script>

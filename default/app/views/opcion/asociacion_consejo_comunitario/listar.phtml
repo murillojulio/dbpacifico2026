@@ -1,0 +1,65 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+//    $(function() {
+//        $('table').kgrid({
+//            form_to:    $.KumbiaPHP.publicPath+'opcion/asociacion_consejo_comunitario/buscar/', 
+//            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+//            order_to:   $.KumbiaPHP.publicPath+"opcion/asociacion_consejo_comunitario/listar/"            
+//        });
+//    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/asociacion_consejo_comunitario/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($asociacion_consejo_comunitarios->items as $asociacion_consejo_comunitario): ?>
+                    <?php $key_show = Security::setKey($asociacion_consejo_comunitario->id, 'show_asociacion_consejo_comunitario'); ?>
+                    <?php $key_upd = Security::setKey($asociacion_consejo_comunitario->id, 'upd_asociacion_consejo_comunitario'); ?>
+                    <?php $key_inac = Security::setKey($asociacion_consejo_comunitario->id, 'inactivar_asociacion_consejo_comunitario'); ?>
+                    <?php $key_reac = Security::setKey($asociacion_consejo_comunitario->id, 'reactivar_asociacion_consejo_comunitario'); ?>
+                    <?php $key_del = Security::setKey($asociacion_consejo_comunitario->id, 'eliminar_asociacion_consejo_comunitario'); ?>
+                    <tr>
+                        <td><?php echo $asociacion_consejo_comunitarios->counter; ?></td>
+                        <td><?php echo $asociacion_consejo_comunitario->nombre; ?></td>
+                        <td><?php echo $asociacion_consejo_comunitario->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver tipo subsidio', "opcion/asociacion_consejo_comunitario/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar tipo subsidio', "opcion/asociacion_consejo_comunitario/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($asociacion_consejo_comunitario->estado == AsociacionConsejoComunitario::ACTIVO ) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar tipo subsidio', "opcion/asociacion_consejo_comunitario/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar tipo subsidio', "opcion/asociacion_consejo_comunitario/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar tipo subsidio', "opcion/asociacion_consejo_comunitario/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar: '.$asociacion_consejo_comunitario->nombre, 'msg'=>'Está seguro de eliminar este tipo subsidio? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $asociacion_consejo_comunitarios->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$asociacion_consejo_comunitarios, 'url'=>"opcion/asociacion_consejo_comunitario/listar/$order/")); ?>
+</div>

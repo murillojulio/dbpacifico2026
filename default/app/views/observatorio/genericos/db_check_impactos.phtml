@@ -1,0 +1,10 @@
+
+<label for="panel_municipio">Seleccione los impactos</label>
+<div id="panel_municipio" class="panel panel-default">
+    <div class="panel-body">
+        <div class="col-md-12">
+            <?php echo DwForm::dbCheckId('impacto_'.$tipo_impacto_id,'nombre',array('afectacion/impacto','getImpactoByTipoImpactoIdDBS',$tipo_impacto_id)); ?>
+        </div>
+    </div>
+</div> 
+<?php //echo time(); ?>

@@ -1,0 +1,45 @@
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_accion_seguimiento_control/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar accion seguimiento control', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE DEL CONSEJO</th>                    
+                    <th>REPRESENTANTE LEGAL</th>
+                    <th>TIPO DE CONSEJO</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_consejo = 1;
+                foreach($consejos as $consejo): ?>                    
+                    <?php $key_show = Security::setKey($consejo->id, 'show_consejo'); ?>
+                    <?php $key_upd = Security::setKey($consejo->id, 'upd_consejo'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_consejo; ?></td>                        
+                        <td><?php echo $consejo->nombre; ?></td>
+                        <td><?php echo $consejo->nombre_representante_legal; ?></td>
+                        <td><?php echo $consejo->tipo_consejo; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$consejo->nivel, 'estado'=>$consejo->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'consejo',
+                                        "nombre"=>$consejo->nombre,
+                                        "url_ver"=>"gestion_territorial/gestion_tccn/ver_consejo/$key_show/$key/$order/$page/",
+                                        "url_editar"=>NULL,
+                                        "url_eliminar"=>NULL)); ?>
+                        </td>
+                    </tr>
+                    <?php $contador_consejo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+  <br>

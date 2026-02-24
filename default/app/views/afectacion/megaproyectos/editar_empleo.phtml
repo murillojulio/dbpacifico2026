@@ -1,0 +1,74 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('empleo', $obj_empleo, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('empleo.megaproyecto_id', NULL, $obj_empleo->megaproyecto_id) ?>
+                        <?php echo DwForm::hidden('empleo.id', NULL, $obj_empleo->id) ?>
+                        <?php echo DwForm::text('empleo.nombre', array('class'=>'input-required'), $obj_empleo->nombre, 'Nombre del empleador'); ?>
+                    </div>                
+                    <div class="col-md-6">
+                        <?php echo DwForm::select('empleo.consulta_previa', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), $obj_empleo->consulta_previa, '¿Se da por un compromiso de la Consulta Previa?'); ?>
+                    </div>           
+                </div>
+            
+
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::number('empleo.local', array('class'=>'input-lower input-integer input-required'), $obj_empleo->local, 'Cantidad de empleados locales'); ?>            
+            </div>
+            <div class="col-md-6">
+                <?php echo DwForm::number('empleo.otra_region', array('class'=>'input-lower input-integer input-required'), $obj_empleo->otra_region, 'Cantidad de empleados de otra region'); ?>            
+            </div>           
+        </div>
+    
+    
+    <label for="panel_cualificado"><h3 class="panel-title">Empleados Cualificados</h3></label>   
+                <div id="panel_cualificado" class="panel panel-default">
+                  <div class="panel-body">
+    <div class="row">
+            <div class="col-md-4">
+                <?php echo DwForm::number('empleo.cualificado', array('class'=>'input-lower input-integer input-required'), $obj_empleo->cualificado, 'Cantidad'); ?>            
+            </div>
+            <div class="col-md-4">
+                <?php echo DwForm::number('empleo.cualificado_salario', array('class'=>'input-lower input-integer input-required'), $obj_empleo->cualificado_salario, 'Salario medio'); ?>            
+            </div>           
+         <div class="col-md-4">
+              <?php echo DwForm::dbSelect('empleo.cualificado_forma_pago_id', 'nombre', array('opcion/forma_pago', 'getListadoFormaPagoDBS', FormaPago::ACTIVO), NULL, array('class'=>'input-required'), $obj_empleo->cualificado_forma_pago_id, 'Forma de pago');  ?>                                
+            </div>  
+        </div>
+                  </div>
+                </div>
+     <label for="panel_cualificado"><h3 class="panel-title">Empleados NO Cualificados</h3></label>   
+                <div id="panel_cualificado" class="panel panel-default">
+                  <div class="panel-body">
+    <div class="row">
+            <div class="col-md-4">
+                <?php echo DwForm::number('empleo.no_cualificado', array('class'=>'input-lower input-integer input-required'), $obj_empleo->no_cualificado, 'Cantidad'); ?>            
+            </div>
+            <div class="col-md-4">
+                <?php echo DwForm::number('empleo.no_cualificado_salario', array('class'=>'input-lower input-integer input-required'), $obj_empleo->no_cualificado_salario, 'Salario medio'); ?>            
+            </div>           
+         <div class="col-md-4">
+                <?php echo DwForm::dbSelect('empleo.cualificado_forma_pago_id', 'nombre', array('opcion/forma_pago', 'getListadoFormaPagoDBS', FormaPago::ACTIVO), NULL, array('class'=>'input-required'), $obj_empleo->no_cualificado_forma_pago_id, 'Forma de pago');  ?> 
+            </div>  
+        </div>
+                  </div>
+                </div>     
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar empleo'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php echo DwForm::focus(''); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

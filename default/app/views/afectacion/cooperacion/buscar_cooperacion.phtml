@@ -1,0 +1,76 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({            
+            form_to         : $.KumbiaPHP.publicPath+'afectacion/cooperacion/buscar_cooperacion/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'afectacion/cooperacion/buscar_cooperacion/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                 <?php echo DwHtml::button("afectacion/cooperacion/listar", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("afectacion/cooperacion/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                     <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >TIPO DE COOPERACIÓN</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($cooperacions->items as $cooperacion): ?>
+                    <?php $key_show = Security::setKey($cooperacion->id, 'show_cooperacion'); ?>
+                    <?php $key_upd = Security::setKey($cooperacion->id, 'upd_cooperacion'); ?>
+                    <?php $key_inac = Security::setKey($cooperacion->id, 'inactivar_cooperacion'); ?>
+                    <?php $key_reac = Security::setKey($cooperacion->id, 'reactivar_cooperacion'); ?>
+                    <tr>
+                        <td><?php echo $cooperacions->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $cooperacion->nombre_clase_cooperacion) : $cooperacion->nombre_clase_cooperacion; ?></td>
+                        <td><?php echo $cooperacion->tipo_cooperacion_nombre; ?></td>                        
+                        <td><?php echo $cooperacion->nombre_departamento; ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver cooperación', "afectacion/cooperacion/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar cooperación', "afectacion/cooperacion/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($cooperacion->estado == Cooperacion::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar cooperación', "afectacion/cooperacion/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar cooperación', "afectacion/cooperacion/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>
+                    </tr>
+                    <?php $cooperacions->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$cooperacions, 'url'=>"afectacion/cooperacion/buscar_cooperacion/$field/$value/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/cooperacion/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>

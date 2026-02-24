@@ -1,0 +1,140 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    
+    <?php echo DwForm::hidden('poblacion.departamento_id', NULL, $poblacion->departamento_id); ?>
+    <?php echo DwForm::hidden('poblacion.id', NULL, $poblacion->id); ?> 
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>
+                &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $departamento->departamento_in;?>
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">
+                    <div class="col-md-4">
+                        <?php echo DwForm::text('departamento.nombre', array('class'=>'input-lower input-required'), $departamento->nombre, 'Nombre'); ?>
+                    </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('departamento.capital', array('class'=>'input-lower input-required'), $departamento->capital, 'Capital'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::text('departamento.cant_municipio', array('class'=>'input-lower input-integer input-required'), $departamento->cant_municipio, 'Cantidad de municipios'); ?>
+                        </div>
+                    </div>                    
+                   
+                      <div class="row">
+                          <div class="col-md-4">
+                            <?php echo DwForm::text('departamento.cant_municipio_pacifico', array('class'=>'input-lower input-integer input-required'), $departamento->cant_municipio_pacifico, 'Cantidad de municipios en el pacífico'); ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?php echo DwForm::date('departamento.fecha_creacion', array('class'=>'input-required'), substr($departamento->fecha_creacion, 0, 10), 'Fecha de creación del departamento'); ?>
+                        </div>                       
+                    </div> 
+                      <div class="row">
+                           <div class="col-md-12">
+                            <label for="panel_area">Area superficie</label>
+                            <div id="panel_area" class="panel panel-default">
+                                <div class="panel-body">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="departamento_area_total">Total<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="departamento_area_total" name="departamento[area_total]" type="text" value="<?php echo number_format($departamento->area_total, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">                                          
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                      <div class="col-md-4">
+                                        <label for="departamento_area_urbana">Urbana<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="departamento_area_urbana" name="departamento[area_urbana]" type="text" value="<?php echo number_format($departamento->area_urbana, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                     <div class="col-md-4">
+                                        <label for="departamento_area_rural">Rural<span class="req">*</span></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="departamento_area_rural" name="departamento[area_rural]" type="text" value="<?php echo number_format($departamento->area_rural, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
+                                          <div class="input-group-addon">Km<sup>2</sup></div>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>                                    
+                                </div>
+                            </div>
+                           
+                        </div>
+                          
+                      </div>
+                       
+                  </div>
+               </div>
+            </div>
+                
+         <div class="col-md-12">
+                 <label for="panel_poblacion"><h3 class="panel-title">Población</h3></label>   
+                 &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $poblacion->poblacion_in;?>
+                <div id="panel_poblacion" class="panel panel-default">
+                  <div class="panel-body">
+                       
+                      <?php
+                    $array_poblacion = (array) $poblacion;
+                    echo View::partial('poblacion/editar', false, array('array_poblacion' => $array_poblacion, 'para_territorio' => 'no')); 
+                   ?>                       
+                      
+                  
+                  </div>
+               </div>
+            </div>
+             <div class="col-md-12">               
+    <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>
+   
+      <div id="panel_fuente" class="panel panel-default">
+          <div class="panel-body"> 
+             <?php View::partial('fuentes/editar', false, array('fuentes'=>$fuentes)); ?>   
+              </div> 
+      </div>                    
+ </div>
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar departamento'); ?>
+                <?php echo DwHtml::button("observatorio/departamentos/listar/", 'cancelar', array('class' => 'btn-default', 'title'=>'Regresar a la lista de departamentos'), 'fa-reply', APP_AJAX); ?>             
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
+<script type='text/javascript'>
+    
+$("#form-1").submit(function(){
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: '',
+        thousandsSeparator: ''
+    });    
+});
+    
+    
+        
+        $(".formato_punto_coma").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 2,
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });   
+</script>

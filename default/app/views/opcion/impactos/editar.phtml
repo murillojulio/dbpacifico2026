@@ -1,0 +1,26 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::hidden('impacto.id', NULL, $impacto->id); ?> 
+                <?php echo DwForm::hidden('impacto.tipo_impacto_id', NULL, $tipo_impacto_id); ?>
+                <?php echo DwForm::text('impacto.nombre', array('class'=>'input-required'), $impacto->nombre, 'Nombre'); ?>
+            </div>             
+        </div>           
+
+       <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Actualizar impacto'); ?>
+                <?php echo DwForm::cancel('opcion/impactos/listar/'.$tipo_impacto_id); ?>
+                <?php echo DwForm::focus('impacto.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

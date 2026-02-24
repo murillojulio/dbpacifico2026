@@ -1,0 +1,75 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to         : $.KumbiaPHP.publicPath+'observatorio/territorios/buscar_territorio_cn/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'observatorio/territorios/buscar_territorio_cn/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/territorios/listar_territorio_cn/", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("observatorio/territorios/index_agregar_territorio/comunidad_negra", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="titulado" data-order="titulado">TITULADO</th>
+                    <th class="col-hidden" data-search="departamento" data-order="departamento">DEPARTAMENTO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if(!empty($territorios->items)) { ?>
+                <?php foreach($territorios->items as $territorio): ?>
+                    <?php $key_show = Security::setKey($territorio->id, 'show_territorio'); ?>
+                    <?php $key_upd = Security::setKey($territorio->id, 'upd_territorio'); ?>
+                    <?php $key_inac = Security::setKey($territorio->id, 'inactivar_territorio'); ?>
+                    <?php $key_reac = Security::setKey($territorio->id, 'reactivar_territorio'); ?>
+                     <?php $key_del = Security::setKey($territorio->id, 'eliminar_territorio'); ?>
+                    <tr>
+                        <td><?php echo $territorios->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $territorio->nombre) : $territorio->nombre; ?></td>
+                        <td><?php echo ($field=='titulado') ? DwUtils::resaltar($value, $territorio->titulado) : $territorio->titulado; ?></td>                        
+                        <td><?php echo ($field=='departamento') ? DwUtils::resaltar($value, $territorio->departamento) : $territorio->departamento; ?></td> 
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver territorio', "observatorio/territorios/ver/$key_show/1/$order/page.$page/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar territorio', "observatorio/territorios/editar/$key_upd/1/$order/page.$page/", null, 'warning', 'fa-edit'); ?>
+                            <?php //echo DwHtml::buttonTable('Agregar comunidad', "observatorio/territorios/agregar_comunidad/$territorio->id/$territorio->nombre/$territorio->tipo/", null, 'success', 'fa-plus'); ?>
+                            <?php 
+                                if(Session::get('perfil') == 'ADMINISTRADOR' || Session::get('perfil') == 'Super Usuario')
+                                {
+                                    echo DwHtml::buttonTable('Eliminar territorio', "observatorio/territorios/eliminar/$key_del/listar_territorio_cn/$order/page.$page/", 
+                                            array('class'=>'js-confirm', 'msg-title'=>'Eliminar territorio: '.$territorio->nombre, 'msg'=>'Está seguro de eliminar este territorio? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban');
+                                }
+                            ?>
+                        </td>
+                    </tr>
+                    <?php $territorios->counter++; ?>
+                <?php endforeach; ?>
+                      <?php } ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$territorios, 'url'=>"observatorio/territorios/buscar_territorio_cn/$field/$value/$order/")); ?>
+
+</div>

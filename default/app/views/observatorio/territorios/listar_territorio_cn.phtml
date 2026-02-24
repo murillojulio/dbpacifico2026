@@ -1,0 +1,77 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <?php echo DwForm::hidden('tipo', NULL, 'comunidad_negra') ?>
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("observatorio/territorios/index_agregar_territorio/comunidad_negra", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div>
+
+        <table class="table table-bordered table-hover table-striped table-condensed datatable">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE</th>
+                    <th>TITULADO</th>
+                    <th>DEPARTAMENTO</th>
+                    <th>CASOS DE VIOLENCIA</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num = 1; ?>
+                <?php foreach($territorios as $territorio): ?>
+                    <?php $key_show = Security::setKey($territorio->id, 'show_territorio'); ?>
+                    <?php $key_upd = Security::setKey($territorio->id, 'upd_territorio'); ?>
+                    <?php $key_inac = Security::setKey($territorio->id, 'inactivar_territorio'); ?>
+                    <?php $key_reac = Security::setKey($territorio->id, 'reactivar_territorio'); ?>
+                    <?php $key_del = Security::setKey($territorio->id, 'eliminar_territorio'); ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $territorio->nombre; ?></td>
+                        <td><?php echo $territorio->titulado; ?></td>                        
+                        <td><?php echo $territorio->departamento; ?></td>
+                        <td><?php echo $territorio->cant_caso_reg; ?></td>
+                         <td><?php View::partial('nivel_estado/ver', false, array('nivel'=>$territorio->nivel, 'estado'=>$territorio->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'territorio',
+                                        "nombre"=>$territorio->nombre,
+                                        'url_ver'=>"observatorio/territorios/ver/$key_show/1/$order/page.$page/",
+                                        'url_editar'=>"observatorio/territorios/editar/$key_upd/1/$order/page.$page/",
+                                        "url_eliminar"=>"observatorio/territorios/eliminar/$key_del/listar_territorio_cn/$order/page.$page/")); 
+                                        $perfil = Session::get('perfil');
+                                        if($perfil == 'ADMINISTRADOR' || $perfil == 'Super Usuario' || $perfil == 'SUPER')
+                                        {                                            
+                                            /*echo DwHtml::link("observatorio/territorios/export_pdf/$territorio->id/", '', array('target'=>'blank'), 'fa-print', NULL); */
+                                            echo DwHtml::button("observatorio/territorios/export_pdf/$territorio->id/", '', array('target'=>'blank', 'class' => 'btn-default', 'title'=>'generar reporte'), 'fa-print', NULL);
+                                        }
+                                        ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE</th>
+                    <th>TITULADO</th>
+                    <th>DEPARTAMENTO</th>
+                    <th>CASOS DE VIOLENCIA</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </tfoot>
+        </table>
+       
+    </div>
+
+</div>

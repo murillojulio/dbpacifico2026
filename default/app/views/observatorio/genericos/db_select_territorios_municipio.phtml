@@ -1,0 +1,20 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect($field, 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect',  $municipio_id), NULL, array('class'=>$input_required), NULL, $label); ?>
+
+<script type='text/javascript'>
+               
+$("#caso_territorio_id").on('change', function(e) {
+
+    $("#div_impactos").fadeIn();
+    $("#impacto_ambiental_si_no").focus();
+    var territorio_nombre = $("#caso_territorio_id option:selected").attr('texto');
+    var territorio_id = $("#caso_territorio_id option:selected").attr('value');
+    $("#afectacion_territorio_territorio_nombre").val(territorio_nombre);
+    $("#afectacion_territorio_territorio_id").val(territorio_id);
+    $('#btn_guardar').attr('class', 'btn btn-success text-bold');
+    
+    //Para partial ubicacion
+    //$("#btn_anadir_ubicacion").attr('class', 'btn btn-success form-control');
+        
+});
+</script>

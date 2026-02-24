@@ -1,0 +1,37 @@
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    //echo DwHtml::button("afectacion/megaproyectos/agregar_accion_seguimiento_control/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar accion seguimiento control', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE DEL CABILDO</th>
+                    <th>TIPO DE CABILDO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_cabildo = 1;
+                foreach($cabildos as $cabildo): ?>                    
+                    <?php $key_show = Security::setKey($cabildo->id, 'show_cabildo'); ?>
+                    <?php $key_upd = Security::setKey($cabildo->id, 'upd_cabildo'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_cabildo; ?></td>                        
+                        <td><?php echo $cabildo->nombre; ?></td>
+                        <td><?php echo $cabildo->tipo_cabildo; ?></td>
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver cabildo', "gestion_territorial/gestion_tcci/ver_cabildo/$key_show/$key/$order/$page/", null, 'info', 'fa-search'); ?>
+                            <?php //echo DwHtml::buttonTable('Modificar accion seguimiento control', "afectacion/megaproyectos/editar_cabildo/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>
+                    </tr>
+                    <?php $contador_cabildo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+<br>

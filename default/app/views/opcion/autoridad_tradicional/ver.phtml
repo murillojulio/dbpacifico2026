@@ -1,0 +1,27 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::dbSelect('autoridad_tradicional.tipo_autoridad_tradicional_id', 'nombre', array('opcion/tipo_autoridad_tradicional', 'getListadoTipoAutoridadTradicionalDBS', TipoAutoridadTradicional::ACTIVO), NULL, array('class'=>'input-readonly'), NULL, 'Tipo de autoridad tradicional'); ?>
+            </div>
+             <div class="col-md-6">
+                        <?php echo DwForm::text('autoridad_tradicional.nombre', array('class'=>'input-readonly'), $autoridad_tradicional->nombre, 'Nombre'); ?>
+                    </div>             
+        </div>           
+
+       <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back(); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

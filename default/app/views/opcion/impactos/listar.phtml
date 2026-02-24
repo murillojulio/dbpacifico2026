@@ -1,0 +1,72 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'opcion/impactos/buscar/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"opcion/impactos/listar/"            
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/impactos/agregar/$tipo_impacto_id/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($impactos->items as $impacto): ?>
+                    <?php $key_show = Security::setKey($impacto->id, 'show_impacto'); ?>
+                    <?php $key_upd = Security::setKey($impacto->id, 'upd_impacto'); ?>
+                    <?php $key_inac = Security::setKey($impacto->id, 'inactivar_impacto'); ?>
+                    <?php $key_reac = Security::setKey($impacto->id, 'reactivar_impacto'); ?>
+                    <?php $key_del = Security::setKey($impacto->id, 'eliminar_impacto'); ?>
+                    <tr>
+                        <td><?php echo $impactos->counter; ?></td>
+                        <td><?php echo $impacto->nombre; ?></td>
+                        <td><?php echo $impacto->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver tipo daño', "opcion/impactos/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar tipo daño', "opcion/impactos/editar/$key_upd/$tipo_impacto_id/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($impacto->estado == Impacto::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar tipo daño', "opcion/impactos/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar tipo daño', "opcion/impactos/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar tipo daño', "opcion/impactos/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar tipo daño', 'msg'=>'Está seguro de eliminar este tipo daño? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $impactos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$impactos, 'url'=>"opcion/impactos/listar/$tipo_impacto_id/$order/")); ?>
+     <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('opcion/impactos/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>

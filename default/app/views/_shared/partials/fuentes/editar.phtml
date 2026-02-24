@@ -1,0 +1,377 @@
+<?php
+
+/**
+ * Normalización de datos provenientes del modelo
+ * $fuentes llega como objeto contenedor
+ */
+
+$tabla = '';
+$tabla_identi = '';
+$listado_fuentes = [];
+
+if (is_object($fuentes)) {
+    $tabla           = $fuentes->tabla ?? '';
+    $tabla_identi    = $fuentes->tabla_id ?? '';
+    $listado_fuentes = $fuentes->fuentes ?? [];
+}
+
+// Para compatibilidad visual
+$fuentes = $listado_fuentes;
+$contador_fuentes = count($fuentes);
+
+?>
+
+<div class="fuentes-container">
+    <!-- Botón para agregar nueva fuente -->
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" id="btnAgregarNuevaFuente" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalAgregarFuente">
+                <i class="fa fa-plus"></i> Agregar Fuente
+            </button>
+        </div>
+    </div>
+
+    <!-- Listado de fuentes existentes -->
+    <div id="div_fuente">
+        <?php if (!empty($fuentes)): ?>
+            <?php foreach ($fuentes as $index => $fuente): ?>
+                <?php 
+                $contador = $index + 1;
+                $puede_eliminar = $contador_fuentes > 1;
+                ?>
+                <div class="row fuente-item" data-fuente-id="<?= h($fuente->id) ?>">
+                    <div class="col-md-2">
+                        <?= DwForm::hidden("fuente.id{$contador}", null, $fuente->id) ?>
+                        <?= DwForm::date(
+                            "fuente.fecha{$contador}",
+                            ['class' => 'input-required'],
+                            date('d-m-Y', strtotime($fuente->fecha)),
+                            'Fecha de la fuente'
+                        ) ?>
+                    </div>
+                    
+                    <div class="col-md-9">
+                        <?= DwForm::text(
+                            "fuente.nombre{$contador}",
+                            ['class' => 'input-lower input-required'],
+                            $fuente->nombre,
+                            'Descripción de la fuente'
+                        ) ?>
+                    </div>
+                    
+                    <div class="col-md-1">
+                        <?php if ($puede_eliminar): ?>
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button 
+                                    type="button"
+                                    class="form-control btn btn-danger btn-xs btn-eliminar-fuente"
+                                    data-fuente-id="<?= h($fuente->id) ?>"
+                                    data-toggle="modal"
+                                    data-target="#modalEliminarFuente">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="alert alert-info">
+                No hay fuentes registradas. Haz clic en "Agregar Fuente" para crear una.
+            </div>
+        <?php endif; ?>
+        
+        <?= DwForm::hidden('fuente.cantidad', null, $contador_fuentes) ?>
+    </div>
+</div>
+
+<!-- Modal: Agregar Fuente -->
+<div class="modal fade" id="modalAgregarFuente" tabindex="-1" role="dialog" aria-labelledby="tituloAgregarFuente">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="tituloAgregarFuente">Agregar Fuente de Información</h4>
+            </div>
+            
+            <div class="modal-body">
+                <form id="formAgregarFuente">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= DwForm::date('nueva_fuente.fecha', ['class' => 'form-control'], null, 'Fecha de la fuente') ?>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?= DwForm::textarea(
+                                'nueva_fuente.nombre',
+                                ['class' => 'form-control input-lower', 'rows' => 3],
+                                null,
+                                'Descripción de la fuente'
+                            ) ?>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn_guardar_fuente" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Eliminar Fuente -->
+<div class="modal fade" id="modalEliminarFuente" tabindex="-1" role="dialog" aria-labelledby="tituloEliminarFuente">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="tituloEliminarFuente">Eliminar Fuente de Información</h4>
+            </div>
+            
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar esta fuente de información?</p>
+                <p class="text-muted"><small>Esta acción no se puede deshacer.</small></p>
+                <?= DwForm::hidden('id_a_borrar', null, '') ?>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="btn_borrar_fuente" class="btn btn-danger">
+                    <i class="fa fa-trash"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    
+    // Configuración
+    const CONFIG = {
+        urlGestionar: '<?= PUBLIC_PATH ?>observatorio/genericos/gestionar_fuente/',
+        tabla: '<?= $tabla ?>',
+        tablaIdenti: '<?= $tabla_identi ?>'
+    };
+    
+    // Utilidades
+    const Utils = {
+        mostrarError(mensaje, detalles = null) {
+            let textoError = `Error: ${mensaje}`;
+            if (detalles) {
+                console.error('Detalles del error:', detalles);
+                textoError += `\n\nDetalles técnicos:\n${JSON.stringify(detalles, null, 2)}`;
+            }
+            alert(textoError);
+        },
+        
+        validarCampos(campos) {
+            return campos.every(campo => campo && campo.trim() !== '');
+        },
+        
+        deshabilitarBoton($boton, deshabilitar = true) {
+            $boton.prop('disabled', deshabilitar);
+            if (deshabilitar) {
+                $boton.addClass('disabled').prepend('<i class="fa fa-spinner fa-spin"></i> ');
+            } else {
+                $boton.removeClass('disabled').find('.fa-spinner').remove();
+            }
+        },
+        
+        limpiarFormulario() {
+            $('#nueva_fuente_fecha').val('');
+            $('#nueva_fuente_nombre').val('');
+        }
+    };
+    
+    function initDatePickers(context = document) {
+
+        if (!$.fn.datetimepicker) {
+            console.warn('bootstrap-datepicker no cargado');
+            return;
+        }
+    
+        $('.js-datepicker', context)
+            .datetimepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                language: 'es'
+            });
+            /*.on('show', function () {
+                $(this).blur(); // evita focus pegado en modales
+            });*/
+    }
+
+    
+    // Servicio para gestionar fuentes
+    const FuenteService = {
+        gestionar(datos) {
+            return $.ajax({
+                type: 'POST',
+                url: CONFIG.urlGestionar,
+                data: {
+                    ...datos,
+                    tabla: CONFIG.tabla,
+                    tabla_identi: CONFIG.tablaIdenti
+                },
+                dataType: 'html'
+            });
+        },
+        
+        guardar(fecha, nombre) {
+            return this.gestionar({
+                id: 'vacio',
+                fecha: fecha,
+                nombre: nombre
+            });
+        },
+        
+        eliminar(id) {
+            return this.gestionar({
+                id: id,
+                fecha: 'vacio',
+                nombre: 'vacio'
+            });
+        }
+    };
+    
+    // Inicialización cuando el documento esté listo
+    $(document).ready(function() {
+        let ultimoFoco = null;
+        
+        $('#modalAgregarFuente').on('show.bs.modal', function(){
+            ultimoFoco = document.activeElement;
+        });
+        
+        
+        $('#modalAgregarFuente').on('hide.bs.modal', function(){
+            if(ultimoFoco && typeof ultimoFoco.focus === 'function'){
+                ultimoFoco.focus();
+            }
+        });
+        
+        initDatePickers();
+        // Evento: Guardar nueva fuente
+        $('#btn_guardar_fuente').on('click', function(e) {
+            e.preventDefault();
+            
+            const $btnGuardar = $(this);
+            const fecha = $('#nueva_fuente_fecha').val().trim();
+            const nombre = $('#nueva_fuente_nombre').val().trim();
+            
+            // Validar campos
+            if (!Utils.validarCampos([fecha, nombre])) {
+                Utils.mostrarError('Debes ingresar una fecha y descripción de la fuente');
+                return;
+            }
+            
+            // Deshabilitar botón durante el proceso
+            Utils.deshabilitarBoton($btnGuardar);
+            
+            // Realizar petición
+            FuenteService.guardar(fecha, nombre)
+                .done(function(data) {
+                    $('#modalAgregarFuente').modal('hide');
+                    $('#div_fuente').html(data);
+                    initDatePickers();
+                    Utils.limpiarFormulario();
+                    
+                    // Mostrar mensaje de éxito (opcional)
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success('Fuente guardada correctamente');
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    Utils.mostrarError('No se pudo guardar la fuente', {
+                        status: textStatus,
+                        error: errorThrown,
+                        respuesta: jqXHR.responseText
+                    });
+                })
+                .always(function() {
+                    Utils.deshabilitarBoton($btnGuardar, false);
+                });
+        });
+        
+        // Evento: Preparar eliminación (delegar evento para elementos dinámicos)
+        $(document).on('click', '.btn-eliminar-fuente', function() {
+            const idFuente = $(this).data('fuente-id');
+            $('#id_a_borrar').val(idFuente);
+        });
+        
+        // Evento: Confirmar eliminación
+        $('#btn_borrar_fuente').on('click', function(e) {
+            e.preventDefault();
+            
+            const $btnBorrar = $(this);
+            const id = $('#id_a_borrar').val();
+            
+            if (!id) {
+                Utils.mostrarError('No se ha seleccionado ninguna fuente para eliminar');
+                return;
+            }
+            
+            // Deshabilitar botón durante el proceso
+            Utils.deshabilitarBoton($btnBorrar);
+            
+            // Realizar petición
+            FuenteService.eliminar(id)
+                .done(function(data) {
+                    $('#modalEliminarFuente').modal('hide');
+                    $('#div_fuente').html(data);
+                    initDatePickers();
+                    
+                    // Mostrar mensaje de éxito (opcional)
+                    if (typeof toastr !== 'undefined') {
+                        toastr.success('Fuente eliminada correctamente');
+                    }
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    Utils.mostrarError('No se pudo eliminar la fuente', {
+                        status: textStatus,
+                        error: errorThrown,
+                        respuesta: jqXHR.responseText
+                    });
+                })
+                .always(function() {
+                    Utils.deshabilitarBoton($btnBorrar, false);
+                });
+        });
+        
+        // Limpiar formulario al cerrar el modal
+        $('#modalAgregarFuente').on('hidden.bs.modal', function() {
+            Utils.limpiarFormulario();
+        });
+    });
+    
+})();
+</script>
+
+<style>
+.fuente-item {
+    margin-bottom: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.fuente-item:last-child {
+    border-bottom: none;
+}
+
+.fuentes-container {
+    margin: 15px 0;
+}
+</style>

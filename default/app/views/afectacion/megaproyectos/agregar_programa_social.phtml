@@ -1,0 +1,56 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('programa_social.megaproyecto_id', NULL, $megaproyecto_id) ?>
+                        <?php echo DwForm::text('programa_social.nombre', array('class'=>'input-required'), NULL, 'Nombre del programa social.'); ?>
+                    </div>                
+                    <div class="col-md-6">
+                        <?php echo DwForm::select('programa_social.consulta_previa', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>'input-required'), NULL, '¿Son un compromiso de la Consulta Previa?'); ?>
+                    </div>           
+                </div>
+    
+    
+    <div class="row">
+        <div class="col-md-6">        
+            <label for="panel_cualificado"><h3 class="panel-title">Seleccione los sectores del programa social</h3></label>   
+            <div id="panel_cualificado" class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php //echo DwForm::dbCheckId('municipio','nombre',array('observatorio/municipio','getMunicipioPorDepartamento',$departamento_id)); ?>
+                            <?php echo DwForm::dbCheck('sector_programa_social','nombre',array('opcion/sector_programa_social','find')) ?>
+                        </div>             
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <?php echo DwForm::textarea('programa_social.descripcion', array('class'=>'input-lower'), '', 'Descripción del programa social'); ?>
+        </div>
+    </div>
+    
+     <div class="row">
+            <div class="col-md-6">
+                <?php echo DwForm::number('programa_social.monto', array('class'=>'input-lower input-integer input-required'), NULL, 'Monto del programa social'); ?>            
+            </div>
+                      
+        </div>    
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar programa social'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('programa_social.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

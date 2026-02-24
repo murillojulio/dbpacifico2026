@@ -1,0 +1,200 @@
+<?php View::flash(); ?>
+<div class="modal fade" id="modal_agregar_dano">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Agregar cultivo de uso ilícito</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="cultivo_ilicito_tipo_cultivo_id">Tipo de cultivo <span style="color: red;" class="req">*</span></label>
+                            <?php echo DwForm::dbSelect('cultivo_ilicito.tipo_cultivo_id', 'nombre', array('opcion/tipo_cultivo', 'getListadoTipoCultivoDBS', ''), NULL, array('onchange' => 'validarBotonAgregarCultivo()'), NULL, 'Seleccione el tipo de cultivo'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="panel_fuente">Fuente de la información</label>
+                        <div id="panel_fuente" class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="row">                                
+                                    <div class="col-md-12">
+                                    <div class="form-group">                            
+                                        <label for="fuente_fecha">Fecha de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::date('fuente.fecha', array('onkeyup' => 'ValidarBotonAgregarCultivo()', 'onchange'=>'ValidarBotonAgregarCultivo()'), NULL, 'Fecha de la fuente'); ?>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fuente_descripcion">Descripción de la fuente <span style="color: red;" class="req">*</span></label>
+                                        <?php echo DwForm::textarea('fuente.descripcion', array('class' => 'input-lower', 'onkeyup'=>'validarBotonAgregarCultivo()'), NULL, 'Descripción de la fuente'); ?>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-cancelar-guardar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="btn-agregar-cultivo" type="button" class="btn btn-success" onclick="agregarCultivo()" data-loading-text="Guardando...">Continuar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">            
+            <?php echo DwHtml::button(NULL, 'agregar', array('class' => 'btn-success', "data-toggle"=>"modal", "data-target"=>"#modal_agregar_dano"), 'fa-check-square-o', NULL); ?>
+                <?php /* echo DwHtml::button("afectacion/cultivo_ilicito/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);*/ ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="datatable table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>TIPO DE CULTIVO</th>
+                    <th>PROMOTOR(ES)</th>
+                    <th>AREA</th>
+                    <th>UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $num++; ?>
+                <?php foreach ($cultivo_ilicitos as $cultivo_ilicito) : ?>
+                    <?php $key_show = Security::setKey($cultivo_ilicito->id, 'show_cultivo_ilicito'); ?>
+                    <?php $key_upd = Security::setKey($cultivo_ilicito->id, 'upd_cultivo_ilicito'); ?>
+                    <?php $key_del = Security::setKey($cultivo_ilicito->id, 'del_cultivo_ilicito'); ?>
+                    <?php //$key_inac = Security::setKey($cultivo_ilicito->id, 'inactivar_cultivo_ilicito'); 
+                    ?>
+                    <?php //$key_reac = Security::setKey($cultivo_ilicito->id, 'reactivar_cultivo_ilicito'); 
+                    ?>
+                    <tr>
+                        <td><?php echo $num++; ?></td>
+                        <td><?php echo $cultivo_ilicito->tipo_cultivo; ?></td>
+                        <td>
+                            <?php if (!empty($cultivo_ilicito->presuntos_responsables)): ?>
+                                <ul>
+                                    <?php foreach (explode(' | ', $cultivo_ilicito->presuntos_responsables) as $pr): ?>
+                                        <li><?= $pr ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $cultivo_ilicito->area; ?></td>
+                        <td><?php if (!empty($cultivo_ilicito->ubicaciones)): ?>
+                                <ul>
+                                    <?php foreach (explode(' | ', $cultivo_ilicito->ubicaciones) as $u): ?>
+                                        <li><?= $u ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </td>
+
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $cultivo_ilicito->nivel, 'estado' => $cultivo_ilicito->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial(
+                                'opcion/ver',
+                                false,
+                                array(
+                                    'elemento' => 'cultivo ilícito',
+                                    "nombre" => $cultivo_ilicito->tipo_cultivo,
+                                    "url_ver" => NULL,
+                                    "url_editar" => "afectacion/cultivo_ilicito/editar/$key_upd/",
+                                    "url_eliminar" => "afectacion/cultivo_ilicito/eliminar/$cultivo_ilicito->tipo_cultivo/$key_del/$cultivo_ilicito->afectacion_id/"
+                                )
+                            ); ?>
+                        </td>
+
+                        <!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver cultivo ilícito', "afectacion/cultivo_ilicito/ver/$key_show/1/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar cultivo ilícito', "afectacion/cultivo_ilicito/editar/$key_upd/1/", null, 'warning', 'fa-edit'); ?>
+                            <?php if ($cultivo_ilicito->estado == CultivoIlicito::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar cultivo ilícito', "afectacion/cultivo_ilicito/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar cultivo ilícito', "afectacion/cultivo_ilicito/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page' => $cultivo_ilicitos, 'url' => "afectacion/cultivo_ilicito/listar/$order/")); ?>
+    <!--    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/cultivo_ilicito/index/'); ?>                    
+                </div>
+            </div>
+        </div>-->
+</div>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $("#btn-agregar-cultivo").prop('disabled', true);
+        $("monto_inversion").priceFormat({
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+    });
+
+    function validarBotonAgregarCultivo() {
+        var tipo_cultivo = $('#cultivo_ilicito_tipo_cultivo_id').val();    
+        var fecha = $('#fuente_fecha').val();
+        var descripcion = $('#fuente_descripcion').val();
+
+        if (tipo_cultivo !== '' && fecha !== '' && descripcion !== '') {
+            $("#btn-agregar-cultivo").prop('disabled', false);
+        } else {
+            $("#btn-agregar-cultivo").prop('disabled', true);
+        }
+    }
+
+    function agregarCultivo() {
+        let url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/agregar_desde_modal/'; ?>";
+
+        let tipo_cultivo_id = $('#cultivo_ilicito_tipo_cultivo_id').val();
+        let fuente_fecha = $('#fuente_fecha').val();
+        let fuente_descripcion = $('#fuente_descripcion').val();
+        let datos = new FormData();
+        datos.append('tipo_cultivo_id', tipo_cultivo_id);
+        datos.append('fuente_fecha', fuente_fecha);
+        datos.append('fuente_descripcion', fuente_descripcion);
+
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                url = "<?php echo PUBLIC_PATH . 'afectacion/cultivo_ilicito/editar/'; ?>" + data + "/";
+                $(location).attr('href', url);
+            })
+            .catch(function(err) {
+
+                alert('ERROR en agregarCultivo() ' + err);
+
+                console.error(err);
+            });
+    }
+</script>

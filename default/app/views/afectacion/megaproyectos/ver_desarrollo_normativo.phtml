@@ -1,0 +1,101 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <label for="panel_info_basica"><h3 class="panel-title">Información básica</h3></label>                
+               <div id="panel_info_basica" class="panel panel-default">
+                  <div class="panel-body">
+                   <div class="row">
+                    <div class="col-md-12">      
+                        <?php echo DwForm::hidden('desarrollo_normativo.megaproyecto_id', NULL, NULL); ?>
+                        <?php echo DwForm::hidden('desarrollo_normativo.id', NULL, NULL); ?>
+                        <?php echo DwForm::text('desarrollo_normativo.nombre', array('class'=>'input-readonly'), NULL, 'Nombre del documento'); ?>
+                    </div>                                   
+                </div>
+                                    <div class="row">    
+         <?php 
+            if($desarrollo_normativo->documento != '')           
+            {                
+                echo '<div class="col-md-8">';                        
+                echo '<a id="enlace_documento_politica" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/desarrollo_normativo/'.$desarrollo_normativo->documento.'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento adjunto</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('desarrollo_normativo.documento', NULL, $desarrollo_normativo->documento);                                  
+            }
+         ?>
+     </div>
+                       <br>
+
+                       <div class="row">
+                           <div class="col-md-6">
+                        <?php echo DwForm::dbSelect('desarrollo_normativo.tipo_megaproyecto_id', 'nombre', array('opcion/tipo_megaproyecto', 'getTipoMegaproyectoDBS', ''), NULL, array('class'=>'input-readonly'), NULL, 'Seleccione el sector del desarrollo normativo'); ?>                        
+                    </div>  
+                           <div id="div_subtipo_megaproyecto" class="col-md-6">
+                        <?php echo DwForm::dbSelect('desarrollo_normativo.subtipo_megaproyecto_id', 'nombre', array('opcion/subtipo_megaproyecto', 'getSubtipoMegaproyectoByTipoMegaproyectoIdDBS', $desarrollo_normativo->tipo_megaproyecto_id), NULL, array('class'=>'input-readonly'), NULL, 'Seleccione el subsector del desarrollo normativo'); ?>                        
+                    </div>   
+                      </div>             
+                      
+                       <div class="row">                         
+                       <?php View::partial('ubicacion/ver', false, 
+                               array('ubicaciones'=>$ubicaciones, 
+                                    'titulo'=>'del desarrollo normativo')); ?>                              
+                      </div>
+                      
+                                     
+                      <div class="row">
+                          <div class="col-md-4">
+                        <?php echo DwForm::select('desarrollo_normativo.tipo', 
+                                array(''=>'Seleccione', 'LEY'=>'LEY', 'DECRETO'=>'DECRETO',
+                                    'RESOLUCIÓN'=>'RESOLUCIÓN', 'ORDENANZA'=>'ORDENANZA',
+                                    'ACUERDO'=>'ACUERDO', 'JURISPRUDENCIA'=>'JURISPRUDENCIA'), 
+                                array('class'=>'input-readonly'), NULL, 'Tipo'); ?>
+                    </div> 
+                    <div class="col-md-4">                                                
+                        <?php echo DwForm::text('desarrollo_normativo.numero', array('class'=>'input-readonly'), NULL, 'Número'); ?>
+                    </div> 
+                            <div class="col-md-4">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha', array('class'=>'input-readonly'), NULL, 'Fecha'); ?>
+                        </div>
+                    </div> 
+                       <div class="row">                       
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha_vigencia_inicio', array('class'=>'input-readonly'), NULL, 'Fecha en que inicia la vigencia del desarrollo normativo'); ?>
+                        </div> 
+                        <div class="col-md-6">
+                            <?php echo DwForm::date('desarrollo_normativo.fecha_vigencia_fin', array('class'=>'input-readonly'), NULL, 'Fecha en que finaliza la vigencia del desarrollo normativo'); ?>
+                        </div> 
+                    </div>                     
+                  </div>
+               </div>
+            </div>
+      
+            <div class="col-md-12">               
+               <label for="panel_fuente"><h3 class="panel-title">Fuente(s) de la información</h3></label>               
+                 <div id="panel_fuente" class="panel panel-default">
+                     <div class="panel-body">
+                       <?php View::partial('fuentes/ver', false, array('fuentes'=>$fuentes)); ?> 
+                    </div>                    
+                </div>
+            </div> 
+           
+                          
+                    
+        </div>                        
+
+         <div class="row">
+            <div class="form-actions">
+                <div class="text-left">
+                    <?php echo DwButton::back(); ?>                    
+                </div>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+    
+    
+</div>

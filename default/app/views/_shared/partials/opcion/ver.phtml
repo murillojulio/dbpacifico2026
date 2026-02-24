@@ -1,0 +1,22 @@
+<?php
+    if ($url_ver != NULL)
+    {
+        echo DwHtml::buttonTable("Ver $elemento", $url_ver, null, 'default', 'fa-eye');
+    }
+    echo '&nbsp;';
+    if ($url_editar != NULL)
+    {
+    echo DwHtml::buttonTable("Modificar $elemento", $url_editar, null, 'default', 'fa-edit');
+    }
+    echo '&nbsp;';
+    
+    if($url_eliminar != NULL)
+    {
+        $perfil = Session::get('perfil');
+        if($perfil == 'ADMINISTRADOR' || $perfil == 'Super Usuario' || $perfil == 'SUPER')
+        {
+            echo DwHtml::buttonTable("Eliminar $elemento", $url_eliminar, 
+                    array('class'=>'js-confirm', 'msg-title'=>"Eliminar $elemento: ".$nombre, 'msg'=>"Está seguro de eliminar este $elemento? <br />Recuerda que esta operación no se puede reversar."), 'default', 'fa-minus');
+        }
+    }
+?>

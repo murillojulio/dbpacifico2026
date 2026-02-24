@@ -1,0 +1,21 @@
+   <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del daño</th>
+                                        <th>Veces usado</th>
+                                        <th class="btn-actions col-blocked text-center">Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($danos as $dano): ?>                                        
+                                        <tr>
+                                            <td><?php echo $dano->nombre; ?></td>
+                                            <td><?php echo $dano->veces_usado; ?></td>                                                
+                                            <td class="btn-actions">                                                
+                                                <button id="btn-editar-dano-<?php echo $dano->id?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" onclick="setVariablesEditar(<?php echo $tipo_dano_id.",".$dano->id.",'".$dano->nombre."'"; ?>)" data-toggle="modal" data-target="#modal_editar_dano"></button>
+                                                <button id="btn-eliminar-dano-<?php echo $dano->id?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariables(<?php echo $tipo_dano_id.",".$dano->id.",'".$dano->nombre."'"; ?>)" data-toggle="modal" data-target="#modal_eliminar_dano"></button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>

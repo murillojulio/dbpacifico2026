@@ -1,0 +1,42 @@
+<?php DwForm::open() ?>
+<div class="btn-toolbar btn-toolbar-top">
+            <div class="row">
+                <div class="btn-actions">    
+                    <button title="Agregar ubicación" type="button" class="btn btn-success btn-default" data-toggle="modal" data-target="#myModalAddUbicacion">
+                         AGREGAR UBICACIÓN<!-- <i class="btn-icon-only fa fa-minus"></i>-->
+                    </button>
+                </div>            
+            </div>
+        </div>
+                         
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>DEPARTAMENTO</th>
+                    <th>SUBREGION</th>
+                    <th>MUNICIPIO</th>                                        
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>                
+                <?php                 
+                $contador_ubicacion = 1;
+                foreach($ubicaciones as $ubicacion):               
+                        ?>
+                        <tr>                       
+                        <td><?php echo $ubicacion->departamento_nombre; ?></td>
+                        <td><?php echo $ubicacion->getMunicipio()->getSubregion()->nombre; ?></td>
+                        <td><?php echo $ubicacion->municipio_nombre; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver ubicacion', "observatorio/territorios/ver_ubicacion/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); ?>
+                           <?php 
+                                    echo '<button onclick="setIdBorrarUbicacion(this.value)" title="Eliminar ubicación" value="'.$ubicacion->id.'" id="btn_delete_ubicacion'.$ubicacion->id.'" type="button" class="btn btn-danger btn-small" data-toggle="modal" data-target="#myModalDeleteUbicacion">';
+                                    echo '<i class="btn-icon-only fa fa-minus"></i></button></div>';
+                            ?>                           
+                        </td>
+                    </tr>
+                                  
+                    <?php $contador_ubicacion++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>

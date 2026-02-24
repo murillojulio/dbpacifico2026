@@ -1,0 +1,311 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process_estado_nivel('territorio', $obj_territorio, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+    
+    
+     <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="<?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Población</a></li>       
+        <li class="<?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Comunidades</a></li> 
+        <li class="<?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Conflictos</a></li> 
+        <li class="<?php echo $tab_5_active; ?>"><a href="#tab5" data-toggle="tab">Fuente(s) de la información</a></li> 
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Población</a></li>        
+        <li class="tab-pane <?php echo $tab_3_active; ?>" ><a href="#tab3" data-toggle="tab">Comunidades</a></li>
+        <li class="tab-pane <?php echo $tab_4_active; ?>" ><a href="#tab4" data-toggle="tab">Conflictos</a></li>
+        <li class="tab-pane <?php echo $tab_5_active; ?>" ><a href="#tab5" data-toggle="tab">Fuente(s) de la información</a></li>
+    </ul>
+
+    <div class="tab-content"> 
+        <div class="tab-pane <?php echo $tab_1_active; ?>" id="tab1">   
+            &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $obj_territorio->territorio_in;?>
+                <div class="row">                          
+                    <div class="col-md-6">                           
+                        <?php echo DwForm::hidden('territorio.tipo', NULL, $obj_territorio->tipo); ?>
+                        <?php echo DwForm::hidden('territorio.departamento_id', NULL, $obj_territorio->departamento_id); ?>
+                        <?php echo DwForm::text('territorio.nombre', array('class'=>'input-required'), $obj_territorio->nombre, 'Nombre'); ?>
+                    </div>
+                     <div class="col-md-6">  
+                         <?php echo DwForm::select('territorio.titulado', array(''=>'Seleccione', 'SI'=>'SI', 'NO'=>'NO'), array('class'=>' input-required'), $obj_territorio->titulado, '¿Titulado?'); ?>
+                    </div>
+                </div>
+            <div class="row">
+                <div class="col-md-6">
+                           <?php View::partial('ubicacion_territorio/editar', false, 
+                                   array('ubicaciones'=>$ubicaciones, 
+                                       'territorio_id'=>$obj_territorio->id,
+                                       'titulo'=>'del territorio')); ?>  
+                    </div>
+            </div>
+               <div class="row">
+                    <div id="div_titulado_si">
+                        <?php                            
+                                $array_titulado_si = (array) $obj_titulado_si;                               
+                                echo View::partial('titulado_si/editar', false, array('array_titulado_si'=>$array_titulado_si)); 
+                         ?> 
+                    </div>                    
+                    <div id="div_titulado_no">
+                        <?php                            
+                                $array_titulado_no = (array) $obj_titulado_no;
+                                echo View::partial('titulado_no/editar', false, array('array_titulado_no'=>$array_titulado_no));                                 
+                         ?> 
+                    </div> 
+                          
+                </div>
+        <script type="text/javascript">
+			
+            $("#territorio_titulado").change(function(){
+            var si_no = $("#territorio_titulado").val();
+
+            if(si_no == 'SI'){
+                $("#div_titulado_si").show();
+                $("#div_titulado_no").hide();
+            }
+            else{
+                $("#div_titulado_si").hide();
+                $("#div_titulado_no").show();
+            }
+
+        });
+        
+        if($("#territorio_titulado").val() == 'SI'){
+                $("#div_titulado_si").show();
+                $("#div_titulado_no").hide();
+            }
+            else{
+                $("#div_titulado_si").hide();
+                $("#div_titulado_no").show();
+            }
+			
+            
+        </script>
+              
+       <div class="row">
+             <div class="form-actions">
+                      <div class="pull-left">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div> 
+                        <?php echo DwForm::send('Actualizar territorio'); ?>                                
+                  </div>
+        </div>
+        
+    </div>
+         <div class="tab-pane <?php echo $tab_2_active; ?>" id="tab2">
+                  &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $poblacion->poblacion_in;?>      
+                  <?php
+                    $array_poblacion = (array) $poblacion;
+                    echo View::partial('poblacion/editar', false, array('array_poblacion' => $array_poblacion, 'para_territorio' => 'si')); 
+                   ?>                                                
+                    
+                   <div class="row">
+                         <div class="col-md-6">
+                            <?php echo DwForm::text('territorio.cant_ninos_primera_inf', array('class'=>'formato_punto'), $obj_territorio->cant_ninos_primera_inf, 'Cantidad de niños con registro civil en edad de primera infancia'); ?>
+                        </div>
+                       <div class="col-md-6">
+                            <?php echo DwForm::text('territorio.cant_sin_ninos_primera_inf', array('class'=>'formato_punto'), $obj_territorio->cant_sin_ninos_primera_inf, 'Cantidad de niños sin registro civil en edad de primera infancia'); ?>
+                        </div>
+                   </div>
+              <div class="row">
+             <div class="form-actions">
+                      <div class="pull-left">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div> 
+                        <?php echo DwForm::send('Actualizar territorio'); ?>                                
+                  </div>
+        </div>
+    </div>
+        <div class="tab-pane <?php echo $tab_3_active; ?>" id="tab3">
+             <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <div class="col-md-3">
+                    <label for="btn_agregar_comunidad">&nbsp;</label>
+                <?php echo DwHtml::button("observatorio/territorios/agregar_comunidad/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/$order/$page/", 'agregar comunidad', array('class' => 'form-control btn-success', 'id' => 'btn_agregar_comunidad'), 'fa-check-square-o', APP_AJAX); ?>
+                    </div>
+                <div class="col-md-3">
+                         <?php echo DwForm::text('', array('class'=>'input-readonly'), $cantidad_comunidad, 'Cantidad total de comunidades de este territorio'); ?>
+                             </div>
+            </div>            
+        </div>
+    </div>
+                 
+                     <div class="container-overflow">
+                         
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE</th>                    
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_comunidad = 1;
+                foreach($comunidades as $comunidad): ?>
+                    
+                    <?php //$key_show = Security::setKey($comunidad->id, 'show_comunidad'); ?>
+                    <?php $key_upd  = Security::setKey($comunidad->id, 'upd_comunidad'); ?>                    
+                    <?php $key_del  = Security::setKey($comunidad->id, 'del_comunidad'); ?>
+                    <tr>
+                        <td><?php echo $contador_comunidad; ?></td>
+                        <td><?php echo $comunidad->nombre; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$comunidad->nivel, 'estado'=>$comunidad->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'comunidad',
+                                        "nombre"=>$comunidad->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"observatorio/territorios/editar_comunidad/$key_upd/$obj_territorio->tipo/$key/$order/$page/",
+                                        "url_eliminar"=>"observatorio/territorios/eliminar_comunidad/$obj_territorio->nombre/$comunidad->nombre/$key_del/$key/$order/$page/")); ?>
+                        </td>                       
+                    </tr>
+                    <?php $contador_comunidad++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+            <div class="row">
+                <div class="form-actions">
+                    <div class="pull-left">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div>                         
+                </div>                                
+            </div>
+    </div> 
+        
+        
+        <div class="tab-pane <?php echo $tab_4_active; ?>" id="tab4">
+             <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php echo DwHtml::button("observatorio/territorios/agregar_conflicto/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/$order/$page/", 'agregar conflicto', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>                   
+               
+            </div>            
+        </div>
+    </div>
+                 
+                     <div class="container-overflow">
+                         
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE</th>                    
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_conflicto = 1;
+                foreach($conflictos as $conflicto): ?>
+                    
+                    <?php //$key_show = Security::setKey($conflicto->id, 'show_conflicto'); ?>
+                    <?php $key_upd = Security::setKey($conflicto->id, 'upd_conflicto'); ?>                    
+                    <?php $key_del = Security::setKey($conflicto->id, 'del_conflicto'); ?>  
+                    <tr>
+                        <td><?php echo $contador_conflicto; ?></td>
+                        <td><?php echo $conflicto->nombre; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$conflicto->nivel, 'estado'=>$conflicto->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'conflicto',
+                                        "nombre"=>$conflicto->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"observatorio/territorios/editar_conflicto/$key_upd/$obj_territorio->tipo/$key/$order/$page/",
+                                        "url_eliminar"=>"observatorio/territorios/eliminar_conflicto/$obj_territorio->nombre/$obj_territorio->tipo/$conflicto->nombre/$key_del/$key/$order/$page/")); ?>
+                        </td>                           
+                    </tr>
+                    <?php $contador_conflicto++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             </div>
+            <div class="row">
+               <div class="form-actions">
+                      <div class="pull-left">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div>                         
+                  </div>                          
+            </div>
+    </div> 
+        
+        <div class="tab-pane <?php echo $tab_5_active; ?>" id="tab5">
+             <div class="row">
+                 <div class="col-md-12">
+                     <?php View::partial('fuentes/editar', false, array('fuentes'=>$fuentes)); ?>  
+                 </div>
+             </div>
+              <div class="row">
+                  <div class="form-actions">
+                      <div class="pull-left">
+                        <?php echo DwButton::back($url_redir_back); ?>
+                    </div> 
+                        <?php echo DwForm::send('Actualizar territorio'); ?>                                
+                  </div>
+              </div>
+    </div> 
+        
+        
+    </div>
+    <?php echo DwForm::close(); ?>
+
+</div>
+
+<script type='text/javascript'>
+    
+$("#form-1").submit(function(){
+    $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: '',
+        thousandsSeparator: ''
+    });    
+});
+
+ $(".formato_punto").priceFormat(
+    {
+        prefix: '',
+        centsLimit: 0,
+        centsSeparator: ',',
+        thousandsSeparator: '.'
+    }); 
+    
+    
+        
+        $(".formato_punto_coma").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 2,
+            centsSeparator: ',',
+            thousandsSeparator: '.'
+        });   
+$("#territorio_departamento_id").change(function(){
+	var regiones_id 	=	$('#territorio_departamento_id').val();
+        var departamento_id 	=	$('#territorio_departamento_id').val();
+        //var departamento_nombre =	$('#territorio_departamento_id').attr('id');
+        var departamento_nombre = $("#territorio_departamento_id option:selected").attr('texto');        
+        $.ajax({
+          type: "POST",
+          url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_check_municipios/'; ?>"+departamento_id+"/"+departamento_nombre+"/",
+          async: true,
+          data: "regiones_id=" + regiones_id,
+          success: function(html){
+            $("#div_municipios").html(html);
+          }
+        });
+});
+</script>

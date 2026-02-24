@@ -1,0 +1,174 @@
+<?php
+// Fecha actual del servidor (día-mes-año)
+$hoy = date('d-m-Y');
+?>
+
+<input id="fuente_cantidad" name="fuente[cantidad]" type="hidden" value="1">
+
+<div class="row">
+    <div class="col-md-2">
+        <button onclick="addFuenteInfo()" id="btnAdd" type="button" class="btn btn-success btn-xs">
+            <i class="btn-icon-only fa fa-plus"></i>
+        </button>
+        <button onclick="removeFuenteInfo()" id="btnDel" type="button" class="btn btn-danger btn-xs">
+            <i class="btn-icon-only fa fa-minus"></i>
+        </button>
+    </div>
+</div>
+
+<div class="fuente_1">
+    <div class="row">
+        <div class="col-md-2">
+            <?php echo DwForm::date(
+                'fuente.fecha1',
+                array(
+                    'class' => 'input-required',
+                    'data-date-format' => 'dd-mm-yyyy'
+                ),
+                $hoy,
+                'Fecha de la fuente'
+            ); ?>
+        </div>
+        <div class="col-md-10">
+            <?php echo DwForm::text(
+                'fuente.nombre1',
+                array('class'=>'input-lower input-required'),
+                NULL,
+                'Descripcion de la fuente'
+            ); ?>
+        </div>
+    </div>
+</div>
+
+<div class="fuente_2">
+    <div class="row">
+        <div class="col-md-2">
+            <?php echo DwForm::date(
+                'fuente.fecha2',
+                array(
+                    'class' => 'input-required',
+                    'data-date-format' => 'dd-mm-yyyy'
+                ),
+                '',
+                'Fecha de la fuente'
+            ); ?>
+        </div>
+        <div class="col-md-10">
+            <?php echo DwForm::text(
+                'fuente.nombre2',
+                array('class'=>'input-lower input-required'),
+                NULL,
+                'Descripcion de la fuente'
+            ); ?>
+        </div>
+    </div>
+</div>
+
+<div class="fuente_3">
+    <div class="row">
+        <div class="col-md-2">
+            <?php echo DwForm::date(
+                'fuente.fecha3',
+                array(
+                    'class' => 'input-required',
+                    'data-date-format' => 'dd-mm-yyyy'
+                ),
+                '',
+                'Fecha de la fuente'
+            ); ?>
+        </div>
+        <div class="col-md-10">
+            <?php echo DwForm::text(
+                'fuente.nombre3',
+                array('class'=>'input-lower input-required'),
+                NULL,
+                'Descripcion de la fuente'
+            ); ?>
+        </div>
+    </div>
+</div>
+
+<div class="fuente_4">
+    <div class="row">
+        <div class="col-md-2">
+            <?php echo DwForm::date(
+                'fuente.fecha4',
+                array(
+                    'class' => 'input-required',
+                    'data-date-format' => 'dd-mm-yyyy'
+                ),
+                '',
+                'Fecha de la fuente'
+            ); ?>
+        </div>
+        <div class="col-md-10">
+            <?php echo DwForm::text(
+                'fuente.nombre4',
+                array('class'=>'input-lower input-required'),
+                NULL,
+                'Descripcion de la fuente'
+            ); ?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    // Fecha del servidor disponible en JS
+    var FECHA_HOY = '<?php echo $hoy; ?>';
+
+    $("div.fuente_2").hide();
+    $("div.fuente_3").hide();
+    $("div.fuente_4").hide();
+    $('#btnDel').hide();
+
+    // Inicializar fechas ocultas con fecha del servidor
+    $('#fuente_fecha2').attr('value', FECHA_HOY);
+    $('#fuente_fecha3').attr('value', FECHA_HOY);
+    $('#fuente_fecha4').attr('value', FECHA_HOY);
+
+    $('#fuente_nombre2').attr('value', 'null');
+    $('#fuente_nombre3').attr('value', 'null');
+    $('#fuente_nombre4').attr('value', 'null');
+
+    var num = new Number(1);
+
+    function addFuenteInfo()
+    {
+        num++;
+        $("div.fuente_" + num).show();
+        $('#fuente_cantidad').attr('value', num);
+
+        // Cargar fecha del servidor al mostrar
+        $('#fuente_fecha' + num).attr('value', FECHA_HOY);
+        $('#fuente_nombre' + num).attr('value', '');
+
+        if (num <= 2)
+            $('#btnDel').show();
+
+        if (num == 1)
+            $('#btnDel').hide();
+
+        if (num == 4)
+            $('#btnAdd').hide();
+    }
+
+    function removeFuenteInfo()
+    {
+        $("div.fuente_" + num).hide();
+
+        // Mantener fecha del servidor
+        $('#fuente_fecha' + num).attr('value', FECHA_HOY);
+        $('#fuente_nombre' + num).attr('value', 'null');
+
+        num--;
+        $('#fuente_cantidad').attr('value', num);
+
+        if (num == 1)
+            $('#btnDel').hide();
+
+        if (num < 4)
+            $('#btnAdd').show();
+    }
+
+</script>

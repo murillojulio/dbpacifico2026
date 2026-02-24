@@ -1,0 +1,145 @@
+<?php View::flash(); ?>
+
+<?php 
+ echo '';
+?>
+<div class="container shell-view">    
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    <div class="container-overflow">   
+        
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+// Wait for both DOM and Highcharts to be ready
+$(document).ready(function() {
+    if (typeof Highcharts === 'undefined') {
+        console.error('Highcharts library failed to load');
+        return;
+    }
+    
+    $('#container').highcharts({
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 10,           // Reducido para mejor visualización
+                beta: 15,            // Ajustado para mejor ángulo
+                viewDistance: 25,
+                depth: 50            // Aumentado para más profundidad
+            },
+            backgroundColor: '#f9f9f9',
+            height: 500,             // Altura fija para mejor visualización
+            marginTop: 80            // Espacio para el título
+        },
+        title: {
+            text: 'Distribución de Entidades Territoriales por Departamento',
+            style: {
+                fontSize: '22px',
+                fontWeight: 'bold',
+                color: '#333'
+            }
+        },
+        subtitle: {
+            text: 'Municipios, territorios, comunidades negras y resguardos indígenas',
+            style: {
+                fontSize: '14px',
+                color: '#666'
+            }
+        },
+        xAxis: {
+            categories: [<?php echo $str_categories;?>],
+            crosshair: true,
+            labels: {
+                rotation: -45,       // Rotar etiquetas si son largas
+                style: {
+                    fontSize: '11px'
+                }
+            },
+            title: {
+                text: 'Departamentos',
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            }
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Cantidad',
+                style: {
+                    fontSize: '12px',
+                    fontWeight: 'bold'
+                }
+            },
+            gridLineColor: '#e6e6e6'
+        },
+        tooltip: {
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            borderColor: '#ccc',
+            borderRadius: 8,
+            shadow: true,
+            headerFormat: '<span style="font-size:12px; font-weight:bold">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:3px">{series.name}: </td>' +
+                '<td style="padding:3px"><b>{point.y:.0f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.1,   // Reducido para columnas más anchas
+                borderWidth: 0,
+                groupPadding: 0.15,  // Espacio entre grupos
+                depth: 40,           // Profundidad 3D
+                dataLabels: {
+                    enabled: true,
+                    rotation: 0,
+                    color: '#444',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        textOutline: '1px contrast'
+                    },
+                    format: '{point.y}'
+                }
+            }
+        },
+        legend: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            layout: 'horizontal',
+            itemStyle: {
+                fontSize: '12px',
+                fontWeight: 'normal'
+            },
+            itemMarginBottom: 5
+        },
+        colors: ['#2E7D32', '#1976D2', '#F57C00', '#C62828'], // Colores más distintivos
+        credits: {
+            enabled: false          // Quitar créditos de Highcharts
+        },
+        series: [{
+            name: 'Municipio',
+            data: [<?php echo $str_municipios;?>]
+        }, {
+            name: 'Territorio',
+            data: [<?php echo $str_territorios;?>]
+        }, {
+            name: 'Comunidad Negra',
+            data: [<?php echo $str_comunidad_negra;?>]
+        }, {
+            name: 'Resguardo Indígena',
+            data: [<?php echo $str_indigenas;?>]
+        }]
+    });
+});
+</script>
+<div id="container"></div>
+    </div>    
+</div>

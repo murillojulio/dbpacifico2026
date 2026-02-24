@@ -1,0 +1,65 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+//    $(function() {
+//        $('table').kgrid({
+//            form_to:    $.KumbiaPHP.publicPath+'opcion/asociacion_cabildo_zonal/buscar/', 
+//            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+//            order_to:   $.KumbiaPHP.publicPath+"opcion/asociacion_cabildo_zonal/listar/"            
+//        });
+//    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/asociacion_cabildo_zonal/agregar/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($asociacion_cabildo_zonals->items as $asociacion_cabildo_zonal): ?>
+                    <?php $key_show = Security::setKey($asociacion_cabildo_zonal->id, 'show_asociacion_cabildo_zonal'); ?>
+                    <?php $key_upd = Security::setKey($asociacion_cabildo_zonal->id, 'upd_asociacion_cabildo_zonal'); ?>
+                    <?php $key_inac = Security::setKey($asociacion_cabildo_zonal->id, 'inactivar_asociacion_cabildo_zonal'); ?>
+                    <?php $key_reac = Security::setKey($asociacion_cabildo_zonal->id, 'reactivar_asociacion_cabildo_zonal'); ?>
+                    <?php $key_del = Security::setKey($asociacion_cabildo_zonal->id, 'eliminar_asociacion_cabildo_zonal'); ?>
+                    <tr>
+                        <td><?php echo $asociacion_cabildo_zonals->counter; ?></td>
+                        <td><?php echo $asociacion_cabildo_zonal->nombre; ?></td>
+                        <td><?php echo $asociacion_cabildo_zonal->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver', "opcion/asociacion_cabildo_zonal/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar', "opcion/asociacion_cabildo_zonal/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($asociacion_cabildo_zonal->estado == AsociacionCabildoZonal::ACTIVO ) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar', "opcion/asociacion_cabildo_zonal/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar', "opcion/asociacion_cabildo_zonal/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar', "opcion/asociacion_cabildo_zonal/eliminar/$key_del/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar: '.$asociacion_cabildo_zonal->nombre, 'msg'=>'Está seguro de eliminar este? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $asociacion_cabildo_zonals->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$asociacion_cabildo_zonals, 'url'=>"opcion/asociacion_cabildo_zonal/listar/$order/")); ?>
+</div>

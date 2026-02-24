@@ -1,0 +1,32 @@
+<?php View::flash(); ?>
+
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php //echo DwHtml::button("afectacion/megaproyectos/listar/agroindustria", 'AGROINDUSTRIA', array('class' => 'btn-danger btn-lg'), '', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container shell-view">
+        <div class="row">
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/subtipo_megaproyecto/listar/1", 'OBRA DE INFRAESTRUCTURA', array('class' => 'btn-success btn-lg'), '', APP_AJAX); ?>
+            </div> 
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/subtipo_megaproyecto/listar/2", 'ECONOMÍA EXTRACTIVA', array('class' => 'btn-success btn-lg'), '', APP_AJAX); ?>
+            </div>
+            <div class="col-md-4">
+                <?php echo DwHtml::button("opcion/subtipo_megaproyecto/listar/3", 'ECONOMÍA DE TRANSFORMACIÓN', array('class' => 'btn-success btn-lg'), '', APP_AJAX); ?>
+           </div>           
+        </div>
+    </div>
+
+    
+
+</div>

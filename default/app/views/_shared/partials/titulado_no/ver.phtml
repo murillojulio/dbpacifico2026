@@ -1,0 +1,53 @@
+<?php ?><div class="col-md-12">
+              
+                <label for="panel_solicitud_titulo"><h3 class="panel-title">Solicitud de título</h3></label>   
+                <div id="panel_solicitud_titulo" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-3">                              
+                            <?php echo DwForm::date('tituladono.solicitud_titulo_fecha', array('class'=>'input-readonly'), substr($array_titulado_no['solicitud_titulo_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                        </div> 
+                        <div class="col-md-3">
+                            <label for="tituladono_solicitud_titulo_area">Area solicitada<!--<span class="req">*</span>--></label>
+                                     <div class="form-group">
+                                        <div class="input-group">                                 
+                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format($array_titulado_no['solicitud_titulo_area'], 2, '.', ','); ?>" class="form-control formato_punto_coma" readonly="readonly" data-invalid="">                                          
+                                          <div class="input-group-addon">Hectáreas</div>                                          
+                                        </div>
+                                      </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_limite_lindero', array('class'=>'input-lower input-readonly'), $array_titulado_no['solicitud_titulo_limite_lindero'], 'Límite / lindero'); ?>                  
+                        </div>
+                           <div class="col-md-6">
+                                
+                                   <?php echo DwForm::textarea('tituladono.solicitud_titulo_observacion', array('class'=>'input-lower input-readonly'), $array_titulado_no['solicitud_titulo_observacion'], 'Observaciones'); ?>                  
+                        </div>
+                          
+                      </div>
+                      <div class="row">    
+         <?php 
+            if($array_titulado_no['documento_solicitud_titulo'] != '')            
+            {                
+                echo '<div class="col-md-9">';                        
+                echo '<a id="enlace_documento_con" class="btn btn-info" target="_blank" href="'.PUBLIC_PATH.'files/upload/territorio/resolucion/documento_solicitud_titulo/'.$array_titulado_no['documento_solicitud_titulo'].'">';
+                echo '<i class="fa fa-pd-expand fa-eye"></i>Ver documento de solicitud de título</a>';                            
+                echo '</div>';
+                echo DwForm::hidden('tituladosi.documento_solicitud_titulo', NULL, $array_titulado_no['documento_solicitud_titulo']);
+                                  
+            }
+         ?>
+     </div>
+                  </div>
+                </div>
+                
+                                                   
+                  
+ </div>
+ 
+
+ 
+<?php //echo time(); ?>

@@ -1,0 +1,16 @@
+ 
+              
+               <?php 
+               $contador = 1;
+               foreach($fuentes as $fuente): ?>
+                    <?php echo "<div class='row'>"; ?>                                
+                       <?php echo "<div  class='col-md-2'><div class='form-group'>"; ?>  
+              <?php echo "<label for='fecha".$contador."'>Fecha</label>"; ?>
+                 <?php echo "<input id='fecha".$contador."' type='text' value='".substr($fuente->fecha, 0, 10)."' class='form-control input-readonly' readonly='readonly'>"; ?>                                    
+               <?php echo "</div> </div> <div class='col-md-10'><div class='form-group'>"; ?>    
+              <?php echo "<label for='nombre".$contador."'>Descripción de la fuente</label>"; ?>
+                 <?php echo "<input id='nombre".$contador."' type='text' value='".$fuente->nombre."' class='form-control input-readonly' readonly='readonly'>"; ?>                                    
+              <?php echo "</div></div></div>"; ?>   
+               <?php $contador++; ?>
+                <?php endforeach; ?>
+        

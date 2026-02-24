@@ -1,0 +1,42 @@
+<?php View::flash(); ?>
+ <div class="modal fade" id="modal-editar-dano">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Editar daño</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">  
+                        <div class="col-md-12">
+                            <?php echo DwForm::hidden("afectacion_dano_territorio.id", NULL, $afectacion_dano_territorio_id);?> 
+                            <div class="form-group">
+                            <label for="editar_afectacion_dano_territorio_territorio_id">Territorio afectado<span class="req">*</span></label>
+                            <?php 
+                            $tipo_dano_id = $AfectacionDanoTerritorio->getDano()->getTipoDano()->id;
+                            echo DwForm::dbSelect('editar_afectacion_dano_territorio.territorio_id', 'nombre', array('observatorio/territorio', 'getListadoTerritoriosDBS', $afectacion_id, $territorio_id), NULL, array('class' => '', 'onchange'=>'validarBotonEditarDano()'), $AfectacionDanoTerritorio->territorio_id, 'Territorio afectado'); ?>
+                            </div>
+                            <div class="form-group">
+                            <label for="editar_afectacion_dano_territorio_tipo_dano_id">Tipo de daño<span class="req">*</span></label>
+                                <?php echo DwForm::dbSelect('editar_afectacion_dano_territorio.tipo_dano_id', 'nombre', array('opcion/tipo_dano', 'getListadoTipoDanoDBS', NULL), NULL, array('class' => '', 'onchange'=>'onChangeTipoDanoEditar()'), $tipo_dano_id, 'Tipo de daño'); ?>
+                            </div>
+                            <div class="form-group">
+                            <div id="div_select_dano_editar">
+                                <label for="editar_afectacion_dano_territorio_dano_id">Daño<span class="req">*</span></label>
+                                <?php echo DwForm::dbSelect('editar_afectacion_dano_territorio.dano_id', 'nombre', array('opcion/dano', 'getDanoByTipoDanoIdDBS', $tipo_dano_id), NULL, array('class'=>'', 'onchange'=>'validarBotonEditarDano()'), $AfectacionDanoTerritorio->dano_id, 'Daño'); ?>
+                            </div>
+                            </div>
+                            <div class="form-group">
+                            <label for="editar_afectacion_dano_territorio_descripcion">Descripción<span class="req">*</span></label>
+                            <?php echo DwForm::textarea('editar_afectacion_dano_territorio.descripcion', array('class'=>'input-lower', 'onkeyup'=>'validarBotonEditarDano()', 'style'=>"height: 130px;"), $AfectacionDanoTerritorio->descripcion, 'Descripción del daño'); ?>
+                            </div>
+                        </div>                       
+                    </div>                                   
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cancelar-guardar-cambio-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button id="btn-guardar-cambio-dano" type="button" class="btn btn-success" onclick="guardarCambiosDano()" data-loading-text="Guardando...">Guardar cambios</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

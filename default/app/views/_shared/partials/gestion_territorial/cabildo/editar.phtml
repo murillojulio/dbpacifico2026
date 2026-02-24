@@ -1,0 +1,72 @@
+       
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php
+                $cabildo = $array_validacion_cabildo['cabildo'];
+                $cabildo_mayor = $array_validacion_cabildo['cabildo_mayor'];
+                $cabildo_local = $array_validacion_cabildo['cabildo_local'];
+                
+                if($cabildo == 1 && $cabildo_mayor == 0)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo mayor', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo local', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                }
+                if($cabildo == 0 && $cabildo_mayor == 0)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo', array('class' => 'btn-success', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo mayor', array('class' => 'btn-success', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo local', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                }                
+                if($cabildo == 0 && $cabildo_mayor == 1)
+                {
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/1/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/2/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo mayor', array('class' => 'btn-success disabled', 'title'=>''), 'fa-check-square-o', APP_AJAX);                    
+                    echo DwHtml::button("gestion_territorial/gestion_tcci/agregar_cabildo/3/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", 'agregar cabildo local', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                }
+                ?>                   
+            </div>            
+        </div>
+    </div>                   
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th>NOMBRE DEL CABILDO</th>             
+                    <th>TIPO DE CABILDO</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_cabildo = 1;
+                foreach($cabildos as $cabildo): ?>                    
+                    <?php //$key_show = Security::setKey($cabildo->id, 'show_cabildo'); ?>
+                    <?php $key_upd = Security::setKey($cabildo->id, 'upd_cabildo'); ?>                    
+                    <?php $key_del = Security::setKey($cabildo->id, 'del_cabildo'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_cabildo; ?></td>                        
+                        <td><?php echo $cabildo->nombre; ?></td>
+                        <td><?php echo $cabildo->tipo_cabildo; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$cabildo->nivel, 'estado'=>$cabildo->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'cabildo',
+                                        "nombre"=>$cabildo->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"gestion_territorial/gestion_tcci/editar_cabildo/$key_upd/$key/$order/$page/",
+                                        "url_eliminar"=>"gestion_territorial/gestion_tcci/eliminar_cabildo/$cabildo->nombre/$obj_territorio->nombre/$key_del/$key/$order/$page/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver cabildo', "gestion_territorial/gestion_tcci/ver_cabildo/$key_show/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar cabildo', "gestion_territorial/gestion_tcci/editar_cabildo/$key_upd/$key/$order/$page/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_cabildo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+<br>                 
+              

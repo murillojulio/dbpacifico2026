@@ -1,0 +1,71 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  $departamento_id), NULL, array('class'=>'input-required'), NULL, 'Municipio'); ?>
+
+<script type="text/javascript">
+    $(document).ready(function() 
+    {               
+        $("#caso_municipio_id").on('change', function(e) {
+            jsSpinner('show');            
+            gestionCampoBarrios('ocultar');
+            let datos = new FormData();
+            var municipio_id = $('#caso_municipio_id').val();
+            datos.append('municipio_id', municipio_id);
+            fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_territorios/'; ?>",
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('data = ', data);
+                $("#div_territorio").html(data);
+                $("#caso_territorio_id").focus();
+                $("#caso_localidad_id").val('');  
+                cargarlocalidades(municipio_id);
+                //jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                console.error(err);
+            });
+        });
+
+        function cargarlocalidades(municipio_id){
+            let datos = new FormData();
+            datos.append('municipio_id', municipio_id);
+            fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_localidades/'; ?>",
+            {
+                method: 'POST',        
+                body: datos
+            }).then(function(response) {
+                /*console.log('response =', response);*/
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('data = ', data);
+                $("#div_localidades").html(data);
+                gestionBtnAgregarLocalidad(municipio_id);
+                jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                console.error(err);
+            });
+        }
+
+        function gestionBtnAgregarLocalidad(municipio_id_in){
+            if(municipio_id_in != ''){
+                $("#btn_caso_localidad_corregimiento").prop('disabled', false);
+                $("#btn_caso_localidad_vereda").prop('disabled', false);
+                $("#btn_caso_localidad_inspeccion").prop('disabled', false);
+            }else{
+                $("#btn_caso_localidad_corregimiento").prop('disabled', true);
+                $("#btn_caso_localidad_vereda").prop('disabled', true);
+                $("#btn_caso_localidad_inspeccion").prop('disabled', true);
+            }            
+        }
+    });
+        
+</script>

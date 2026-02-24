@@ -1,0 +1,28 @@
+<?php View::flash();?>
+<div id="div_gestion_promotores">
+    <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>PROMOTOR DEL CULTIVO</th>
+                <th>DESCRIPCION</th>
+                <th style="width:80px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($CultivoIlicitoPresuntoResponsable as $promotores) :
+            ?>
+                <tr>
+                    <td><?php echo $promotores->responsable; ?></td>
+                    <td><?php echo $promotores->descripcion_presunto_responsable; ?></td>
+                    <td class="btn-actions">
+                        <button id="btn-editar-promotor-<?php echo $promotores->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" data-loading-text="Cargando..." onclick="cargarModalEditarPromotor(<?php echo $promotores->id; ?>)"></button>                        
+                        <button id="btn-eliminar-promotor-<?php echo $promotores->id ?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariablesEliminarPromotor(<?php echo $promotores->id; ?>)" data-toggle="modal" data-target="#modal_eliminar_promotor" title="Eliminar"></button>
+                    </td>
+                </tr>
+            <?php
+            endforeach;
+            ?>
+        </tbody>
+    </table>
+</div>

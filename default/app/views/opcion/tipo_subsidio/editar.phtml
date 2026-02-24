@@ -1,0 +1,24 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                        <?php echo DwForm::text('tipo_subsidio.nombre', array('class'=>'input-required'), $tipo_subsidio->nombre, 'Nombre'); ?>
+                    </div>             
+        </div>           
+
+       <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar tipo subsidio'); ?>
+                <?php echo DwForm::cancel('opcion/tipo_subsidio/listar/'); ?>
+                <?php echo DwForm::focus('tipo_subsidio.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>

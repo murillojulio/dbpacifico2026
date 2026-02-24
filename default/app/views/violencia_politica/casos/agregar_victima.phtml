@@ -1,0 +1,84 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+            <div class="col-md-12">
+               <div class="row">  
+                   <?php echo DwForm::hidden("victima.caso_id", NULL, $caso->id);?>                   
+                        <div class="col-md-6">
+                            <?php echo DwForm::text('victima.nombre', array('class'=>'input-required'), NULL, 'Nombre(s) y Apellido(s)'); ?>
+                        </div>
+                        <div class="col-md-3">
+                        <?php echo DwForm::dbSelect('victima.genero_id', 'nombre', array('opcion/genero', 'getListadoGeneroDBS', Genero::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Género'); ?>
+                        </div>
+                    <div class="col-md-3">
+                        <?php echo DwForm::number('victima.edad', array('class'=>'input-integer', 'placeholder'=>'SIN INFORMACIÓN'), NULL, 'Edad'); ?>
+                    </div>
+               </div>
+                 <div class="row">                   
+                     <div class="col-md-6">
+                            <?php echo DwForm::text('victima.ocupacion', array('class'=>'input-required'), NULL, 'Ocupación'); ?>
+                        </div>                        
+                     <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('victima.caracterizacion_id', 'nombre', array('opcion/caracterizacion', 'getListadoCaracterizacionDBS', Caracterizacion::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Perfil'); ?>
+                        </div>
+                        
+               </div>
+                <div class="row">               
+                        <div class="col-md-6">
+                            <?php echo DwForm::dbSelect('victima.etnia_id', 'nombre', array('opcion/etnia', 'getListadoEtniaDBS', 'etnia'), NULL, array('class'=>''), NULL, 'Etnia'); ?>
+                        </div>
+                    <div id="div_etnia_indigena_id" class="col-md-6">
+                            <?php echo DwForm::dbSelect('victima.etnia_indigena_id', 'nombre', array('opcion/etnia', 'getListadoEtniaDBS', 'indigena'), NULL, array('class'=>''), NULL, 'Etnia indígena'); ?>
+                        </div>
+                </div>
+                <div class="row">
+                     <div class="col-md-6">
+                 <label for="panel_antecedentes">Antecedentes de la víctima relacionados con violencia</label>
+                    <div id="panel_antecedentes" class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="col-md-12">
+                                <?php echo DwForm::dbCheckId('antecedente_violencia','nombre',array('opcion/antecedente_violencia','getListadoAntecedenteViolenciaDBS'), NULL, NULL, 2, '6'); ?>
+                            </div>
+                        </div>
+                    </div> 
+             </div>  
+                </div>
+               
+            </div>             
+        </div>                        
+
+        <div class="row">
+            <div class="form-actions">                   
+                <?php echo DwForm::send('Guardar víctima'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php echo DwForm::focus('victima.nombre');?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?> 
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+ $("#div_etnia_indigena_id").hide();
+ $("#victima_etnia_id").on('change', function(e) {
+            var etnia_id = $('#victima_etnia_id').val();
+            if(etnia_id == 2)
+                {
+                   $("#div_etnia_indigena_id").show(); 
+                }
+                else
+                {
+                    $("#div_etnia_indigena_id").hide();
+                    $("#victima_etnia_indigena_id").val('');
+                }
+        });
+    });
+        
+</script>

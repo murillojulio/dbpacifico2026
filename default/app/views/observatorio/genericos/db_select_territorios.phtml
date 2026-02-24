@@ -1,0 +1,20 @@
+<label for="select_territorio_id">
+    Seleccione el territorio afectado<span class="req">*</span>
+</label>
+<?php echo DwForm::hidden('megaproyecto_territorio.territorio_nombre', NULL, '') ?>
+<?php echo DwForm::dbSelect('megaproyecto_territorio.territorio_id', 'nombre', array('observatorio/territorio', 'getListadoTerritorioByDepartamentoIdDBS', $departamento_id), NULL, array('class'=>'input-required'), NULL, 'Seleccione el territorio'); ?>
+<p class="help-block"> 
+    <small class="help-error"></small>
+</p>
+
+<script type='text/javascript'>
+       
+$("#megaproyecto_territorio_territorio_id").change(function(){
+
+    $("#div_impactos").show();
+    $("#impacto_ambiental_si_no").focus();
+    var territorio_nombre = $("#megaproyecto_territorio_territorio_id option:selected").attr('texto');
+    $("#megaproyecto_territorio_territorio_nombre").val(territorio_nombre);
+        
+});
+</script>

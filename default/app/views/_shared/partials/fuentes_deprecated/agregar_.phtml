@@ -1,0 +1,128 @@
+ 
+                         
+                             <input id="fuente_cantidad" name="fuente[cantidad]" type="hidden" value="1">
+                             <div class="row" >
+                                 <div class="col-md-2" >
+                                     <button onclick="addFuenteInfo()" id="btnAdd" type="button" class="btn btn-success btn-xs">
+                                       <i class="btn-icon-only fa fa-plus"></i> 
+                                      </button>
+                                     <button onclick="removeFuenteInfo()" id="btnDel" type="button" class="btn btn-danger btn-xs">
+                                        <i class="btn-icon-only fa fa-minus"></i>
+                                      </button>                              
+                                 </div>                                 
+                             </div>
+                            
+                             
+                      <div class="fuente_1">
+                         <div class="row">                                
+                          <div  class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha1', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre1', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                        </div>
+                    </div>
+                            
+                             
+                         <div class="fuente_2">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha2', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre2', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                             </div>
+                               
+                         <div class="fuente_3">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha3', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre3', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                         </div>                                
+                                     
+                          <div class="fuente_4">
+                         <div class="row">
+                          <div class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha4', array('class'=>'input-required'), '', 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-10">                                   
+                            <?php echo DwForm::text('fuente.nombre4', array('class'=>'input-lower input-required'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>                          
+                     </div>
+                         </div>
+                                         
+ 
+    <div>
+       
+    </div> 
+                         
+    
+                               
+            <script type="text/javascript">
+        
+        
+        $("div.fuente_2").hide();
+        $("div.fuente_3").hide();
+        $("div.fuente_4").hide();
+        $('#btnDel').hide();
+        
+        $('#fuente_fecha2').attr('value', '2000-01-01');
+        $('#fuente_fecha3').attr('value', '2000-01-01');
+        $('#fuente_fecha4').attr('value', '2000-01-01');
+        $('#fuente_nombre2').attr('value', 'null');
+        $('#fuente_nombre3').attr('value', 'null');
+        $('#fuente_nombre4').attr('value', 'null');
+        
+        
+        var num = new Number(1);
+        function addFuenteInfo()
+        {            
+            num++;      // the numeric ID of the new input field being added          
+            $("div.fuente_"+num).show();
+            $('#fuente_cantidad').attr('value', num);
+            
+            $('#fuente_fecha'+num).attr('value', '');
+            $('#fuente_nombre'+num).attr('value', '');
+ 
+            
+            if (num <= 2)
+                 $('#btnDel').show(); 
+             
+             if (num == 1)
+                 $('#btnDel').hide(); 
+             
+             if (num == 4)
+                 $('#btnAdd').hide(); 
+              //$('#btnAdd').attr('disabled','disabled');    
+        }    
+        function removeFuenteInfo()
+        {            
+                  // the numeric ID of the new input field being added          
+            $("div.fuente_"+num).hide();
+            $('#fuente_fecha'+num).attr('value', '2000-01-01');
+            $('#fuente_nombre'+num).attr('value', 'null');
+            
+            num--;
+             $('#fuente_cantidad').attr('value', num);
+            
+            // enable the "remove" button
+            //$('#btnAdd').attr('disabled','');
+ 
+            // business rule: you can only add 5 names
+            if (num == 1)
+                $('#btnDel').hide();
+            
+            if (num < 4)
+                 $('#btnAdd').show(); 
+        }  
+        
+       
+    </script>
+    

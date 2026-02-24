@@ -1,0 +1,194 @@
+<?php 
+    $sub_tab_1_active = '';
+    $sub_tab_2_active = '';
+    $sub_tab_3_active = '';
+
+    if($sub_tab == '1' || $sub_tab == ''){ $sub_tab_1_active = 'active'; }
+    if($sub_tab == '2'){ $sub_tab_2_active = 'active'; }
+    if($sub_tab == '3'){ $sub_tab_3_active = 'active'; }
+?>
+
+
+<div class="container shell-view">
+<ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $sub_tab_1_active; ?>"><a href="#vin_tab1" data-toggle="tab">Empleo</a></li>
+        <li class="<?php echo $sub_tab_2_active; ?>"><a href="#vin_tab2" data-toggle="tab">Programas Sociales</a></li>       
+        <li class="<?php echo $sub_tab_3_active; ?>"><a href="#vin_tab3" data-toggle="tab">Subsidios</a></li> 
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">    
+        <li class="tab-pane <?php echo $sub_tab_1_active; ?>"><a href="#vin_tab1" data-toggle="tab">Empleo</a></li>
+        <li class="tab-pane <?php echo $sub_tab_2_active; ?>"><a href="#vin_tab2" data-toggle="tab">Programas Sociales</a></li>        
+        <li class="tab-pane <?php echo $sub_tab_3_active; ?>" ><a href="#vin_tab3" data-toggle="tab">Subsidios</a></li>
+    </ul>
+
+        <div class="tab-content"> 
+            <div class="tab-pane <?php echo $sub_tab_1_active; ?>" id="vin_tab1">            
+                <div class="col-md-12">
+                <div class="row">
+                 <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL EMPLEADOR</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_empleo = 1;
+                foreach($empleos as $empleo): ?>                    
+                    <?php //$key_show = Security::setKey($empleo->id, 'show_empleo'); ?>
+                    <?php $key_upd = Security::setKey($empleo->id, 'upd_empleo'); ?>                    
+                    <?php $key_del = Security::setKey($empleo->id, 'del_empleo'); ?>
+                    <tr>
+                        <td><?php echo $contador_empleo; ?></td>
+                        <td><?php echo $empleo->nombre; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$empleo->nivel, 'estado'=>$empleo->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'empleo',
+                                        "nombre"=>$empleo->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/megaproyectos/editar_empleo/$key_upd/$megaproyecto->clase_megaproyecto/$key/",
+                                        "url_eliminar"=>"afectacion/megaproyectos/eliminar_empleo/$key_del/$megaproyecto->clase_megaproyecto/$key/$empleo->nombre/$megaproyecto->nombre/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver empleo', "afectacion/megaproyectos/ver_empleo/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar empleo', "afectacion/megaproyectos/editar_empleo/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_empleo++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+          
+                </div>
+            </div>
+                </div>
+            
+            <!-- SEGUNDA PESTAÑA --------------------->
+        
+        <div class="tab-pane <?php echo $sub_tab_2_active; ?>" id="vin_tab2">            
+            <div class="col-md-12">     
+            <div class="row">
+                   <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("afectacion/megaproyectos/agregar_programa_social/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar programa social', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL PROGRAMA SOCIAL</th>                    
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_programa_social = 1;
+                foreach($programa_sociales as $programa_social): ?>                    
+                    <?php //$key_show = Security::setKey($programa_social->id, 'show_programa_social'); ?>
+                    <?php $key_upd = Security::setKey($programa_social->id, 'upd_programa_social'); ?>                    
+                    <?php $key_del = Security::setKey($programa_social->id, 'del_programa_social'); ?>                    
+                    <tr>
+                        <td><?php echo $contador_programa_social; ?></td>
+                        <td><?php echo $programa_social->nombre; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$programa_social->nivel, 'estado'=>$programa_social->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'programa social',
+                                        "nombre"=>$programa_social->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/megaproyectos/editar_programa_social/$key_upd/$megaproyecto->clase_megaproyecto/$key/",
+                                        "url_eliminar"=>"afectacion/megaproyectos/eliminar_programa_social/$key_del/$megaproyecto->clase_megaproyecto/$key/$programa_social->nombre/$megaproyecto->nombre/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver programa social', "afectacion/megaproyectos/ver_programa_social/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar programa social', "afectacion/megaproyectos/editar_programa_social/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_programa_social++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             
+          
+                </div>
+            </div>
+        
+        <div class="tab-pane <?php echo $sub_tab_3_active; ?>" id="vin_tab3">            
+            <div class="col-md-12">
+            <div class="row">
+                           <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">                
+                <?php //echo DwHtml::button("afectacion/megaproyectos/agregar_empleo/$obj_territorio->id/$obj_territorio->nombre/$obj_territorio->tipo/$key/", 'agregar empleo', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);
+                    echo DwHtml::button("afectacion/megaproyectos/agregar_subsidio/$megaproyecto->id/$megaproyecto->nombre/$megaproyecto->clase_megaproyecto/$key/", 'agregar subsidio', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX);?>                   
+            </div>            
+        </div>
+    </div>
+                 
+                          
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-order="nombre">NOMBRE DEL SUBSIDIO</th>                    
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $contador_subsidio = 1;
+                foreach($subsidios as $subsidio): ?>                    
+                    <?php //$key_show = Security::setKey($subsidio->id, 'show_subsidio'); ?>
+                    <?php $key_upd = Security::setKey($subsidio->id, 'upd_subsidio'); ?>                    
+                    <?php $key_del = Security::setKey($subsidio->id, 'del_subsidio'); ?> 
+                    <tr>
+                        <td><?php echo $contador_subsidio; ?></td>
+                        <td><?php echo $subsidio->nombre; ?></td>
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$subsidio->nivel, 'estado'=>$subsidio->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'subsidio',
+                                        "nombre"=>$subsidio->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/megaproyectos/editar_subsidio/$key_upd/$megaproyecto->clase_megaproyecto/$key/",
+                                        "url_eliminar"=>"afectacion/megaproyectos/eliminar_subsidio/$key_del/$megaproyecto->clase_megaproyecto/$key/$subsidio->nombre/$megaproyecto->nombre/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php //echo DwHtml::buttonTable('Ver subsidio', "afectacion/megaproyectos/ver_subsidio/$key_show/$megaproyecto->clase_megaproyecto/$key/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar subsidio', "afectacion/megaproyectos/editar_subsidio/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); ?>                            
+                        </td>-->
+                    </tr>
+                    <?php $contador_subsidio++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+             
+          
+                </div>
+            </div>
+        </div>  
+    </div>

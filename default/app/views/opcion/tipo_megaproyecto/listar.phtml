@@ -1,0 +1,65 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'opcion/impacto/buscar/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"opcion/impacto/listar/"            
+        });
+    });
+</script>
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("opcion/subtipo_megaproyecto/agregar/$tipo_megaproyecto_id/", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="cant_municipio_reg" data-order="cant_municipio_reg">VECES USADO</th>
+                    <th class="btn-actions col-blocked text-center">ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($subtipo_megaproyectos->items as $subtipo_megaproyecto): ?>
+                    <?php $key_show = Security::setKey($subtipo_megaproyecto->id, 'show_subtipo_megaproyecto'); ?>
+                    <?php $key_upd = Security::setKey($subtipo_megaproyecto->id, 'upd_subtipo_megaproyecto'); ?>
+                    <?php $key_inac = Security::setKey($subtipo_megaproyecto->id, 'inactivar_subtipo_megaproyecto'); ?>
+                    <?php $key_reac = Security::setKey($subtipo_megaproyecto->id, 'reactivar_subtipo_megaproyecto'); ?>
+                    <?php $key_del = Security::setKey($subtipo_megaproyecto->id, 'eliminar_subtipo_megaproyecto'); ?>
+                    <tr>
+                        <td><?php echo $subtipo_megaproyectos->counter; ?></td>
+                        <td><?php echo $subtipo_megaproyecto->nombre; ?></td>
+                        <td><?php echo $subtipo_megaproyecto->cant_sector; ?></td>                                                
+                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver subtipo megaproyecto', "opcion/subtipo_megaproyecto/ver/$key_show/", null, 'info', 'fa-eye'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar subtipo megaproyecto', "opcion/subtipo_megaproyecto/editar/$key_upd/$tipo_megaproyecto_id/", null, 'warning', 'fa-edit'); ?>                            
+                             <?php if($subtipo_megaproyecto->estado == SubtipoMegaproyecto::ACTIVO) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar subtipo megaproyecto', "opcion/subtipo_megaproyecto/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } else { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar subtipo megaproyecto', "opcion/subtipo_megaproyecto/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                            <?php echo DwHtml::buttonTable('Eliminar subtipo megaproyecto', "opcion/subtipo_megaproyecto/eliminar/$key_del/$tipo_megaproyecto_id/", array('class'=>'js-confirm', 'msg-title'=>'Eliminar subtipo megaproyecto', 'msg'=>'Está seguro de eliminar este subtipo megaproyecto? <br />Recuerda que esta operación no se puede reversar.'), 'danger', 'fa-ban'); ?>
+                        </td>
+                    </tr>
+                    <?php $subtipo_megaproyectos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+
+        </table>
+    </div>
+    <?php View::partial('paginators/default', false, array('page'=>$subtipo_megaproyectos, 'url'=>"opcion/subtipo_megaproyecto/listar/$order/")); ?>
+</div>

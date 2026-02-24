@@ -1,0 +1,56 @@
+<div class="btn-toolbar btn-toolbar-top">
+    <div class="row">
+        <div class="btn-actions">
+            <?php echo DwHtml::button("gestion_territorial/$controller/agregar_iniciativa_empresarial/$obj_territorio->id/$obj_territorio->nombre/$key/$order/$page/", isset($titulo_boton) ? $titulo_boton : 'agregar iniciativa empresarial', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+        </div>
+    </div>
+</div>
+<table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+    <thead>
+        <tr>
+            <th>NUM</th>
+            <th>NOMBRE</th>
+            <th>TIPO</th>
+            <th>ACTIVIDAD PRODUCTIVA</th>
+            <th>COBERTURA POBLACIÓN</th>
+            <th class="btn-actions text-center">ESTADO</th>
+            <th class="btn-actions col-blocked text-center">OPCIONES</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        $contador_iniciativa_empresarial = 1;
+        foreach ($iniciativa_empresarials as $iniciativa_empresarial) : ?>
+            <?php $key_upd = Security::setKey($iniciativa_empresarial->id, 'upd_iniciativa_empresarial'); ?>
+            <?php $key_del = Security::setKey($iniciativa_empresarial->id, 'del_iniciativa_empresarial'); ?>
+            <tr>
+                <td><?php echo $contador_iniciativa_empresarial; ?></td>
+                <td><?php echo $iniciativa_empresarial->nombre; ?></td>
+                <td><?php echo $iniciativa_empresarial->tipo_iniciativa; ?></td>
+                <td><?php echo $iniciativa_empresarial->tipo_actividad; ?></td>
+                <td><?php echo $iniciativa_empresarial->cobertura_poblacion; ?></td>
+                <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $iniciativa_empresarial->nivel, 'estado' => $iniciativa_empresarial->estado)); ?>
+                <td class="btn-actions">
+                    <?php View::partial(
+                        'opcion/ver',
+                        false,
+                        array(
+                            'elemento' => 'iniciativa empresarial',
+                            "nombre" => $iniciativa_empresarial->nombre,
+                            "url_ver" => NULL,
+                            "url_editar" => "gestion_territorial/$controller/editar_iniciativa_empresarial/$key_upd/$key/$order/$page/0/",
+                            "url_eliminar" => "gestion_territorial/$controller/eliminar_iniciativa_empresarial/$iniciativa_empresarial->nombre/$obj_territorio->nombre/$key_del/$key/$order/$page/"
+                        )
+                    ); ?>
+                </td>
+                <!--                        <td class="btn-actions">
+        <?php echo DwHtml::buttonTable('Modificar iniciativa empresarial', "gestion_territorial/$controller/editar_iniciativa_empresarial/$key_upd/$key/$order/$page/", null, 'warning', 'fa-edit'); ?>
+        <?php  //echo DwHtml::buttonTable('Modificar accion seguimiento control', "afectacion/megaproyectos/editar_iniciativa_empresarial/$key_upd/$megaproyecto->clase_megaproyecto/$key/", null, 'warning', 'fa-edit'); 
+        ?>                            
+    </td>-->
+            </tr>
+            <?php $contador_iniciativa_empresarial++; ?>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<br>

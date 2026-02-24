@@ -1,0 +1,104 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'afectacion/desarrollo_normativo/buscar_desarrollo_normativo/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"afectacion/desarrollo_normativo/listar_desarrollo_normativo/"
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("afectacion/desarrollo_normativo/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >SECTOR</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($desarrollo_normativos->items as $desarrollo_normativo): ?>
+                    <?php $key_show = Security::setKey($desarrollo_normativo->id, 'show_desarrollo_normativo'); ?>
+                    <?php $key_upd = Security::setKey($desarrollo_normativo->id, 'upd_desarrollo_normativo'); ?>
+                    <?php $key_del = Security::setKey($desarrollo_normativo->id, 'del_desarrollo_normativo'); ?>
+                    <?php //$key_inac = Security::setKey($desarrollo_normativo->id, 'inactivar_desarrollo_normativo'); ?>
+                    <?php //$key_reac = Security::setKey($desarrollo_normativo->id, 'reactivar_desarrollo_normativo'); ?>
+                    <tr>
+                        <td><?php echo $desarrollo_normativos->counter; ?></td>
+                        <td><?php echo $desarrollo_normativo->nombre; ?></td>
+                        <td><?php echo $desarrollo_normativo->sector; ?></td>                        
+                        <td><?php
+                        $ubicaciones = $desarrollo_normativo->getAfectacion()->getUbicaciones($desarrollo_normativo->afectacion_id);
+                        foreach($ubicaciones as $ubicacion):
+                            echo $ubicacion->departamento.' - ';
+                            echo $ubicacion->subregion.' - ';
+                            echo $ubicacion->municipio.' - ';
+                            echo $ubicacion->territorio.'<br>';
+                        endforeach;
+                        
+                         ?></td> 
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$desarrollo_normativo->nivel, 'estado'=>$desarrollo_normativo->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'desarrollo normativo',
+                                        "nombre"=>$desarrollo_normativo->nombre,
+                                        "url_ver"=>"afectacion/desarrollo_normativo/ver/$key_show/",
+                                        "url_editar"=>"afectacion/desarrollo_normativo/editar/$key_upd/",
+                                        "url_eliminar"=>"afectacion/desarrollo_normativo/eliminar/$desarrollo_normativo->nombre/$key_del/$desarrollo_normativo->afectacion_id/")); ?>
+                        </td>  
+<!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver desarrollo normativo', "afectacion/desarrollo_normativo/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar desarrollo normativo', "afectacion/desarrollo_normativo/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($desarrollo_normativo->estado == DesarrolloNormativo::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar desarrollo normativo', "afectacion/desarrollo_normativo/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar desarrollo normativo', "afectacion/desarrollo_normativo/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                    <?php $desarrollo_normativos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$desarrollo_normativos, 'url'=>"afectacion/desarrollo_normativo/listar/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/desarrollo_normativo/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+</script>

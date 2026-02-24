@@ -1,0 +1,55 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('comunidad.territorio_id', NULL, $territorio_id) ?>
+                        <?php echo DwForm::text('comunidad.nombre', array('class'=>'input-required'), NULL, 'Nombre de la comunidad'); ?>
+                    </div>                
+                    <div class="col-md-3">
+                        <?php echo DwForm::date('comunidad.fecha_creacion', array('class'=>''), '', 'Fecha de creación'); ?>
+                    </div>               
+                    <div class="col-md-3">
+                        <?php echo DwForm::date('comunidad.fecha_disolucion', array('class'=>''), '', 'Fecha de disolución'); ?>
+                    </div>
+                </div>
+     <div class="row">
+                    <div class="col-md-12">                        
+                        <?php echo DwForm::textarea('comunidad.descripcion_ubicacion', array('class'=>'input-lower'), NULL, 'Descripción de la ubicación geográfica de la comunidad'); ?>
+                    </div> 
+     </div>
+            
+
+        <div class="row">
+                     <div class="col-md-12">
+                 <label for="panel_poblacion"><h3 class="panel-title">Población</h3></label>   
+                <div id="panel_poblacion" class="panel panel-default">
+                  <div class="panel-body">                            
+                  <?php
+                    $array_poblacion = (array) $poblacion;
+                    echo View::partial('poblacion/agregar', false, array('para_territorio' => 'comunidad')); 
+                   ?>                                  
+                  </div>
+               </div>
+            </div>   
+
+ 
+ 
+</div>
+
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar comunidad'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php echo DwForm::focus('comunidad.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

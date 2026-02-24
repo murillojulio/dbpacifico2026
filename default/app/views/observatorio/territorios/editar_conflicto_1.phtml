@@ -1,0 +1,132 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('conflicto.territorio_id', NULL, $obj_conflicto->territorio_id) ?>
+                        <?php echo DwForm::hidden('conflicto.id', NULL, $obj_conflicto->id) ?>
+                        <?php echo DwForm::text('conflicto.nombre', array('class'=>'input-lower input-required'), $obj_conflicto->nombre, 'Nombre del conflicto.'); ?>
+                    </div>                
+                    <div class="col-md-6">
+                        <?php echo DwForm::select('conflicto.conflicto', array(''=>'Seleccione', 'INTRAETNICO'=>'INTRAETNICO', 'INTERETNICO'=>'INTERETNICO'), array('class'=>'input-required'), $obj_conflicto->conflicto, 'Conflicto'); ?>
+                    </div>           
+                </div>
+            
+
+        <div class="row">
+                     <div class="col-md-6">
+                 <label for="panel_poblacion"><h3 class="panel-title">Tipo de conflicto</h3></label>   
+                <div id="panel_poblacion" class="panel panel-default">
+                  <div class="panel-body">
+                       <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::check('conflicto.cultural', '1', NULL, $obj_conflicto->cultural, 'CULTURAL'); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::check('conflicto.economico', '1', NULL, $obj_conflicto->economico, 'ECONÓMICO'); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::check('conflicto.recurso_natural', '1', NULL, $obj_conflicto->recurso_natural, 'RECURSOS NATURALES'); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php echo DwForm::check('conflicto.otro', '1', NULL, $obj_conflicto->otro, 'OTROS'); ?>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-4">
+                            <label for="panel_politico"><h3 class="panel-title">Político</h3></label>   
+                <div id="panel_politico" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-12">
+                            <?php echo DwForm::check('conflicto.politico_violencia', '1', NULL, $obj_conflicto->politico_violencia, 'VIOLENCIA'); ?>
+                        </div>
+                          <div class="col-md-12">
+                            <?php echo DwForm::check('conflicto.politico_grupo_armado', '1', NULL, $obj_conflicto->politico_grupo_armado, 'PRESENCIA DE GRUPOS ARMADOS'); ?>
+                        </div>
+                          <div class="col-md-12">
+                            <?php echo DwForm::check('conflicto.politico_electoral', '1', NULL, $obj_conflicto->politico_electoral, 'POLÍTICO ELECTORAL'); ?>
+                        </div>
+                          
+                      </div>
+                      </div>
+                    </div>
+                            
+                        </div>
+                           
+                           <div class="col-md-4">
+                            <label for="panel_politico"><h3 class="panel-title">Territorial</h3></label>   
+                <div id="panel_politico" class="panel panel-default">
+                  <div class="panel-body">
+                      <div class="row">
+                          <div class="col-md-12">
+                            <?php echo DwForm::check('conflicto.territorial_uso', '1', NULL, $obj_conflicto->territorial_uso, 'USO'); ?>
+                        </div>
+                          <div class="col-md-12">
+                            <?php echo DwForm::check('conflicto.territorial_delimitacion', '1', NULL, $obj_conflicto->territorial_delimitacion, 'DELIMITACIÓN'); ?>
+                        </div>                                            
+                      </div>
+                      </div>
+                    </div>
+                            
+                        </div>
+                           
+                    </div>  
+                                      
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+            <?php echo DwForm::textarea('conflicto.descripcion', array('class'=>'input-lower input-required'), $obj_conflicto->descripcion, 'Descripción del conflicto'); ?>
+        </div>
+</div>
+    <label for="panel_politico"><h3 class="panel-title">Ubicación del conflicto</h3></label>   
+                <div id="panel_politico" class="panel panel-default">
+                  <div class="panel-body">
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo DwForm::textarea('conflicto.ubicacion_otro_territorio_afectado', array('class'=>'input-lower input-required'), $obj_conflicto->ubicacion_otro_territorio_afectado, '¿Cuales territorios colectivos están afectados?'); ?>
+        </div>
+        <div class="col-md-6">
+            <?php echo DwForm::textarea('conflicto.ubicacion_dentro_territorio', array('class'=>'input-lower input-required'), $obj_conflicto->ubicacion_dentro_territorio, 'Descripción ubicación dentro de los territorios colectivos'); ?>
+        </div>
+    </div>
+                  </div>
+                </div>
+     <div class="row">
+        <div class="col-md-4">
+            <?php echo DwForm::select('conflicto.estado_conflicto', array(''=>'Seleccione', 'ABIERTO'=>'ABIERTO', 'CERRADO'=>'CERRADO'), array('class'=>'input-required'), $obj_conflicto->estado_conflicto, 'Estado del conflicto'); ?>
+        </div>
+        <div class="col-md-4">
+            <?php echo DwForm::date('conflicto.fecha_comienzo', array('class'=>'input-required'), substr($obj_conflicto->fecha_comienzo, 0, 10), 'Fecha comienzo conflicto'); ?>
+        </div>
+        <div class="col-md-4">
+            <?php echo DwForm::date('conflicto.fecha_fin', array('class'=>''), substr($obj_conflicto->fecha_fin, 0, 10), 'Fecha terminación conflicto'); ?>
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="form-actions">
+               <?php echo DwForm::send('Actualizar conflicto'); ?>
+                <?php echo DwForm::cancel(); ?>
+                <?php echo DwForm::focus('comunidad.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

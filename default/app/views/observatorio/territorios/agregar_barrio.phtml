@@ -1,0 +1,28 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+               <div class="row">
+                    <div class="col-md-6">
+                        <?php echo DwForm::hidden('comunidad.territorio_id', NULL, $territorio_id) ?>
+                        <?php echo DwForm::hidden('comunidad.tipo', NULL, 'barrio') ?>
+                        <?php echo DwForm::text('comunidad.nombre', array('class'=>'input-required'), NULL, 'Nombre del barrio'); ?>
+                    </div>                
+                    <div class="col-md-6">                        
+                    </div>                            
+                </div>         
+        <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Guardar barrio'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php echo DwForm::focus('comunidad.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>

@@ -1,0 +1,104 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({
+            form_to:    $.KumbiaPHP.publicPath+'afectacion/area_natural_protegida/buscar_area_natural_protegida/', 
+            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
+            order_to:   $.KumbiaPHP.publicPath+"afectacion/area_natural_protegida/listar_area_natural_protegida/"
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("afectacion/area_natural_protegida/agregar", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" >TIPO ÁREA NATURAL PROTEGIDA</th>
+                    <th class="col-hidden" >UBICACION</th>
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($area_natural_protegidas->items as $area_natural_protegida): ?>
+                    <?php $key_show = Security::setKey($area_natural_protegida->id, 'show_area_natural_protegida'); ?>
+                    <?php $key_upd = Security::setKey($area_natural_protegida->id, 'upd_area_natural_protegida'); ?>
+                    <?php $key_del = Security::setKey($area_natural_protegida->id, 'del_area_natural_protegida'); ?>
+                    <?php //$key_inac = Security::setKey($area_natural_protegida->id, 'inactivar_area_natural_protegida'); ?>
+                    <?php //$key_reac = Security::setKey($area_natural_protegida->id, 'reactivar_area_natural_protegida'); ?>
+                    <tr>
+                        <td><?php echo $area_natural_protegidas->counter; ?></td>
+                        <td><?php echo $area_natural_protegida->nombre; ?></td>
+                        <td><?php echo $area_natural_protegida->tipo_area_natural_protegida_nombre; ?></td>                        
+                        <td><?php
+                        $ubicaciones = $area_natural_protegida->getAfectacion()->getUbicacion();
+                        foreach($ubicaciones as $ubicacion):
+                            echo $ubicacion->getDepartamento()->nombre.' - ';
+                            echo $ubicacion->getMunicipio()->getSubregion()->nombre.' - ';
+                            echo $ubicacion->getMunicipio()->nombre.' - ';
+                            echo $ubicacion->getTerritorio()->nombre.'<br>';
+                        endforeach;
+                        
+                         ?></td> 
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$area_natural_protegida->nivel, 'estado'=>$area_natural_protegida->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'área natural protegida',
+                                        "nombre"=>$area_natural_protegida->nombre,
+                                        "url_ver"=>NULL,
+                                        "url_editar"=>"afectacion/area_natural_protegida/editar/$key_upd/",
+                                        "url_eliminar"=>"afectacion/area_natural_protegida/eliminar/$area_natural_protegida->nombre/$key_del/$area_natural_protegida->afectacion_id/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver área natural protegida', "afectacion/area_natural_protegida/ver/$key_show/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar área natural protegida', "afectacion/area_natural_protegida/editar/$key_upd/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($area_natural_protegida->estado == AreaNaturalProtegida::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar área natural protegida', "afectacion/area_natural_protegida/estado/inactivar/$key_inac/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar área natural protegida', "afectacion/area_natural_protegida/estado/reactivar/$key_reac/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                    <?php $area_natural_protegidas->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$area_natural_protegidas, 'url'=>"afectacion/area_natural_protegida/listar/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/area_natural_protegida/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+</script>

@@ -1,0 +1,102 @@
+<?php View::flash(); ?>
+
+<script type="text/javascript">
+    $(function() {
+        $('table').kgrid({            
+            form_to         : $.KumbiaPHP.publicPath+'afectacion/megaproyectos/buscar_megaproyecto/',
+            form_data       : ['<?php echo $field; ?>', '<?php echo $value; ?>'],            
+            order_to        : $.KumbiaPHP.publicPath+'afectacion/megaproyectos/buscar_megaproyecto/<?php echo $field; ?>/<?php echo $value; ?>/',
+            order_attr      : '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>'
+        });
+    });
+</script>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+    
+    <div class="btn-toolbar btn-toolbar-top">
+        <div class="row">
+            <div class="btn-actions">
+                <?php echo DwHtml::button("afectacion/megaproyectos/listar/$clase_megaproyecto", 'listar', array('class'=>'btn-warning'), 'fa-check', APP_AJAX); ?>
+                <?php echo DwHtml::button("afectacion/megaproyectos/agregar/$clase_megaproyecto", 'agregar', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); ?>
+            </div>            
+        </div>
+    </div>
+
+    <div class="container-overflow">
+
+        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+            <thead>
+                <tr>
+                    <th>NUM</th>
+                    <th data-search="nombre" data-order="nombre">NOMBRE</th>
+                    <th class="col-hidden" data-search="nombre_empresa" data-order="nombre_empresa">EMPRESA</th>
+                    <!--                    <th class="col-hidden" data-order="monto_inversion">MONTO INVERSION</th>                    -->
+                    <th class="btn-actions text-center">ESTADO</th>
+                    <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($megaproyectos->items as $megaproyecto): ?>
+                    <?php $key_show = Security::setKey($megaproyecto->id, 'show_megaproyecto'); ?>
+                    <?php $key_upd = Security::setKey($megaproyecto->id, 'upd_megaproyecto'); ?>
+                    <?php $key_del = Security::setKey($megaproyecto->id, 'del_megaproyecto'); ?>
+                    <?php //$key_inac = Security::setKey($megaproyecto->id, 'inactivar_megaproyecto'); ?>
+                    <?php //$key_reac = Security::setKey($megaproyecto->id, 'reactivar_megaproyecto'); ?>
+                    <tr>
+                        <td><?php echo $megaproyectos->counter; ?></td>
+                        <td><?php echo ($field=='nombre') ? DwUtils::resaltar($value, $megaproyecto->nombre) : $megaproyecto->nombre; ?></td>
+                        <td><?php echo ($field=='nombre_empresa') ? DwUtils::resaltar($value, $megaproyecto->nombre_empresa) : $megaproyecto->nombre_empresa; ?></td>
+                       <!--                        <td><?php 
+                                  echo $megaproyecto->moneda_monto_inversion; 
+                                  echo number_format($megaproyecto->monto_inversion, 2, '.', ',');                                                                   
+                            ?>
+                        </td> -->
+                        <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel'=>$megaproyecto->nivel, 'estado'=>$megaproyecto->estado)); ?>
+                        <td class="btn-actions">
+                            <?php View::partial('opcion/ver', false, 
+                                    array('elemento'=>'megaproyecto',
+                                        "nombre"=>$megaproyecto->nombre,
+                                        "url_ver"=>"afectacion/megaproyectos/ver/$key_show/$clase_megaproyecto/1/",
+                                        "url_editar"=>"afectacion/megaproyectos/editar/$key_upd/$clase_megaproyecto/1/",
+                                        "url_eliminar"=>"afectacion/megaproyectos/eliminar/$megaproyecto->nombre/$key_del/$megaproyecto->afectacion_id/")); ?>
+                        </td>
+<!--                        <td class="btn-actions">
+                            <?php echo DwHtml::buttonTable('Ver megaproyecto', "afectacion/megaproyectos/ver/$key_show/$clase_megaproyecto/1/", null, 'info', 'fa-search'); ?>
+                            <?php echo DwHtml::buttonTable('Modificar megaproyecto', "afectacion/megaproyectos/editar/$key_upd/$clase_megaproyecto/1/", null, 'warning', 'fa-edit'); ?>
+                            <?php if($megaproyecto->estado == Megaproyecto::ACTIVO && (Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario')) { ?>
+                                <?php echo DwHtml::buttonTable('Inactivar megaproyecto', "afectacion/megaproyectos/estado/inactivar/$key_inac/$clase_megaproyecto/", null, 'success', 'fa-flag'); ?>
+                            <?php } elseif(Session::get('perfil') == 'ADMINISTRADOR'  || Session::get('perfil') == 'Super Usuario') { ?>
+                                <?php echo DwHtml::buttonTable('Reactivar megaproyecto', "afectacion/megaproyectos/estado/reactivar/$key_reac/$clase_megaproyecto/", null, 'danger', 'fa-flag'); ?>
+                                
+                            <?php } ?>
+                        </td>-->
+                    </tr>
+                    <?php $megaproyectos->counter++; ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+    </div>
+
+    <?php View::partial('paginators/default', false, array('page'=>$megaproyectos, 'url'=>"afectacion/megaproyectos/buscar_megaproyecto/$field/$value/$order/")); ?>
+    <div class="row">
+            <div class="form-actions">    
+                <div class="text-left">
+                    <?php echo DwButton::back('afectacion/megaproyectos/index/'); ?>                    
+                </div>
+            </div>
+        </div>
+</div>
+<script type='text/javascript'>
+        $(document).ready(function() {
+        $("monto_inversion").priceFormat(
+        {
+            prefix: '',
+            centsLimit: 0,
+            //centsSeparator: ',',
+            thousandsSeparator: '.'
+        });
+        });
+</script>

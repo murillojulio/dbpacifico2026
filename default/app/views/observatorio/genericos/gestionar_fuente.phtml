@@ -1,0 +1,88 @@
+<?php DwForm::open() ?>
+
+               <?php
+
+/**
+ * Normalización de datos provenientes del modelo
+ * $fuentes llega como objeto contenedor
+ */
+
+$tabla = '';
+$tabla_identi = '';
+$listado_fuentes = [];
+
+if (is_object($fuentes)) {
+    $tabla           = $fuentes->tabla ?? '';
+    $tabla_identi    = $fuentes->tabla_id ?? '';
+    $listado_fuentes = $fuentes->fuentes ?? [];
+}
+
+// Para compatibilidad visual
+$fuentes = $listado_fuentes;
+$contador_fuentes = count($fuentes);
+?>
+
+<div class="fuentes-container">
+    <!-- Botón para agregar nueva fuente 
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modalAgregarFuente">
+                <i class="fa fa-plus"></i> Agregar Fuente
+            </button>
+        </div>
+    </div>-->
+
+    <!-- Listado de fuentes existentes -->
+    <div id="div_fuente">
+        <?php if (!empty($fuentes)): ?>
+            <?php foreach ($fuentes as $index => $fuente): ?>
+                <?php 
+                $contador = $index + 1;
+                $puede_eliminar = $contador_fuentes > 1;
+                ?>
+                <div class="row fuente-item" data-fuente-id="<?= h($fuente->id) ?>">
+                    <div class="col-md-2">
+                        <?= DwForm::hidden("fuente.id{$contador}", null, $fuente->id) ?>
+                        <?= DwForm::date(
+                            "fuente.fecha{$contador}",
+                            ['class' => 'input-required'],
+                            date('d-m-Y', strtotime($fuente->fecha)),
+                            'Fecha de la fuente'
+                        ) ?>
+                    </div>
+                    
+                    <div class="col-md-9">
+                        <?= DwForm::text(
+                            "fuente.nombre{$contador}",
+                            ['class' => 'input-lower input-required'],
+                            $fuente->nombre,
+                            'Descripción de la fuente'
+                        ) ?>
+                    </div>
+                    
+                    <div class="col-md-1">
+                        <?php if ($puede_eliminar): ?>
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button 
+                                    type="button"
+                                    class="form-control btn btn-danger btn-xs btn-eliminar-fuente"
+                                    data-fuente-id="<?= h($fuente->id) ?>"
+                                    data-toggle="modal"
+                                    data-target="#modalEliminarFuente">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="alert alert-info">
+                No hay fuentes registradas. Haz clic en "Agregar Fuente" para crear una.
+            </div>
+        <?php endif; ?>
+        
+        <?= DwForm::hidden('fuente.cantidad', null, $contador_fuentes) ?>
+    </div>
+</div>

@@ -1,0 +1,1851 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php $caso->nombre = $caso->titulo;
+    View::process_estado_nivel('caso', $caso, $page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+
+    <ul class="nav nav-tabs nav-justified hidden-xs">
+        <li class="<?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="<?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Víctimas</a></li>
+        <li class="<?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Hechos victimizantes</a></li>
+        <li class="<?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Daños</a></li>
+        <li class="<?php echo $tab_5_active; ?>"><a href="#tab5" data-toggle="tab">Fuente(s) de la información</a></li>
+    </ul>
+    <ul class="nav nav-tabs nav-justified visible-xs">
+        <li class="tab-pane <?php echo $tab_1_active; ?>"><a href="#tab1" data-toggle="tab">Información general</a></li>
+        <li class="tab-pane <?php echo $tab_2_active; ?>"><a href="#tab2" data-toggle="tab">Víctimas</a></li>
+        <li class="tab-pane <?php echo $tab_3_active; ?>"><a href="#tab3" data-toggle="tab">Hechos victimizantes</a></li>
+        <li class="tab-pane <?php echo $tab_4_active; ?>"><a href="#tab4" data-toggle="tab">Daños</a></li>
+        <li class="tab-pane <?php echo $tab_5_active; ?>"><a href="#tab5" data-toggle="tab">Fuente(s) de la información</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane fade <?php echo $tab_1_active; ?>" id="tab1">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php
+                            echo DwForm::text('numero', array('class' => 'input-disabled'), $caso->id . substr($caso->getMunicipio()->getDepartamento()->nombre, 0, 2), 'Número del caso'); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?php
+                            echo DwForm::text('fecha_registro', array('class' => 'input-disabled input-lower'), $caso->caso_at . ' | ' . strtolower($caso->caso_at_user), 'Fecha de registro | Usuario'); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <?php
+                            echo DwForm::text('ultima_actualizacion', array('class' => 'input-disabled input-lower'), $caso->caso_in . ' | ' . strtolower($caso->caso_in_user), 'Fecha última actualización | Usuario'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php echo DwForm::dbSelect('caso.tipo_caso_id', 'nombre', array('violencia_politica/tipo_caso', 'getListadoTipoCasoDBS', TipoCaso::ACTIVO), NULL, array('class' => 'input-required'), $caso->tipo_caso_id, 'Tipo de caso'); ?>
+                        </div>
+                        <div class="col-md-9">
+                            <?php echo DwForm::hidden("caso.id", NULL, NULL); ?>
+                            <?php echo DwForm::text('caso.titulo', array('class' => 'input-required'), NULL, 'Título del caso'); ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3" id="div_departamento">
+                            <?php echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('observatorio/departamento', 'getListadoDepartamentoDBS', Departamento::ACTIVO), NULL, array('class' => 'input-required'), $departamento_id, 'Departamento'); ?>
+                            <?php //echo DwForm::dbSelect('caso.departamento_id', 'nombre', array('commons/departamento', 'findByPais', (isset($usuario->pais_de_expedicion_id)) ? $usuario->pais_de_expedicion_id : '52'), NULL, array('class' => 'input-required'), (isset($usuario->departamento_de_expedicion_id)) ? $usuario->departamento_de_expedicion_id : NULL, 'Departamento de expedición'); 
+                            ?>
+                        </div>
+                        <div class="col-md-3" id="div_municipio">
+                            <?php echo DwForm::dbSelect('caso.municipio_id', 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  $departamento_id), NULL, array('class' => 'input-required'), NULL, 'Municipio'); ?>
+
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#caso_municipio_id").on('change', function(e) {
+                                        jsSpinner('show');
+                                        gestionCampoBarrios('ocultar');
+                                        let datos = new FormData();
+                                        var municipio_id = $('#caso_municipio_id').val();
+                                        datos.append('municipio_id', municipio_id);
+                                        fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_territorios/'; ?>", {
+                                                method: 'POST',
+                                                body: datos
+                                            }).then(function(response) {
+                                                /*console.log('response =', response);*/
+                                                return response.text();
+                                            })
+                                            .then(function(data) {
+                                                console.log('data = ', data);
+                                                $("#div_territorio").html(data);
+                                                $("#caso_territorio_id").focus();
+                                                $("#caso_localidad_id").val('');
+                                                cargarlocalidades(municipio_id);
+                                                //jsSpinner('hide');
+                                            })
+                                            .catch(function(err) {
+                                                jsSpinner('hide');
+                                                console.error(err);
+                                            });
+                                    });
+
+                                    function cargarlocalidades(municipio_id) {
+                                        let datos = new FormData();
+                                        datos.append('municipio_id', municipio_id);
+                                        fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_localidades/'; ?>", {
+                                                method: 'POST',
+                                                body: datos
+                                            }).then(function(response) {
+                                                /*console.log('response =', response);*/
+                                                return response.text();
+                                            })
+                                            .then(function(data) {
+                                                console.log('data = ', data);
+                                                $("#div_localidades").html(data);
+                                                gestionBtnAgregarLocalidad(municipio_id);
+                                                jsSpinner('hide');
+                                            })
+                                            .catch(function(err) {
+                                                jsSpinner('hide');
+                                                console.error(err);
+                                            });
+                                    }
+
+                                    function gestionBtnAgregarLocalidad(municipio_id_in) {
+                                        if (municipio_id_in != '') {
+                                            $("#btn_caso_localidad_corregimiento").prop('disabled', false);
+                                            $("#btn_caso_localidad_vereda").prop('disabled', false);
+                                            $("#btn_caso_localidad_inspeccion").prop('disabled', false);
+                                        } else {
+                                            $("#btn_caso_localidad_corregimiento").prop('disabled', true);
+                                            $("#btn_caso_localidad_vereda").prop('disabled', true);
+                                            $("#btn_caso_localidad_inspeccion").prop('disabled', true);
+                                        }
+                                    }
+                                });
+                            </script>
+                        </div>
+                        <div class="<?php if ($caso->comunidad_id !== '') {
+                                        echo 'col-md-3';
+                                    } else {
+                                        echo 'col-md-6';
+                                    } ?>" id="div_territorio">
+                            <?php //echo DwForm::dbSelect('caso.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', (isset($caso->municipio_id)) ? $caso->municipio_id : NULL), NULL, array('class' => 'input-required'), (isset($usuario->territorio_id)) ? $caso->territorio_id : NULL, 'Territorio'); 
+                            ?>
+                            <?php echo DwForm::dbSelect('caso.territorio_id', array('nombre', 'tipo_de_territorio'), array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', $caso->municipio_id), NULL, array('class' => ''), NULL, 'Territorio'); ?>
+
+                            <script type='text/javascript'>
+                                $(document).ready(function() {
+                                    $("#caso_territorio_id").on('change', function(e) {
+                                        var texto = $('#caso_territorio_id option:selected').html();
+                                        var n = texto.search(" U");
+                                        if (texto.search(' U') !== -1) {
+                                            $("#div_territorio").removeClass("col-md-6");
+                                            $("#div_territorio").addClass("col-md-3");
+                                            cargarBarrios();
+                                            //$(this).hide();
+                                        } else {
+                                            $('#div_barrio').hide();
+                                            $('#caso_comunidad_id').val('');
+                                            $("#div_territorio").removeClass("col-md-3");
+                                            $("#div_territorio").addClass("col-md-6");
+                                        }
+                                    });
+                                });
+
+                                function cargarBarrios() {
+                                    jsSpinner('show');
+                                    let datos = new FormData();
+                                    var territorio_id = $('#caso_territorio_id').val();
+                                    datos.append('territorio_id', territorio_id);
+                                    fetch("<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_barrios/'; ?>", {
+                                            method: 'POST',
+                                            body: datos
+                                        }).then(function(response) {
+                                            /*console.log('response =', response);*/
+                                            return response.text();
+                                        })
+                                        .then(function(data) {
+                                            console.log('data = ', data);
+                                            $("#div_barrio").html(data);
+                                            $("#caso_barrio_id").focus();
+                                            $("#div_barrio").addClass("col-md-3");
+                                            $('#div_barrio').show();
+                                            jsSpinner('hide');
+                                        })
+                                        .catch(function(err) {
+                                            jsSpinner('hide');
+                                            console.error(err);
+                                        });
+                                }
+                            </script>
+                        </div>
+                        <div class="<?php if ($caso->comunidad_id !== '') {
+                                        echo 'col-md-3';
+                                    } ?>" id="div_barrio">
+                            <?php if ($caso->comunidad_id !== '') {
+                                echo DwForm::dbSelect('caso.comunidad_id', 'nombre', array('observatorio/comunidad', 'getBarriosByTerritorioIdSelect',  $caso->territorio_id), NULL, array('class' => ''), NULL, 'Barrio');
+                            } ?>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-md-3" id="">
+                            <?php echo DwForm::hidden("caso.localidad_id", NULL, NULL); ?>
+                        </div>
+                        <div id="div_localidades">
+                            <div class="col-md-3" id="div_corregimiento">
+                                <label for="caso_localidad_corregimiento">Corregimiento</label>
+                                <?php echo $caso->tipo_localidad;
+                                echo DwForm::dbSelectButton('caso.localidad_corregimiento', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $caso->municipio_id, 'corregimiento'), NULL, array('onchange' => 'gestionSelectLocalidades(\'corregimiento\')'), $corregimiento_id, NULL, NULL, 'mostrarModalLocalidad(\'corregimiento\')', '+'); ?>
+                            </div>
+                            <div class="col-md-3" id="div_vereda">
+                                <label for="caso_localidad_vereda">Vereda</label>
+                                <?php echo DwForm::dbSelectButton('caso.localidad_vereda', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $caso->municipio_id, 'vereda'), NULL, array('onchange' => 'gestionSelectLocalidades(\'vereda\')'), $vereda_id, NULL, NULL, 'mostrarModalLocalidad(\'vereda\')', '+'); ?>
+                            </div>
+                            <div class="col-md-3" id="div_inspeccion">
+                                <label for="caso_localidad_inspeccion">Inspección</label>
+                                <?php echo DwForm::dbSelectButton('caso.localidad_inspeccion', 'nombre', array('observatorio/localidad', 'getLocalidadByMunicipioIdSelect', $caso->municipio_id, 'inspeccion'), NULL, array('onchange' => 'gestionSelectLocalidades(\'inspeccion\')'), $inspeccion_id, NULL, NULL, 'mostrarModalLocalidad(\'inspeccion\')', '+'); ?>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="modal_agregar_localidad">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Agregar Localidad</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php echo DwForm::text('localidad.nombre', array('class' => '', 'onkeyup' => 'validarNombreLocalidad()'), NULL, '<div id=\'titulo_localidad\'>Nombre</div>'); ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btn-cancelar-guardar-localidad" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <button id="btn-guardar-localidad" type="button" class="btn btn-primary" onclick="agregarLocalidad()" data-loading-text="Guardando...">Guardar</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        <!--  <div class="input-group">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Vereda +</button>
+      </span>         
+        <select id="caso_localidad_vereda" name="caso[localidad_vereda]" class="form-control ">
+            <option value="">Seleccione</option>
+        </select>
+           
+    </div> -->
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <?php echo DwForm::number('caso.cantidad_victima', array('class' => '', 'placeholder' => 'INDETERMINADO'), NULL, 'Cantidad de víctimas'); ?>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="caso_fecha_desde">Fecha en que ocurrió el caso | DD-MM-AAAA<span class="req">*</span></label>
+                                <div class="input-group date datepicker" id="dp_caso_fecha_desde">
+                                    <input id="caso_fecha_desde" name="caso[fecha_desde]" type="text" value="<?php echo date('d-m-Y', strtotime($caso->fecha_desde)); ?>" class="js-datepicker input-date form-control input-required" required="required">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <p class="help-block">
+                                    <small class="help-error"></small>
+                                </p>
+                            </div>
+                            <div class="row">
+                            </div>
+                            <?php //echo DwForm::date('caso.fecha_desde', array('class'=>'input-required'), date('d-m-Y', strtotime($caso->fecha_desde)), 'Fecha en que ocurrió el caso | AAAA-MM-DD'); 
+                            ?>
+                        </div>
+
+                        <div class="col-md-3">
+
+
+                            <?php /*echo DwForm::date('caso.fecha_hasta', array('class'=>'input-required'), NULL, 'Fecha en que finalizó el caso');*/ ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <?php echo DwForm::textarea('caso.descripcion', array('class' => 'input-lower', 'required' => 'required', 'style' => "height: 200px;"), NULL, 'Descripción del caso'); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-left">
+                                <?php echo DwForm::prevTab('Anterior pestaña', 'disabled'); ?>
+                                <?php echo DwForm::nextTab('Siguiente pestaña'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::send('Guardar Cambios'); ?>
+                            <?php
+                            if (Session::get('query_busqueda_caso') != '') {
+                                echo DwForm::exit('violencia_politica/casos/consulta/si/', 'Regresar a la lista de busqueda');
+                            } else {
+                                echo DwForm::exit();
+                            } ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <?php echo DwForm::close();  ?>
+
+
+        <!--      //////////////////////////////////  SEGUNDA PESTAÑA-->
+        <div class="tab-pane fade <?php echo $tab_2_active; ?>" id="tab2">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-toolbar btn-toolbar-top">
+                        <div class="row">
+                            <div class="btn-actions">
+                                <div class="col-md-3">
+                                    <button style="margin-bottom: 5px;" id="btn-modal-agregar-victima" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-agregar-victima" onclick="deshabilitarVictima()">Agregar víctima</button>
+                                    <?php //echo DwHtml::button("violencia_politica/casos/agregar_victima/$caso->id/", 'agregarvíctima', array('class' => 'btn-success'), 'fa-check-square-o', APP_AJAX); 
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modal-agregar-victima">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title">Agregar víctima al caso: <?php echo $caso->titulo; ?></h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <?php echo DwForm::hidden("victima.caso_id", NULL, $caso->id); ?>
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::text('victima.nombre', array('onkeyup' => 'validarBotonGuardarVictima()'), NULL, 'Nombre(s) y Apellido(s)<span class="req">*</span>'); ?>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::dbSelect('victima.genero_id', 'nombre', array('opcion/genero', 'getListadoGeneroDBS', Genero::ACTIVO), NULL, array('onchange' => 'validarBotonGuardarVictima()'), NULL, 'Género<span class="req">*</span>'); ?>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <?php echo DwForm::number('victima.edad', array('class' => 'input-integer', 'placeholder' => 'SIN INFORMACIÓN'), NULL, 'Edad'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <?php echo DwForm::text('victima.ocupacion', array('onkeyup' => 'validarBotonGuardarVictima()'), NULL, 'Ocupación<span class="req">*</span>'); ?>
+                                                </div>
+                                                <div class="col-md-6">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="panel_perfil">Perfil(es) de la víctima <span class="req">*</span></label>
+                                                        <div id="panel_perfil" class="panel panel-default">
+                                                            <div class="panel-body" style="margin-top:-10px; margin-bottom:-10px;">
+                                                                <?php echo DwForm::dbCheckId('victima_caracterizacion_check', 'nombre', array('opcion/caracterizacion2', 'getListadoCaracterizacion2DBS'), array('onclick' => 'validarBotonGuardarVictima()', 'onchange' => 'validarCaracterizacionOtro()', 'class' => 'agregar_antecedente_violencia'), null, 2, '6'); ?>
+                                                                <div id="div_victima_caracterizacion_otro" style="display:none;">
+                                                                    <?php echo DwForm::text('victima.caracterizacion_otro', array('onkeyup' => ''), NULL, 'Descripción Otro Perfil<span class="req">*</span>'); ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="panel_etnia">Etnia de la víctima</label>
+                                                        <div id="panel_etnia" class="panel panel-default">
+                                                            <div class="panel-body" style="margin-top:-10px; margin-bottom:-10px;">
+                                                                <?php echo DwForm::dbCheckId('victima_etnia_check', 'nombre', array('opcion/etnia2', 'getListEtnia2DBS'), array('onchange' => '', 'class' => 'agregar_antecedente_violencia'), NULL, 2, '6'); ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label for="panel_antecedentes">Antecedentes de la víctima relacionados con violencia</label>
+                                                    <div id="panel_antecedentes" class="panel panel-default">
+                                                        <div class="panel-body">
+                                                            <div class="col-md-12">
+                                                                <?php echo DwForm::dbCheckId('victima_antecedente_violencia_check', 'nombre', array('opcion/antecedente_violencia', 'getListadoAntecedenteViolenciaDBS'), array('onchange' => '', 'class' => 'agregar_antecedente_violencia'), NULL, 3, '4'); ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btn-cancelar-agregar-victima" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button id="btn-agregar-victima" type="button" class="btn btn-primary" onclick="agregarVictima()" data-loading-text="Agregando...">Agregar</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+
+                    <div class="">
+                        <div id="div_gestion_victima">
+                            <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>NUM</th>
+                                        <th>NOMBRE</th>
+                                        <th>EDAD</th>
+                                        <th>GENERO</th>
+                                        <th>PERFIL</th>
+                                        <th class="btn-actions col-blocked text-center">ESTADO</th>
+                                        <th class="btn-actions col-blocked text-center">OPCIONES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $contador_victima = 1;
+                                    foreach ($victimas as $victima) : ?>
+
+                                        <?php //$key_show = Security::setKey($victima->id, 'show_victima'); 
+                                        ?>
+                                        <?php $key_upd = Security::setKey($victima->id, 'upd_victima'); ?>
+                                        <?php $key_del = Security::setKey($victima->id, 'del_victima'); ?>
+                                        <tr>
+                                            <td><?php echo $contador_victima; ?></td>
+                                            <td><?php echo $victima->nombre . ' ' . $victima->apellido; ?></td>
+                                            <td><?php echo ($victima->edad === '') ? 'Sin información' : $victima->edad; ?></td>
+                                            <td><?php try {
+                                                    echo $victima->getGenero()->nombre;
+                                                } catch (Exception $exc) {
+                                                } ?></td>
+                                            <td><?php try {
+                                                    foreach ($victima->getVictimaCaracterizacion2() as $perfil) :
+                                                        echo $perfil->getCaracterizacion2()->nombre . ' - ';
+                                                    endforeach;
+                                                } catch (Exception $exc) {
+                                                } ?></td>
+                                            <td class="btn-actions"><?php View::partial('nivel_estado/ver', false, array('nivel' => $victima->nivel, 'estado' => $victima->estado)); ?>
+                                                <!--                            <td class="btn-actions">
+                                <?php /* View::partial('opcion/ver', false, 
+                                        array('elemento'=>'víctima',
+                                            "nombre"=>$victima->nombre,
+                                            'url_ver'=>NULL,
+                                            'url_editar'=>"violencia_politica/casos/editar_victima/$key_upd/",
+                                            "url_eliminar"=>"violencia_politica/casos/eliminar_victima/$victima->nombre/$caso->titulo/$key_del/$caso->id/")); */ ?>                      
+                            </td>                                        -->
+                                            <td class="btn-actions">
+                                                <button name="btn-generico-editar" id="btn-editar-victima-<?php echo $victima->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" data-loading-text="Cargando..." onclick="cargarModalEditarVictima(<?php echo $victima->id; ?>)"></button>
+                                                <button name="btn-generico-eliminar" id="btn-eliminar-victima-<?php echo $victima->id ?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setNombreEliminarVictima(<?php echo $victima->id . ",'" . $victima->nombre . "'"; ?>)" data-toggle="modal" data-target="#modal_eliminar_victima" title="Eliminar"></button>
+                                            </td>
+                                        </tr>
+                                        <?php $contador_victima++; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="div_modal_editar_victima"></div>
+                    <div class="modal fade" id="modal_eliminar_victima">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title"><i class="fa fa-warning" style="padding-right:5px; margin-top:5px;"></i>Eliminar víctima</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>
+                                        <div id="nombre_victima_eliminar"></div>
+                                        <br>
+                                        Recuerda que esta operación no se puede reversar.
+                                    </h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="btn-cancelar-eliminar-victima" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button id="btn-modal-eliminar-victima" type="button" class="btn btn-primary" onclick="eliminarVictima()" data-loading-text="Eliminando...">Eliminar</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-left">
+                                <?php echo DwForm::prevTab('Anterior pestaña'); ?>
+                                <?php echo DwForm::nextTab('Siguiente pestaña'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php /*echo DwForm::send('Guardar Cambios');*/?>
+                            <?php
+                            if (Session::get('query_busqueda_caso') != '') {
+                                echo DwForm::exit('violencia_politica/casos/consulta/si/', 'Regresar a la lista de busqueda');
+                            } else {
+                                echo DwForm::exit();
+                            } ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--      //////////////////////////////////  TERCERA PESTAÑA-->
+
+        <div class="tab-pane fade <?php echo $tab_3_active; ?>" id="tab3">
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="row">
+                        <div class="modal fade" id="modal-agregar-victimizacion">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Agregar victimización al caso: <?php echo $caso->titulo; ?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div id="div_select_multiple_victima">
+                                                    <?php echo DwForm::dbSelectMultipleNoSeleccion('vhpr.victimas_id', 'nombre', $victimas, array('style' => "height: 150px;", 'onchange' => 'validarBotonAgregarVictimizacion()'), NULL, 'Seleccione Víctima(s)<span class="req">*</span>'/*, 'Mantenga presionado el botón Ctrl (Windows) o Cmd (Mac) para seleccionar varias opciones.'*/); ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="panel_victimas_seleccionadas">Víctimas seleccionadas</label>
+                                                <div id="panel_victimas_seleccionadas" class="panel panel-default">
+                                                    <div class="panel-body" style="margin-top:-15px; margin-bottom:-15px;">
+                                                        <div id="div_listado_victimas">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <?php echo DwForm::dbSelect('vhpr.presunto_responsable_id', 'nombre', array('opcion/presunto_responsable', 'getListadoPresuntoResponsableDBS', PresuntoResponsable::ACTIVO), 'Seleccione', array('class' => '', 'onchange' => 'validarBotonAgregarVictimizacion()'), NULL, 'Presunto responsable<span class="req">*</span>'); ?>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <?php echo DwForm::text('vhpr.descripcion_presunto_responsable', array('placeholder' => 'SIN INFORMACIÓN'), NULL, 'Descripción presunto responsable'); ?>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <?php echo DwForm::dbSelectMultipleNoSeleccion('vhpr.hechos_id', 'nombre', array('opcion/hechovictimizante', 'getListadoHechovictimizanteDBS'), array('style' => "height: 150px;", 'onchange' => 'validarBotonAgregarVictimizacion()'), NULL, 'Seleccione Hechos victimizantes<span class="req">*</span>'/*, 'Mantenga presionado el botón Ctrl (Windows) o Cmd (Mac) para seleccionar varias opciones.'*/) ?>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="panel_hechos_seleccionadas">Hechos victimizantes seleccionados</label>
+                                                <div id="panel_hechos_seleccionadas" class="panel panel-default">
+                                                    <div class="panel-body" style="margin-top:-15px; margin-bottom:-15px;">
+                                                        <div id="div_listado_hechos">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btn-cancelar-agregar-victimizacion" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <button id="btn-agregar-victimizacion" type="button" class="btn btn-primary" onclick="agregarVictimizacion()" data-loading-text="Agregando...">Agregar</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                    </div>
+
+
+
+                    <div class="container-overflow">
+                        <button style="margin-bottom: 5px;" id="btn-agregar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-agregar-victimizacion" onclick="deshabilitar()">Agregar hechos victimizantes</button>
+                        <div id="div_gestion_vhpr">
+                            <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>VICTIMA</th>
+                                        <th>HECHO VICTIMIZANTE</th>
+                                        <th>PRESUNTO RESPONSABLE</th>
+                                        <th>DESCRIPCION PRESUNTO RESPONSABLE</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $Vhpr = new VictimaHechovictimizantePresuntoResponsable();
+                                    $contador_victima = 1;
+                                    foreach ($victimas as $victima) :
+                                        $nombre_victima = '';
+                                        $nombre_presunto_resp = '';
+                                        $contador_hechos = 1;
+                                        foreach ($Vhpr->getVictimaHechovictimizantePresuntoResponsableByVictimaId($victima->id) as $vhpr) :
+                                            $cap_nombre_victima = $vhpr->nombre_victima;
+                                            $cap_nombre_presunto_resp = $vhpr->nombre_presunto_responsable;
+                                    ?>
+                                            <tr <?php if ($contador_hechos === 1) {
+                                                    echo 'style="border-top: red 2px solid;"';
+                                                } ?>>
+                                                <td><?php if ($contador_hechos === 1) {
+                                                        echo $cap_nombre_victima;
+                                                    } ?></td>
+                                                <td><?php echo $vhpr->nombre_hechovictimizante; ?></td>
+                                                <td><?php if ($cap_nombre_presunto_resp != $nombre_presunto_resp) {
+                                                        echo $cap_nombre_presunto_resp;
+                                                    } else {
+                                                    } ?></td>
+                                                <td><?php if ($cap_nombre_presunto_resp != $nombre_presunto_resp) {
+                                                        echo $vhpr->descripcion_presunto_responsable;
+                                                    } else {
+                                                    } ?></td>
+                                                <td>
+                                                    <?php //echo DwHtml::buttonTable('Vervíctima', "observatorio/territorios/ver_victima/$key_show/$obj_territorio->tipo/$key/", null, 'info', 'fa-search'); 
+                                                    ?>
+                                                    <?php echo DwHtml::buttonTable(
+                                                        'Eliminar',
+                                                        "violencia_politica/casos/eliminar_vhpr/$caso->id/$vhpr->id/",
+                                                        array('class' => 'js-confirm', 'msg-title' => 'Eliminar:', 'msg' => '¿Está seguro de eliminar esta victimización? <br />Recuerda que esta operación no se puede reversar.'),
+                                                        'danger',
+                                                        'fa-minus'
+                                                    );
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                            $nombre_presunto_resp = $cap_nombre_presunto_resp;
+                                            $contador_hechos++;
+                                        endforeach;
+                                        ?>
+                                        <?php $contador_victima++; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-left">
+                                <?php echo DwForm::prevTab('Anterior pestaña'); ?>
+                                <?php echo DwForm::nextTab('Siguiente pestaña'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php /*echo DwForm::send('Guardar Cambios');*/?>
+                            <?php
+                            if (Session::get('query_busqueda_caso') != '') {
+                                echo DwForm::exit('violencia_politica/casos/consulta/si/', 'Regresar a la lista de busqueda');
+                            } else {
+                                echo DwForm::exit();
+                            } ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- //////////////////////////////////  CUARTA PESTAÑA -->
+
+        <div class="tab-pane fade <?php echo $tab_4_active; ?>" id="tab4">
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="row">
+                        <div class="modal fade" id="modal-agregar-dano">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Agregar daño al caso: <?php echo $caso->titulo; ?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <?php echo DwForm::dbSelect('caso_dano_territorio.territorio_id', 'nombre', array('observatorio/territorio_municipio', 'getTerritoriosByMunicipioIdSelect', $caso->municipio_id), array('' => 'SIN INFORMACIÓN'), array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Territorio afectado'); ?>
+                                                <?php echo DwForm::dbSelect('caso_dano_territorio.tipo_dano_id', 'nombre', array('opcion/tipo_dano', 'getListadoTipoDanoDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Tipo de daño<span class="req">*</span>'); ?>
+                                                <div id="div_select_dano">
+                                                    <?php echo DwForm::dbSelect('caso_dano_territorio.dano_id', 'nombre', array('opcion/dano', 'getDanoByTipoDanoIdDBS', NULL), NULL, array('class' => '', 'onchange' => 'validarBotonAgregarDano()'), NULL, 'Daño<span class="req">*</span>'); ?>
+                                                </div>
+                                                <?php echo DwForm::textarea('caso_dano_territorio.descripcion', array('class' => 'input-lower', 'onkeyup' => 'validarBotonAgregarDano()', 'style' => "height: 130px;"), NULL, 'Descripción del daño<span class="req">*</span>'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btn-cancelar-agregar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <button id="btn-agregar-dano" type="button" class="btn btn-primary" onclick="agregarDano()" data-loading-text="Agregando...">Agregar</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        <label for="panel_danos"></label>
+                    </div>
+                    <div class="container-overflow">
+                        <button style="margin-bottom: 5px;" id="btn-agregar" type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-agregar-dano" onclick="deshabilitar_modal_dano()">Agregar daño</button>
+                        <div id="div_gestion_danos">
+                            <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>TERRITORIO</th>
+                                        <th>TIPO DE DAÑO</th>
+                                        <th>DAÑO</th>
+                                        <th>DESCRIPCION</th>
+                                        <th style="width:80px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    foreach ($CasoDanoTerritorio as $danos) :
+                                    ?>
+                                        <tr>
+                                            <td><?php echo $danos->territorio; ?></td>
+                                            <td><?php echo $danos->getDano()->getTipoDano()->nombre; ?></td>
+                                            <td><?php echo $danos->dano; ?></td>
+                                            <td><?php echo $danos->descripcion; ?></td>
+                                            <td class="btn-actions">
+                                                <button id="btn-editar-dano-<?php echo $danos->id ?>" type="button" class="btn btn-warning btn-icon-only fa fa-edit" data-loading-text="Cargando..." onclick="cargarModalEditarCasoDanoTerritorio(<?php echo $danos->id; ?>)"></button>
+                                                <button id="btn-eliminar-dano-<?php echo $dano->id ?>" type="button" class="btn btn-danger btn-icon-only fa fa-minus" onclick="setVariablesEliminar(<?php echo $danos->id; ?>)" data-toggle="modal" data-target="#modal_eliminar_dano" title="Eliminar"></button>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endforeach;
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-left">
+                                <?php echo DwForm::prevTab('Anterior pestaña'); ?>
+                                <?php echo DwForm::nextTab('Siguiente pestaña'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php /*echo DwForm::send('Guardar Cambios');*/?>
+                            <?php
+                            if (Session::get('query_busqueda_caso') != '') {
+                                echo DwForm::exit('violencia_politica/casos/consulta/si/', 'Regresar a la lista de busqueda');
+                            } else {
+                                echo DwForm::exit();
+                            } ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--      //////////////////////////////////  QUINTA PESTAÑA-->
+
+        <div class="tab-pane fade <?php echo $tab_5_active; ?>" id="tab5">
+            <div class="row">
+                <div class="col-md-12">
+                    <!--                     <div class="row">                                
+                          <div  class="col-md-2">                                    
+                            <?php echo DwForm::date('fuente.fecha', array('class' => ''), NULL, 'Fecha de la fuente'); ?>                                    
+                          </div>
+                          <div class="col-md-8">                                   
+                            <?php echo DwForm::text('fuente.nombre', array('class' => 'input-lower'), NULL, 'Descripcion de la fuente'); ?>                                  
+                          </div>   
+                         <div class="col-md-2">
+              <label for="boton_anadir_fuente"></label>
+              <a id="boton_anadir_fuente" href="#" class="btn btn-success disabled form-control" role="button">AÑADIR</a>
+          </div>
+                        </div>-->
+                    <?php View::partial('fuentes/editar', false, array('fuentes' => $fuentes)); ?>
+                </div>
+            </div>
+            <!--               <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Actualizar caso'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+            </div>
+        </div>-->
+        <div class="row">
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-left">
+                                <?php echo DwForm::prevTab('Anterior pestaña'); ?>
+                                <?php echo DwForm::nextTab('Siguiente pestaña', 'diabled'); ?>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <?php echo DwForm::send('Guardar Cambios');?>
+                            <?php
+                            if (Session::get('query_busqueda_caso') != '') {
+                                echo DwForm::exit('violencia_politica/casos/consulta/si/', 'Regresar a la lista de busqueda');
+                            } else {
+                                echo DwForm::exit();
+                            } ?>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="div_modal_editar"></div>
+        <div class="modal fade" id="modal_eliminar_dano">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Eliminar daño</h4>
+                    </div>
+                    <div class="modal-body">
+                        ¿Está seguro que desea eliminar este daño?
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btn-cancelar-eliminar-dano" type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button id="btn-eliminar-dano" type="button" class="btn btn-primary" onclick="eliminarCasoDanoTerritorio()" data-loading-text="Eliminando...">Eliminar</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+<div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Los hechos victimizantes han sido agregados con exito.
+    </div>
+</div>
+<div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar-dano" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        El daño al territorio se ha agregado con exito.
+    </div>
+</div>
+<div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar-cambio-dano" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        Los cambios del daño al territorio se han guardado con exito.
+    </div>
+</div>
+<div id="flash-message" class="flash-message">
+    <div id="alert-id-guardar-localidad" class="alert alert-block alert-success" style="display: none;">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        La localidad ha sido guardada con exito.
+    </div>
+</div>
+<script type="text/javascript">
+    let victima_id_eliminar = '';
+    let caso_dano_territorio_id = '';
+    let victima_nombre_eliminar = '';
+    var hechosSeleccionados = new Array();
+    var hechosSeleccionadosTexto = new Array();
+    var victimasSeleccionadas = new Array();
+    var antecedentesSeleccionados = new Array();
+    var caracterizacionSeleccionados = new Array();
+    var etniaSeleccionados = new Array();
+    var antecedentesSeleccionadosEditar = new Array();
+    var caracterizacionSeleccionadosEditar = new Array();
+    var etniaSeleccionadosEditar = new Array();
+    $("#btn-agregar-victimizacion").prop('disabled', true);
+    $("#btn-agregar-dano").prop('disabled', true);
+
+    function validarBotonAgregarVictimizacion() {
+        var presunto_responsable_id = $('#vhpr_presunto_responsable_id').val();
+        var cantidad_victimas = 0;
+        var cadena_victimas = '';
+        var victimasSeleccionadas_ = new Array();
+        $('#vhpr_victimas_id option:selected').each(function() {
+            cantidad_victimas = cantidad_victimas + 1;
+            victimasSeleccionadas_.push($(this).text());
+            var elemento = $(this).text();
+            cadena_victimas = cadena_victimas + "<h6><span style=\"font-weight: 400;\" class=\"label label-primary\">" + elemento + "</span></h6>";
+        });
+        victimasSeleccionadas = victimasSeleccionadas_;
+        /*
+        var cadena_victimas = '';
+        victimasSeleccionadas.forEach(element => {
+            cadena_victimas = cadena_victimas+"<span class=\"label label-primary\">"+element+"</span><br><br>";                
+        });
+        */
+        $("#div_listado_victimas").html(cadena_victimas);
+
+        var cantidad_hechos = 0;
+        var cadena_hechos = '';
+        var hechosSeleccionados_ = new Array();
+        $('#vhpr_hechos_id option:selected').each(function() {
+            cantidad_hechos = cantidad_hechos + 1;
+            hechosSeleccionados_.push($(this).text());
+            var elemento = $(this).text();
+            cadena_hechos = cadena_hechos + "<h6><span style=\"font-weight: 400;\" class=\"label label-primary\">" + elemento + "</span></h6>";
+            /*cadena_hechos = cadena_hechos+"<h6><span style=\"font-weight: 400;\" class=\"label label-primary\">"+elemento+"<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"> <span aria-hidden=\"true\">&times;</span></button></span></h6>";*/
+        });
+        hechosSeleccionados = hechosSeleccionados_;
+        $("#div_listado_hechos").html(cadena_hechos);
+
+        if (cantidad_hechos > 0 && presunto_responsable_id !== '' && cantidad_victimas > 0) {
+            $("#btn-agregar-victimizacion").prop('disabled', false);
+        } else {
+            $("#btn-agregar-victimizacion").prop('disabled', true);
+        }
+    }
+
+    function agregarVictimizacion() {
+        $("#btn-cancelar-agregar-victimizacion").prop('disabled', true);
+        let btn = $('#btn-agregar-victimizacion');
+        btn.button('loading');
+        let modal = $("#modal-agregar-victimizacion");
+        let caso_id = $('#caso_id').val();
+        let presunto_responsable_id = $('#vhpr_presunto_responsable_id').val();
+        let victimas = $('#vhpr_victimas_id').val();
+        let hechos = $('#vhpr_hechos_id').val();
+        let descripcion_presunto_responsable = $('#vhpr_descripcion_presunto_responsable').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/gestion_vhpr/'; ?>";
+
+        let datos = {
+            "accion": "crear",
+            "caso_id": caso_id,
+            "victimas": victimas,
+            "presunto_responsable_id": presunto_responsable_id,
+            "descripcion_presunto_responsable": descripcion_presunto_responsable,
+            "hechos_victimizantes": hechos
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_vhpr").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-agregar-victimizacion").prop('disabled', false);
+
+                $('#vhpr_victimas_id').val('');
+                $('#vhpr_hechos_id').val('');
+                $('#vhpr_presunto_responsable_id').val('');
+                $('#vhpr_descripcion_presunto_responsable').val('');
+                $("#alert-id-guardar").show();
+                $("#alert-id-guardar").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en entregarPedido()');
+                btn.button('reset');
+            }
+        });
+    }
+    /*$(document).ready(function() {*/
+    function deshabilitar() {
+        $("#btn-agregar-victimizacion").prop('disabled', true);
+        $(".hecho_victimizante").prop("checked", false);
+        $("#div_listado_victimas").html("");
+        $("#div_listado_hechos").html("");
+    }
+
+    function deshabilitarBotonLocalidades() {
+        $("#btn_caso_localidad_corregimiento").prop('disabled', true);
+        $("#btn_caso_localidad_vereda").prop('disabled', true);
+        $("#btn_caso_localidad_inspeccion").prop('disabled', true);
+    }
+
+    function limpiarLocalidades() {
+        $("#caso_localidad_corregimiento").empty();
+        $("#caso_localidad_vereda").empty();
+        $("#caso_localidad_inspeccion").empty();
+        $("#caso_territorio_id").empty();
+    }
+
+    $("#caso_departamento_id").on('change', function(e) {
+        jsSpinner('show');
+        limpiarLocalidades();
+        deshabilitarBotonLocalidades();
+        gestionCampoBarrios('ocultar');
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/db_select_municipios/'; ?>";
+        var departamento_id = $('#caso_departamento_id').val();
+        let datos = new FormData();
+        datos.append('departamento_id', departamento_id);
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('data = ', data);
+                $("#div_municipio").html(data);
+                $("#caso_municipio_id").focus();
+                jsSpinner('hide');
+            })
+            .catch(function(err) {
+                jsSpinner('hide');
+                console.error(err);
+            });
+    });
+
+    function gestionCampoBarrios(accion) {
+        if (accion === 'ocultar') {
+            $("#div_barrio").hide();
+            $("#caso_comunidad_id").val('');
+            $("#caso_territorio_id").val('');
+            $("#div_territorio").removeClass("col-md-3");
+            $("#div_territorio").addClass("col-md-6");
+        }
+    }
+
+    /* $("#caso_municipio_id").on('change', function(e) {
+        var municipio_id = $('#caso_municipio_id').val();
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>"+municipio_id+"/caso.territorio_id/Territorio/",
+            data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio",
+        }).done(function(data) {
+            $("#div_territorio").html(data);
+            $("#caso_territorio_id").focus();
+        }).fail(function() {
+            alert("error");
+        });
+    }); */
+
+    /*  $("#caso_territorio_id").on('change', function(e) {
+         var texto = $('#caso_territorio_id option:selected').html();
+         var n = texto.search(" U");
+         if(texto.search(' U') !== -1 ){
+             $("#div_territorio").removeClass("col-md-6");
+             $("#div_territorio").addClass("col-md-3");
+             cargarBarrios();
+         }else{
+             $('#div_barrio').hide();
+             $('#caso_comunidad_id').val('');
+             $("#div_territorio").removeClass("col-md-3");
+             $("#div_territorio").addClass("col-md-6");
+         }            
+     });
+
+     function cargarBarrios(){
+         jsSpinner('show');            
+         let datos = new FormData();
+         var territorio_id = $('#caso_territorio_id').val();
+         datos.append('territorio_id', territorio_id);
+         fetch("<?php //echo PUBLIC_PATH . 'violencia_politica/casos/db_select_barrios/'; 
+                ?>",
+         {
+             method: 'POST',        
+             body: datos
+         }).then(function(response) {
+             //console.log('response =', response);
+             return response.text();
+         })
+         .then(function(data) {
+             console.log('data = ', data);
+             $("#div_barrio").html(data);
+             $("#caso_barrio_id").focus();
+             $("#div_barrio").addClass("col-md-3");
+             $('#div_barrio').show();
+             jsSpinner('hide');
+         })
+         .catch(function(err) {
+             jsSpinner('hide');
+             console.error(err);
+         });   
+     } */
+
+    $("#fuente_nombre").on('keyup', function(e) {
+        var fecha = $('#fuente_fecha').val();
+        var nombre = $('#fuente_nombre').val();
+        var caso_id = $('#caso_id').val();
+        if (fecha != '' && nombre != '') {
+            $('#boton_anadir_fuente').attr('href',
+                '/violencia_politica/casos/agregar_fuente/' + caso_id + '/' + fecha + '/' + nombre + '/');
+            $('#boton_anadir_fuente').attr('class', 'btn btn-success form-control');
+        } else {
+            $('#boton_anadir_fuente').attr('class', 'btn btn-success disabled form-control');
+        }
+
+    });
+
+    $("#fuente_fecha").on('keyup', function(e) {
+        var fecha = $('#fuente_fecha').val();
+        var nombre = $('#fuente_nombre').val();
+        var caso_id = $('#caso_id').val();
+        if (fecha != '' && nombre != '') {
+            $('#boton_anadir_fuente').attr('href',
+                '/violencia_politica/casos/agregar_fuente/' + caso_id + '/' + fecha + '/' + nombre + '/');
+            $('#boton_anadir_fuente').attr('class', 'btn btn-success form-control');
+        } else {
+            $('#boton_anadir_fuente').attr('class', 'btn btn-success disabled form-control');
+        }
+
+    });
+
+    $("#caso_dano_territorio_tipo_dano_id").on('change', function(e) {
+        var tipo_dano_id = $('#caso_dano_territorio_tipo_dano_id').val();
+        $.ajax({
+            type: "POST",
+            url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_danos/'; ?>" + tipo_dano_id + "/",
+            data: "tipo_dano_id=" + tipo_dano_id,
+        }).done(function(data) {
+            $("#div_select_dano").html(data);
+            $("#caso_dano_territorio_dano_id").focus();
+        }).fail(function() {
+            alert("error");
+        });
+    });
+
+    function deshabilitar_modal_dano() {
+        $("#btn-agregar-dano").prop('disabled', true);
+        $('#caso_dano_territorio_descripcion').val('');
+        $('#caso_dano_territorio_territorio_id').val('');
+        $('#caso_dano_territorio_dano_id').val('');
+        $('#caso_dano_territorio_tipo_dano_id').val('');
+    }
+
+    function validarBotonAgregarDano() {
+        var territorio_id = $('#caso_dano_territorio_territorio_id').val();
+        var tipo_dano_id = $('#caso_dano_territorio_tipo_dano_id').val();
+        var dano_id = $('#caso_dano_territorio_dano_id').val();
+        var descripcion = $('#caso_dano_territorio_descripcion').val();
+
+        /*if(territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== ''){*/
+        if (dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+            $("#btn-agregar-dano").prop('disabled', false);
+        } else {
+            $("#btn-agregar-dano").prop('disabled', true);
+        }
+    }
+
+    function agregarDano() {
+        $("#btn-cancelar-agregar-dano").prop('disabled', true);
+        let btn = $('#btn-agregar-dano');
+        btn.button('loading');
+        let modal = $("#modal-agregar-dano");
+        let caso_id = $('#caso_id').val();
+        let dano_id = $('#caso_dano_territorio_dano_id').val();
+        let territorio_id = $('#caso_dano_territorio_territorio_id').val();
+        if (territorio_id === '') {
+            territorio_id = '0';
+        }
+        let descripcion = $('#caso_dano_territorio_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/agregar_dano/'; ?>";
+
+        let datos = {
+            "caso_id": caso_id,
+            "dano_id": dano_id,
+            "territorio_id": territorio_id,
+            "descripcion": descripcion
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-agregar-dano").prop('disabled', false);
+
+                $('#caso_dano_territorio_descripcion').val('');
+                $('#caso_dano_territorio_territorio_id').val('');
+                $('#caso_dano_territorio_dano_id').val('');
+                $('#caso_dano_territorio_tipo_dano_id').val('');
+                $("#alert-id-guardar-dano").show();
+                $("#alert-id-guardar-dano").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en agregarDano()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function setVariablesEliminar(caso_dano_territorio_id_) {
+        caso_dano_territorio_id = caso_dano_territorio_id_;
+    }
+
+    function setNombreEliminarVictima(victima_id, victima_nombre) {
+        victima_id_eliminar = victima_id;
+        victima_nombre_eliminar = victima_nombre;
+        $('#nombre_victima_eliminar').text('¿Está seguro que desea eliminar la víctima ' + victima_nombre + '?');
+    }
+
+    function eliminarCasoDanoTerritorio() {
+        let caso_id = $('#caso_id').val();
+        $("#btn-cancelar-eliminar-dano").hide();
+        let btn = $('#btn-eliminar-dano');
+        btn.button('loading');
+        let modal = $("#modal_eliminar_dano");
+        //let nombre_dano = $("#dano_nombre").val();
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/eliminar_dano/'; ?>";
+
+        let datos = {
+            "caso_id": caso_id,
+            "caso_dano_territorio_id": caso_dano_territorio_id
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-eliminar-dano").show();
+                $("#alert-id-eliminar").show();
+                $("#alert-id-eliminar").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#btn-cancelar-eliminar-dano").show();
+                alert('ERROR en eliminarDano()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function cargarModalEditarCasoDanoTerritorio(caso_dano_territorio_id) {
+        jsSpinner('show');
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/cargar_editar_dano/'; ?>";
+        let caso_municipio_id = $('#caso_municipio_id').val();
+
+        let datos = {
+            "caso_dano_territorio_id": caso_dano_territorio_id,
+            "caso_municipio_id": caso_municipio_id
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                jsSpinner('hide');
+                $("#div_modal_editar").html(data);
+                let modal = $("#modal-editar-dano");
+                modal.modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                jsSpinner('hide');
+                alert('ERROR en cargarModalEditarCasoDanoTerritorio()');
+            }
+        });
+    }
+
+    function validarBotonEditarDano() {
+        var territorio_id = $('#editar_caso_dano_territorio_territorio_id').val();
+        var tipo_dano_id = $('#editar_caso_dano_territorio_tipo_dano_id').val();
+        var dano_id = $('#editar_caso_dano_territorio_dano_id').val();
+        var descripcion = $('#editar_caso_dano_territorio_descripcion').val();
+
+        if (territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+            $("#btn-guardar-cambio-dano").prop('disabled', false);
+        } else {
+            $("#btn-guardar-cambio-dano").prop('disabled', true);
+        }
+
+    }
+
+    function onChangeTipoDanoEditar() {
+
+        var tipo_dano_id = $('#editar_caso_dano_territorio_tipo_dano_id').val();
+        var datos = {
+            "tipo_dano_id": tipo_dano_id
+        };
+        var url = "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_danos_editar/'; ?>";
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_select_dano_editar").html(data);
+                //let modal = $("#modal-editar-dano");
+                $("#div_select_dano_editar").html(data);
+                $("#editar_caso_dano_territorio_dano_id").focus();
+
+                var territorio_id = $('#editar_caso_dano_territorio_territorio_id').val();
+                var tipo_dano_id = $('#editar_caso_dano_territorio_tipo_dano_id').val();
+                var dano_id = $('#editar_caso_dano_territorio_dano_id').val();
+                var descripcion = $('#editar_caso_dano_territorio_descripcion').val();
+                if (territorio_id !== '' && dano_id !== '' && descripcion !== '' && tipo_dano_id !== '') {
+                    $("#btn-guardar-cambio-dano").prop('disabled', false);
+                } else {
+                    $("#btn-guardar-cambio-dano").prop('disabled', true);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en cargarDano');
+            }
+        });
+    }
+
+    function guardarCambiosDano() {
+        $("#btn-cancelar-guardar-cambio-dano").prop('disabled', true);
+        let btn = $('#btn-guardar-cambio-dano');
+        btn.button('loading');
+        let modal = $("#modal-editar-dano");
+        let caso_id = $('#caso_id').val();
+        let caso_dano_territorio_id = $('#caso_dano_territorio_id').val();
+        let dano_id = $('#editar_caso_dano_territorio_dano_id').val();
+        let territorio_id = $('#editar_caso_dano_territorio_territorio_id').val();
+        let descripcion = $('#editar_caso_dano_territorio_descripcion').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'dano/gestion_danos/guardar_cambios_dano/'; ?>";
+
+        let datos = {
+            "caso_id": caso_id,
+            "caso_dano_territorio_id": caso_dano_territorio_id,
+            "dano_id": dano_id,
+            "territorio_id": territorio_id,
+            "descripcion": descripcion
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_danos").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-cambio-dano").prop('disabled', false);
+
+                //                $('#caso_dano_territorio_descripcion').val('');
+                //                $('#caso_dano_territorio_territorio_id').val('');
+                //                $('#caso_dano_territorio_dano_id').val('');
+                //                $('#caso_dano_territorio_tipo_dano_id').val('');                  
+                $("#alert-id-guardar-cambio-dano").show();
+                $("#alert-id-guardar-cambio-dano").hide().fadeIn(500).delay(4000).fadeOut(500);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en guardarCambiosDano()');
+                btn.button('reset');
+            }
+        });
+    }
+
+
+    $("#div_etnia_indigena_id").hide();
+    $("#victima_etnia_id").on('change', function(e) {
+        var etnia_id = $('#victima_etnia_id').val();
+        if (etnia_id == 2) {
+            $("#div_etnia_indigena_id").show();
+        } else {
+            $("#div_etnia_indigena_id").hide();
+            $("#victima_etnia_indigena_id").val('');
+        }
+    });
+
+    function onChangeEditarEtniaId() {
+        var etnia_id = $('#victima_editar_etnia_id').val();
+        if (etnia_id == 2) {
+            $("#div_editar_etnia_indigena_id").show();
+        } else {
+            $("#div_editar_etnia_indigena_id").hide();
+            $("#victima_editar_etnia_indigena_id").val('');
+        }
+    }
+
+
+    function llenarArrayAntecedentes() {
+        var cantidad_antecedentes = 0;
+        var antecedentesSeleccionados_ = new Array();
+        $('[name="victima_antecedente_violencia_check[]"]:checked').each(function() {
+            cantidad_antecedentes = cantidad_antecedentes + 1;
+            antecedentesSeleccionados_.push($(this).val());
+        });
+        antecedentesSeleccionados = antecedentesSeleccionados_;
+    }
+
+    function llenarArrayCaracterizaciones() {
+        var cantidad_victima_caracterizacion = 0;
+        var caracterizacionSeleccionados_ = new Array();
+        $('[name="victima_caracterizacion_check[]"]:checked').each(function() {
+            cantidad_victima_caracterizacion = cantidad_victima_caracterizacion + 1;
+            caracterizacionSeleccionados_.push($(this).val());
+        });
+        caracterizacionSeleccionados = caracterizacionSeleccionados_;
+    }
+
+    function llenarArrayEtnias() {
+        var cantidad_victima_etnia = 0;
+        var etniaSeleccionados_ = new Array();
+        $('[name="victima_etnia_check[]"]:checked').each(function() {
+            cantidad_victima_etnia = cantidad_victima_etnia + 1;
+            etniaSeleccionados_.push($(this).val());
+        });
+        etniaSeleccionados = etniaSeleccionados_;
+    }
+
+    function llenarArrayAntecedentesEditar() {
+        var cantidad_antecedentes = 0;
+        var antecedentesSeleccionados_ = new Array();
+        $('[name="victima_editar_antecedente_violencia_check[]"]:checked').each(function() {
+            cantidad_antecedentes = cantidad_antecedentes + 1;
+            antecedentesSeleccionados_.push($(this).val());
+        });
+        antecedentesSeleccionadosEditar = antecedentesSeleccionados_;
+    }
+
+    function llenarArrayCaracterizacionesEditar() {
+        var cantidad_victima_caracterizacion = 0;
+        var caracterizacionSeleccionados_ = new Array();
+        $('[name="victima_editar_caracterizacion_check[]"]:checked').each(function() {
+            cantidad_victima_caracterizacion = cantidad_victima_caracterizacion + 1;
+            caracterizacionSeleccionados_.push($(this).val());
+        });
+        caracterizacionSeleccionadosEditar = caracterizacionSeleccionados_;
+    }
+
+    function llenarArrayEtniasEditar() {
+        var cantidad_victima_etnia = 0;
+        var etniaSeleccionados_ = new Array();
+        $('[name="victima_editar_etnia_check[]"]:checked').each(function() {
+            cantidad_victima_etnia = cantidad_victima_etnia + 1;
+            etniaSeleccionados_.push($(this).val());
+        });
+        etniaSeleccionadosEditar = etniaSeleccionados_;
+    }
+
+    function agregarVictima() {
+        //$('.antecedentes_violencia_editar').prop('checked', false);
+        llenarArrayAntecedentes();
+        llenarArrayCaracterizaciones();
+        llenarArrayEtnias();
+        $("#btn-cancelar-agregar-victima").prop('disabled', true);
+        let btn = $('#btn-agregar-victima');
+        btn.button('loading');
+        let modal = $("#modal-agregar-victima");
+        let caso_id = $('#caso_id').val();
+        let nombre = $('#victima_nombre').val();
+        let genero_id = $('#victima_genero_id').val();
+        let edad = $('#victima_edad').val();
+        let ocupacion = $('#victima_ocupacion').val();
+        /*let caracterizacion_id = $('#victima_caracterizacion2_id').val();*/
+        let caracterizacion_otro = $('#victima_caracterizacion_otro').val();
+        //let etnia_id = $('#victima_etnia_id').val();
+        //let etnia_indigena_id = $('#victima_etnia_indigena_id').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/gestion_victima/'; ?>";
+
+        let datos = {
+            "caso_id": caso_id,
+            "nombre": nombre,
+            "genero_id": genero_id,
+            "edad": edad,
+            "ocupacion": ocupacion,
+            "caracterizacion_id": "1",
+            "caracterizacion_otro": caracterizacion_otro,
+            "etnia_id": "1",
+            "etnia_indigena_id": "1"
+        };
+        let victima = {
+            "accion": "crear",
+            "victima": datos,
+            "antecedente_violencia": antecedentesSeleccionados,
+            "victima_caracterizacion": caracterizacionSeleccionados,
+            "victima_etnia": etniaSeleccionados
+        };
+
+        $.ajax(url, {
+            data: victima,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_victima").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-agregar-victima").prop('disabled', false);
+                cargarSelectMultipleVictima();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en agregarVictima()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function cargarModalEditarVictima(victima_id) {
+        deshabilitarVictima();
+        jsSpinner('show');
+
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/cargar_editar_victima/'; ?>";
+
+        let datos = {
+            "victima_id": victima_id
+        };
+
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                jsSpinner('hide');
+                $("#div_modal_editar_victima").html(data);
+                let modal = $("#modal-editar-victima");
+                modal.modal('show');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en cargarModalEditarVictima()');
+            }
+        });
+    }
+
+    function guardarCambiosVictima() {
+
+        llenarArrayAntecedentesEditar();
+        llenarArrayCaracterizacionesEditar();
+        llenarArrayEtniasEditar();
+        $("#btn-cancelar-guardar-cambio-victima").prop('disabled', true);
+        let btn = $('#btn-guardar-cambio-victima');
+        btn.button('loading');
+        let modal = $("#modal-editar-victima");
+        let caso_id = $('#victima_editar_caso_id').val();
+        let victima_id = $('#victima_editar_id').val();
+        let nombre = $('#victima_editar_nombre').val();
+        let genero_id = $('#victima_editar_genero_id').val();
+        let edad = $('#victima_editar_edad').val();
+        let ocupacion = $('#victima_editar_ocupacion').val();
+        /*let caracterizacion_id = $('#victima_editar_caracterizacion_id').val();*/
+        let caracterizacion_otro = $('#victima_editar_caracterizacion_otro').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/gestion_victima/'; ?>";
+
+        let datos = {
+            "caso_id": caso_id,
+            "id": victima_id,
+            "nombre": nombre,
+            "genero_id": genero_id,
+            "edad": edad,
+            "ocupacion": ocupacion,
+            "caracterizacion_id": "1",
+            "caracterizacion_otro": caracterizacion_otro,
+            "etnia_id": "1"
+        };
+        let victima = {
+            "accion": "editar",
+            "victima": datos,
+            "antecedente_violencia": antecedentesSeleccionadosEditar,
+            "victima_caracterizacion": caracterizacionSeleccionadosEditar,
+            "victima_etnia": etniaSeleccionadosEditar
+        };
+
+        $.ajax(url, {
+            data: victima,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_victima").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                cargarSelectMultipleVictima();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en guardarCambiosVictima()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function deshabilitarVictima() {
+        $("#victima_nombre").val("");
+        $("#victima_genero_id").val("");
+        $("#victima_edad").val("");
+        $("#victima_ocupacion").val("");
+        $("#victima_caracterizacion2_id").val("");
+        $("#div_victima_caracterizacion_otro").hide();
+        $("#victima_caracterizacion_otro").val("");
+        $("#btn-agregar-victima").prop("disabled", true);
+        $(".editar_antecedente_violencia").prop("checked", false);
+        $(".agregar_antecedente_violencia").prop("checked", false);
+    }
+
+    function validarBotonGuardarVictima() {
+        var nombre = $("#victima_nombre").val();
+        var genero = $("#victima_genero_id").val();
+        var ocupacion = $("#victima_ocupacion").val();
+        var len = $("[name='victima_caracterizacion_check[]']:checked").length;
+
+        if (nombre !== '' && genero !== '' && ocupacion !== '' && len > 0) {
+            $("#btn-agregar-victima").prop('disabled', false);
+        } else {
+            $("#btn-agregar-victima").prop('disabled', true);
+        }
+    }
+
+    function validarBotonGuardarCambioVictima() {
+        var nombre = $("#victima_editar_nombre").val();
+        var genero = $("#victima_editar_genero_id").val();
+        var ocupacion = $("#victima_editar_ocupacion").val();
+        var len = $("[name='victima_editar_caracterizacion_check[]']:checked").length;
+
+        if (nombre !== '' && genero !== '' && ocupacion !== '' && len > 0) {
+            $("#btn-guardar-cambio-victima").prop('disabled', false);
+        } else {
+            $("#btn-guardar-cambio-victima").prop('disabled', true);
+        }
+    }
+
+    function eliminarVictima() {
+        $("#btn-cancelar-eliminar-victima").prop('disabled', true);
+        let btn = $('#btn-modal-eliminar-victima');
+        btn.button('loading');
+        let modal = $("#modal_eliminar_victima");
+
+        let victima_id = victima_id_eliminar;
+        let nombre_victima = victima_nombre_eliminar;
+        let nombre_caso = $('#caso_titulo').val();
+        let caso_id = $('#caso_id').val();
+
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/gestion_victima/'; ?>";
+
+        let datos = {
+            "accion": "eliminar",
+            "victima_id": victima_id,
+            "nombre_victima": nombre_victima,
+            "nombre_caso": nombre_caso,
+            "caso_id": caso_id
+        };
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_gestion_victima").html(data);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-eliminar-victima").prop('disabled', false);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en eliminarVictima()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function cargarSelectMultipleVictima_deprecated() {
+        let caso_id = $('#caso_id').val();
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/select_multiple_victima/'; ?>";
+        let datos = {
+            "caso_id": caso_id
+        };
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                $("#div_select_multiple_victima").html(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en cargarSelectMultipleVictima()');
+            }
+        });
+    }
+
+    function cargarSelectMultipleVictima() {
+        let caso_id = $('#caso_id').val();
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/select_multiple_victima/'; ?>";
+        let datos = new FormData();
+        datos.append('caso_id', caso_id);
+        fetch(url, {
+                method: 'POST',
+                body: datos
+            }).then(function(response) {
+                console.log('response =', response);
+                return response.text();
+            })
+            .then(function(data) {
+                console.log('data = ', data);
+                $("#div_select_multiple_victima").html(data);
+            })
+            .catch(function(err) {
+                console.error(err);
+                alert('ERROR en cargarSelectMultipleVictima() ' + err);
+            });
+
+    }
+
+
+    let tipo_localidad = '';
+
+    function mostrarModalLocalidad(tipo) {
+        tipo_localidad = tipo;
+        let modal = $("#modal_agregar_localidad");
+        modal.modal('show');
+        modal.find('.modal-title').text('Crear ' + tipo);
+        modal.find('#titulo_localidad').text('Nombre ' + tipo);
+        /*$("#localidad_nombre").val('hola');
+        $("#localidad_nombre").focus();*/
+        $("#localidad_nombre").val('');
+        $("#btn-guardar-localidad").attr("disabled", "true");
+    }
+
+    function validarNombreLocalidad() {
+        let nombre = $('#localidad_nombre').val().trim();
+        if ($('#localidad_nombre').val() === '' || nombre.length <= 3) {
+            $("#btn-guardar-localidad").prop('disabled', true);
+        } else {
+            $("#btn-guardar-localidad").prop('disabled', false);
+        }
+    }
+
+    function agregarLocalidad() {
+        $("#btn-cancelar-guardar-localidad").hide();
+        let btn = $('#btn-guardar-localidad');
+        btn.button('loading');
+        let modal = $("#modal_agregar_localidad");
+        let nombre_localidad = $("#localidad_nombre").val();
+        let municipio_id = $("#caso_municipio_id").val();
+        let url = "<?php echo PUBLIC_PATH . 'violencia_politica/casos/agregar_localidad/'; ?>";
+
+        let datos = {
+            "municipio_id": municipio_id,
+            "nombre": nombre_localidad,
+            "tipo": tipo_localidad
+        };
+        let localidad_id = '';
+        $.ajax(url, {
+            data: datos,
+            method: 'POST',
+            success: function(data, textStatus, jqXHR) {
+                if (tipo_localidad === 'corregimiento') {
+                    $("#div_corregimiento").html(data);
+                    $("#caso_localidad_inspeccion").val('');
+                    $("#caso_localidad_vereda").val('');
+                    localidad_id = $("#caso_localidad_corregimiento").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                } else if (tipo_localidad === 'vereda') {
+                    $("#div_vereda").html(data);
+                    $("#caso_localidad_corregimiento").val('');
+                    $("#caso_localidad_inspeccion").val('');
+                    localidad_id = $("#caso_localidad_vereda").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                } else if (tipo_localidad === 'inspeccion') {
+                    $("#div_inspeccion").html(data);
+                    $("#caso_localidad_corregimiento").val('');
+                    $("#caso_localidad_vereda").val('');
+                    localidad_id = $("#caso_localidad_inspeccion").val();
+                    $("#caso_localidad_id").val(localidad_id);
+                }
+                //$("#div_lista_localidads").html(data);
+                mostrarAlertGuardaLocalidad(tipo_localidad, nombre_localidad);
+                btn.button('reset');
+                modal.modal('hide');
+                $("#btn-cancelar-guardar-localidad").show();
+                $("#localidad_nombre").val('');
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('ERROR en agregarLocalidad()');
+                btn.button('reset');
+            }
+        });
+    }
+
+    function gestionSelectLocalidades(tipo_localidad_in) {
+        let localidad_id = '';
+        if (tipo_localidad_in === 'corregimiento') {
+            $("#caso_localidad_inspeccion").val('');
+            $("#caso_localidad_vereda").val('');
+            localidad_id = $("#caso_localidad_corregimiento").val();
+            $("#caso_localidad_id").val(localidad_id);
+        } else if (tipo_localidad_in === 'vereda') {
+            $("#caso_localidad_corregimiento").val('');
+            $("#caso_localidad_inspeccion").val('');
+            localidad_id = $("#caso_localidad_vereda").val();
+            $("#caso_localidad_id").val(localidad_id);
+        } else if (tipo_localidad_in === 'inspeccion') {
+            $("#caso_localidad_corregimiento").val('');
+            $("#caso_localidad_vereda").val('');
+            localidad_id = $("#caso_localidad_inspeccion").val();
+            $("#caso_localidad_id").val(localidad_id);
+        }
+    }
+
+    function mostrarAlertGuardaLocalidad(tipo_localidad_in, nombre_localidad_in) {
+        if (tipo_localidad_in === 'corregimiento') {
+            $("#alert-id-guardar-localidad").text('El ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creado con exito');
+        } else if (tipo_localidad_in === 'vereda') {
+            $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+        } else if (tipo_localidad_in === 'inspeccion') {
+            $("#alert-id-guardar-localidad").text('La ' + tipo_localidad_in + ' ' + nombre_localidad_in + ' fue creada con exito');
+        }
+        $("#alert-id-guardar-localidad").show();
+        $("#alert-id-guardar-localidad").hide().fadeIn(500).delay(4000).fadeOut(500);
+    }
+
+    $("#vhpr_hechos_id").mousedown(function(e) {
+        e.preventDefault();
+
+        var select = this;
+        var scroll = select.scrollTop;
+
+        e.target.selected = !e.target.selected;
+
+        setTimeout(function() {
+            select.scrollTop = scroll;
+        }, 0);
+
+        $(select).focus();
+        validarBotonAgregarVictimizacion();
+    }).mousemove(function(e) {
+        e.preventDefault()
+    });
+
+    $("#vhpr_victimas_id").mousedown(function(e) {
+        e.preventDefault();
+
+        var select = this;
+        var scroll = select.scrollTop;
+
+        e.target.selected = !e.target.selected;
+
+        setTimeout(function() {
+            select.scrollTop = scroll;
+        }, 0);
+
+        $(select).focus();
+        validarBotonAgregarVictimizacion();
+    }).mousemove(function(e) {
+        e.preventDefault()
+    });
+
+    function validarCaracterizacionOtro() {
+        var caracterizacion = false;
+        var valor = '';
+        $('[name="victima_caracterizacion_check[]"]:checked').each(function() {
+            valor = $(this).val();
+            if (valor === '3') {
+                caracterizacion = true;
+            }
+        });
+        if (caracterizacion) {
+            $("#div_victima_caracterizacion_otro").show();
+            $("#victima_caracterizacion_otro").focus();
+        } else {
+            $("#div_victima_caracterizacion_otro").hide();
+            $("#victima_caracterizacion_otro").val('');
+        }
+    }
+
+    function validarCaracterizacionOtroEditar() {
+        var caracterizacion = false;
+        var valor = '';
+        $('[name="victima_editar_caracterizacion_check[]"]:checked').each(function() {
+            valor = $(this).val();
+            if (valor === '3') {
+                caracterizacion = true;
+            }
+        });
+        if (caracterizacion) {
+            $("#div_editar_victima_caracterizacion_otro").show();
+            $("#victima_editar_caracterizacion_otro").focus();
+        } else {
+            $("#div_editar_victima_caracterizacion_otro").hide();
+            $("#victima_editar_caracterizacion_otro").val('');
+        }
+    }
+</script>

@@ -1,0 +1,18 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect('editar_caso_dano_territorio.dano_id', 'nombre', array('opcion/dano', 'getDanoByTipoDanoIdDBS',  $tipo_dano_id), NULL, array('class'=>'', 'onchange'=>'validarBotonEditarDano()'), NULL, 'Daño'); ?>
+
+<script type='text/javascript'>
+               
+$("#caso_dano_terriotorio_dano_id").on('change', function(e) {
+//
+//    $("#div_impactos").fadeIn();
+//    $("#impacto_ambiental_si_no").focus();
+//    var territorio_nombre = $("#caso_territorio_id option:selected").attr('texto');
+//    var territorio_id = $("#caso_territorio_id option:selected").attr('value');
+//    $("#afectacion_territorio_territorio_nombre").val(territorio_nombre);
+//    $("#afectacion_territorio_territorio_id").val(territorio_id);
+//    $('#btn_guardar').attr('class', 'btn btn-success text-bold');
+//    
+        
+});
+</script>

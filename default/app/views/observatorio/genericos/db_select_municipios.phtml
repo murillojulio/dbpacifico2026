@@ -1,0 +1,42 @@
+<?php DwForm::open() ?>
+<?php echo DwForm::dbSelect($field, 'nombre', array('observatorio/municipio', 'getMunicipioPorDepartamento',  $departamento_id), NULL, array('class'=>$input_required), NULL, $label); ?>
+<?php echo DwForm::hidden('m.cargar', NULL, $cargar_territorio) ?>
+<script type="text/javascript">
+    $(document).ready(function() 
+    {        
+        $("#caso_municipio_id").on('change', function(e) {
+            jsSpinner('show');
+            //Para partial ubicacion
+            //$("#btn_anadir_ubicacion").attr('class', 'btn btn-success disabled form-control');
+            //////
+            var cargar_territorio = $('#m_cargar').val();
+
+            var municipio_id = $('#caso_municipio_id').val();
+            
+            if(municipio_id != '')
+            {                    
+                $("#btn_anadir_ubicacion").attr('class', 'btn btn-success');            
+            }
+            else
+            {                    
+                $("#btn_anadir_ubicacion").attr('class', 'btn btn-success disabled');            
+            }
+            if(cargar_territorio == 'si')
+                {
+                    $.ajax({
+                type: "POST",
+                url: "<?php echo PUBLIC_PATH . 'observatorio/genericos/db_select_territorios_municipio/'; ?>"+municipio_id+"/caso.territorio_id/Territorio/<?php echo $required; ?>/",
+                data: "departamento_id=" + municipio_id + "&field=caso.territorio_id&label=Territorio&required=<?php echo $required; ?>",
+            }).done(function(data) {
+                $("#div_territorio").html(data);
+                jsSpinner('hide');
+                $("#caso_territorio_id").focus();
+            }).fail(function() {
+                jsSpinner('hide');
+                alert("error");
+            });
+                }
+        });
+    });
+        
+</script>

@@ -1,0 +1,37 @@
+<?php View::flash(); ?>
+
+<div class="container shell-view">
+
+    <?php View::process($page_module, $page_title, $set_title); ?>
+
+    <?php echo DwForm::open(); ?>
+
+        <div class="row">
+             <div class="col-md-6">
+                 <?php echo DwForm::hidden('accion_seguimiento_control.megaproyecto_id', NULL) ?>
+                 <?php echo DwForm::hidden('accion_seguimiento_control.id', NULL) ?>
+                 <?php echo DwForm::date('accion_seguimiento_control.fecha_accion', array('class'=>'input-required'), NULL, 'Fecha de la acción de seguimiento y control'); ?>                        
+             </div>                
+             <div class="col-md-6">
+                 <?php echo DwForm::dbSelect('accion_seguimiento_control.mads_car_id', 'nombre', array('afectacion/mads_car', 'getListadoMadsCarDBS', MadsCar::ACTIVO), NULL, array('class'=>'input-required'), NULL, 'Entidad que ejecuta la acción de seguimiento y control');  ?>
+             </div>           
+         </div>
+         <div class="row">
+             <div class="col-md-6">
+                 <?php echo DwForm::textarea('accion_seguimiento_control.descripcion_accion', array('class'=>'input-lower'), NULL, 'Descripción de la acción de seguimiento'); ?>
+             </div>                
+             <div class="col-md-6">
+                 <?php echo DwForm::textarea('accion_seguimiento_control.nuevas_medidas', array('class'=>'input-lower'), NULL, 'Nuevas medidas para el plan de manejo'); ?>
+             </div>           
+         </div>
+    <div class="row">
+            <div class="form-actions">
+                <?php echo DwForm::send('Actualizar accion de seguimiento control'); ?>
+                <?php echo DwForm::cancel($url_redir_back); ?>
+                <?php //echo DwForm::focus('accion_seguimiento_control.nombre'); ?>
+            </div>
+        </div>
+
+    <?php echo DwForm::close(); ?>
+
+</div>
