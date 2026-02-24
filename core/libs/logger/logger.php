@@ -93,6 +93,9 @@ abstract class Logger
     public static function initialize($name='')
     {
         self::$log_path = APP_PATH . 'temp/logs/'; //TODO poder cambiar el path
+        if (!is_dir(self::$log_path)) {
+            mkdir(self::$log_path, 0755, true);
+        }
         if ($name === '') {
             $name = 'log' . date('Y-m-d') . '.txt';
         }
