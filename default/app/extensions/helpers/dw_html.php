@@ -136,7 +136,7 @@ class DwHtml extends Html {
      * @param boolean $loadAjax
      * @return type
      */
-    public static function button2Icons($action, $text = NULL, $attrs = array(), $icon, $loadAjax = APP_AJAX) {
+    public static function button2Icons($action, $text = NULL, $attrs = array(), $icon = array(), $loadAjax = APP_AJAX) {
         if (is_array($attrs) OR empty($attrs)) {
             if(empty($attrs)) {
                 $attrs['class'] = 'btn-info';
@@ -231,7 +231,7 @@ class DwHtml extends Html {
      * @param boolean $loadAjax
      * @return string
      */
-    public static function buttonTableIcons($title, $action, $attrs = NULL, $type='info', $icon, $loadAjax = APP_AJAX) {
+    public static function buttonTableIcons($title, $action, $attrs = NULL, $type='info', $icon = array(), $loadAjax = APP_AJAX) {
         if(empty($attrs)) {
             $attrs = array();
             $attrs['class'] = "btn-small btn-$type";
