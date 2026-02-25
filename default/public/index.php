@@ -52,7 +52,8 @@ define('PRODUCTION', FALSE);
 /**
  * Descomentar para mostrar los errores
  */
-//error_reporting(E_ALL ^ E_STRICT);ini_set('display_errors', 'On');
+error_reporting(E_ALL ^ E_STRICT);
+ini_set('display_errors', 'On');
 
 /**
  * Define el APP_PATH
