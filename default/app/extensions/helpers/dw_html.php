@@ -40,7 +40,12 @@ class DwHtml extends Html {
             }
             if(!empty($attrs)) {
                 $attrs = Tag::getAttrs($attrs);
+            } else {
+                $attrs = '';
             }
+        }
+        if (!is_string($attrs)) {
+            $attrs = is_array($attrs) ? Tag::getAttrs($attrs) : (string) $attrs;
         }
         if(empty($action)) {
             $action = PUBLIC_PATH;
