@@ -8,6 +8,9 @@ DirectoryIndex index.php
     # la aplicacion se ubica en public_html
     #RewriteBase /
 
+    # Favicon: evitar 404 y que la petición llegue al framework
+    RewriteRule ^favicon\.ico$ img/logo_observatorio.png [L]
+
     # No permite reescritura si el archivo o directorio existe
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
