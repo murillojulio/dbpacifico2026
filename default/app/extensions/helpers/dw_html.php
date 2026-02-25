@@ -57,7 +57,9 @@ class DwHtml extends Html {
                 }
             }
         }
-        if($icon) {
+        $text = is_array($text) ? '' : (string) $text;
+        $icon = is_array($icon) ? '' : (string) $icon;
+        if($icon !== '') {
             $text = "<i class=\"fa fa-pd-expand $icon\"></i> $text";
         }
         return "<a href=\"$action\" $attrs >$text</a>";
