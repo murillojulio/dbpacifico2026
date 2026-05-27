@@ -97,7 +97,7 @@
         
     </div>
          <div class="tab-pane <?php echo $tab_2_active; ?>" id="tab2">
-                  &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $poblacion->poblacion_in;?>      
+                  &nbsp;&nbsp;&nbsp;fecha última actualización: <?php echo $poblacion->poblacion_in ?? ''; ?>
                   <?php
                     $array_poblacion = (array) $poblacion;
                     echo View::partial('poblacion/editar', false, array('array_poblacion' => $array_poblacion, 'para_territorio' => 'si')); 
