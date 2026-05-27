@@ -14,13 +14,6 @@
  * @author Deivinson Tejeda <deivinsontejeda@gmail.com>
  */
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-require_once CORE_PATH . 'vendors/phpmailer/src/PHPMailer.php';
-require_once CORE_PATH . 'vendors/phpmailer/src/Exception.php';
-require_once CORE_PATH . 'vendors/phpmailer/src/SMTP.php';
-
 class CorreoRecoverPassword {
 
     //Atributos para el envio de correo (acceso privado)
@@ -57,10 +50,10 @@ class CorreoRecoverPassword {
      */
     public static function send($correo, $person, $body)
     {
-        //Cargamos las librería PHPMailer
-        //Load::lib('phpmailer');
-        //instancia de PHPMailer
-        $mail = new PHPMailer();
+        require_once CORE_PATH . 'vendors/phpmailer/src/PHPMailer.php';
+        require_once CORE_PATH . 'vendors/phpmailer/src/Exception.php';
+        require_once CORE_PATH . 'vendors/phpmailer/src/SMTP.php';
+        $mail = new \PHPMailer\PHPMailer\PHPMailer();
 
         $mail->IsSMTP();
         $mail->SMTPAuth = true; // enable SMTP authentication
