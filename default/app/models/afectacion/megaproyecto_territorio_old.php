@@ -83,7 +83,7 @@ class MegaproyectoTerritorio extends ActiveRecord {
      * 
      * return object ActiveRecord
      */
-    public static function setMegaproyectoTerritorio($method, $data, $megaproyecto_nombre, $optData=null, $tipo_impacto_nombre) {        
+    public static function setMegaproyectoTerritorio($method, $data, $megaproyecto_nombre, $optData=null, $tipo_impacto_nombre = '') {        
         $obj = new MegaproyectoTerritorio($data); //Se carga los datos con los de las tablas        
         if($optData) { //Se carga información adicional al objeto
             $obj->dump_result_self($optData);

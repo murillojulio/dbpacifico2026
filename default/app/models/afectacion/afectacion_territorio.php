@@ -84,7 +84,7 @@ class AfectacionTerritorio extends ActiveRecord {
      * 
      * return object ActiveRecord
      */
-    public static function setAfectacionTerritorio($method, $data, $megaproyecto_nombre, $optData=null, $tipo_impacto_nombre) {        
+    public static function setAfectacionTerritorio($method, $data, $megaproyecto_nombre, $optData=null, $tipo_impacto_nombre = '') {        
         $obj = new AfectacionTerritorio($data); //Se carga los datos con los de las tablas        
         if($optData) { //Se carga información adicional al objeto
             $obj->dump_result_self($optData);
@@ -116,7 +116,7 @@ class AfectacionTerritorio extends ActiveRecord {
      * 
      * return object ActiveRecord
      */
-    public static function setAfectacionTerritorioByCultivoIlicito($method, $data, $cultivo_nombre, $optData=null, $tipo_impacto_nombre) {        
+    public static function setAfectacionTerritorioByCultivoIlicito($method, $data, $cultivo_nombre, $optData=null, $tipo_impacto_nombre = '') {        
         $obj = new AfectacionTerritorio($data); //Se carga los datos con los de las tablas        
         if($optData) { //Se carga información adicional al objeto
             $obj->dump_result_self($optData);

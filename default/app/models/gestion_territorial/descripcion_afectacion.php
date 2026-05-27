@@ -83,7 +83,7 @@ class DescripcionAfectacion extends ActiveRecord {
      * 
      * return object ActiveRecord
      */
-    public static function setDescripcionAfectacion($method, $data, $iniciativa_empresarial_nombre, $optData=null, $tipo_impacto_nombre) {        
+    public static function setDescripcionAfectacion($method, $data, $iniciativa_empresarial_nombre, $optData=null, $tipo_impacto_nombre = '') {        
         $obj = new DescripcionAfectacion($data); //Se carga los datos con los de las tablas        
         if($optData) { //Se carga información adicional al objeto
             $obj->dump_result_self($optData);
