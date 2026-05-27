@@ -78,7 +78,7 @@ class GestionTcciController extends BackendController {
         //$tipo       = (Input::hasPost('tipo')) ? Input::post('tipo') : $tipo;
         
         $territorio     = new Territorio();
-        $territorios    = $territorio->getAjaxTerritorio($field, $value, 'indigena', $order, $page);
+        $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo='indigena');
         if(empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }

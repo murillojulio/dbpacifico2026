@@ -34,7 +34,7 @@ class DwAudit extends Logger {
     /**
      * Inicializa el Logger
      */
-    public static function initialize(string $name=''): void {
+    public static function initialize($name='') {
         if(empty($name)){
             self::$_logName = 'audit' . date('Y-m-d') . '.txt';
         }        
@@ -50,7 +50,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function log(string $type = 'DEBUG', array|string $msg = '', string $name_log = ''): void {
+    public static function log($type='DEBUG', $msg, $name_log) {
         self::initialize($name_log);        
         $msg = trim(trim($msg),'.').'.';
         parent::log($type, '['.self::$_route.']['.self::$_login.']['.self::$_ip.'] '.$msg, self::$_logName);
@@ -63,7 +63,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function create(array|string $msg, string $name_log = ''): void {
+    public static function create ($msg, $name_log='') {
         self::log('CREATE', $msg, $name_log);
         
         $body = "<b>Usuario:</b>&nbsp;".Session::get('login')."<br>";
@@ -82,7 +82,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function update(array|string $msg, string $name_log = ''): void {
+    public static function update($msg, $name_log='') {
         self::log('UPDATE', $msg, $name_log);
     }
 
@@ -93,7 +93,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function warning(array|string $msg, string $name_log = ''): void {
+    public static function warning ($msg, $name_log='') {
         self::log('WARNING', $msg, $name_log);
     }
 
@@ -104,7 +104,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function error(array|string $msg, string $name_log = ''): void {
+    public static function error ($msg, $name_log='') {
         self::log('ERROR', $msg, $name_log);
     }
     
@@ -115,7 +115,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function debug(array|string $msg, string $name_log = ''): void {
+    public static function debug ($msg, $name_log='') {
         self::log('DEBUG', $msg, $name_log);
     }
 
@@ -126,7 +126,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function info(array|string $msg, string $name_log = ''): void {
+    public static function info ($msg, $name_log='') {
         self::log('INFO', $msg, $name_log);
     }
 }

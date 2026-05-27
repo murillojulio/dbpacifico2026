@@ -15,11 +15,13 @@ class StringFilter implements FilterInterface {
      * @param array $options
      * @return string
      */
-    public static function execute($s, $options) {
-        $string = filter_var($s, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    public static function execute($s, $options) {        
+        $string = filter_var($s, FILTER_SANITIZE_STRING);
         $string = strip_tags((string) $string);
         $string = stripslashes((string) $string);
         $string = trim($string);
         return $string;
-    }
+   }
+
 }
+?>

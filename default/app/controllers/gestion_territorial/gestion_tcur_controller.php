@@ -93,7 +93,7 @@ class GestionTcurController extends BackendController
         //$tipo       = (Input::hasPost('tipo')) ? Input::post('tipo') : $tipo;
 
         $territorio     = new Territorio();
-        $territorios    = $territorio->getAjaxTerritorio($field, $value, 'urbano', $order, $page);
+        $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'urbano');
         if (empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }

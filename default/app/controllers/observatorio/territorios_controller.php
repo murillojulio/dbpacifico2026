@@ -118,7 +118,7 @@ class TerritoriosController extends BackendController
         //$tipo       = (Input::hasPost('tipo')) ? Input::post('tipo') : $tipo;
 
         $territorio     = new Territorio();
-        $territorios    = $territorio->getAjaxTerritorio($field, $value, 'comunidad_negra', $order, $page);
+        $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'comunidad_negra');
         if (empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
@@ -146,7 +146,7 @@ class TerritoriosController extends BackendController
         $value      = (Input::hasPost('value')) ? Input::post('value') : $value;
 
         $territorio     = new Territorio();
-        $territorios    = $territorio->getAjaxTerritorio($field, $value, 'indigena', $order, $page);
+        $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'indigena');
         if (empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
@@ -175,7 +175,7 @@ class TerritoriosController extends BackendController
         //$tipo       = (Input::hasPost('tipo')) ? Input::post('tipo') : $tipo;
 
         $territorio     = new Territorio();
-        $territorios    = $territorio->getAjaxTerritorio($field, $value, 'urbano', $order, $page);
+        $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'urbano');
         if (empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }

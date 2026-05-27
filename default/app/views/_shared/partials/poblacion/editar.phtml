@@ -1,9 +1,4 @@
-<?php
-$_age_groups = ['e0_4','e5_9','e10_14','e15_19','e20_24','e25_29','e30_34','e35_39','e40_44','e45_49','e50_54','e55_59','e60_64','e65_69','e70_74','e75_79','e80_mas'];
-$_defaults = ['id'=>null,'total'=>null,'hombre'=>null,'mujer'=>null,'numero_familia'=>null,'afro'=>null,'indigena'=>null,'otro'=>null,'no_info'=>null];
-foreach ($_age_groups as $_g) { $_defaults[$_g] = null; $_defaults['h_'.$_g] = null; $_defaults['m_'.$_g] = null; }
-$array_poblacion = ($array_poblacion ?? []) + $_defaults;
-unset($_age_groups, $_defaults, $_g);
+<?php 
 
 $col_md = 'col-md-4';
 if($para_territorio == 'si' || $para_territorio == 'comunidad')
