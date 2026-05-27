@@ -55,6 +55,25 @@ define('PRODUCTION', FALSE);
 error_reporting(E_ALL ^ E_STRICT);
 ini_set('display_errors', 'On');
 
+// Captura errores a archivo cuando PHP-FPM ignora display_errors
+$_err_log = dirname(__DIR__) . '/app/temp/php_debug.log';
+set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline) use ($_err_log): bool {
+    $uri = $_SERVER['REQUEST_URI'] ?? '-';
+    file_put_contents($_err_log,
+        date('Y-m-d H:i:s') . " [$errno] $errstr\n  in $errfile:$errline\n  URI: $uri\n\n",
+        FILE_APPEND | LOCK_EX);
+    return false; // sigue el flujo normal (muestra en pantalla si display_errors está activo)
+});
+register_shutdown_function(function () use ($_err_log): void {
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR], true)) {
+        $uri = $_SERVER['REQUEST_URI'] ?? '-';
+        file_put_contents($_err_log,
+            date('Y-m-d H:i:s') . " [FATAL:{$e['type']}] {$e['message']}\n  in {$e['file']}:{$e['line']}\n  URI: $uri\n\n",
+            FILE_APPEND | LOCK_EX);
+    }
+});
+
 /**
  * Define el APP_PATH
  *
