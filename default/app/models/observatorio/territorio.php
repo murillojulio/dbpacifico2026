@@ -289,7 +289,7 @@ ORDER BY
     
     
             
-     public function getAjaxTerritorio($field, $value, $order='', $page=0, $tipo) {
+     public function getAjaxTerritorio($field, $value, $tipo, $order='', $page=0) {
         $value = Filter::get($value, 'string');
         if( strlen($value) <= 2 OR ($value=='none') ) {
             return NULL;

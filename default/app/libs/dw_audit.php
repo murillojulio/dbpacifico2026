@@ -34,7 +34,7 @@ class DwAudit extends Logger {
     /**
      * Inicializa el Logger
      */
-    public static function initialize($name='') {
+    public static function initialize(string $name=''): void {
         if(empty($name)){
             self::$_logName = 'audit' . date('Y-m-d') . '.txt';
         }        
@@ -50,7 +50,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function log($type='DEBUG', $msg, $name_log) {
+    public static function log($type, $msg, $name_log='') {
         self::initialize($name_log);        
         $msg = trim(trim($msg),'.').'.';
         parent::log($type, '['.self::$_route.']['.self::$_login.']['.self::$_ip.'] '.$msg, self::$_logName);
