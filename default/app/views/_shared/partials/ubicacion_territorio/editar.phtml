@@ -77,7 +77,7 @@
                 <?php
                  
                 $contador_ubicacion = 1;
-                foreach($ubicaciones as $ubicacion):                  
+                foreach(($ubicaciones ?: []) as $ubicacion):                
                     
                         ?>
                         <tr>                       

@@ -590,11 +590,7 @@ class TerritoriosController extends BackendController
         $obj_comunidades = new Comunidad();
         $this->comunidades = $obj_comunidades->getComunidadesByTerritorioId($id);
 
-        $cantidad_comunidad = 0;
-        foreach ($this->comunidades as $registros) :
-            $cantidad_comunidad++;
-        endforeach;
-        $this->cantidad_comunidad = $cantidad_comunidad;
+        $this->cantidad_comunidad = is_array($this->comunidades) ? count($this->comunidades) : 0;
 
         $obj_conflictos = new Conflicto();
         $this->conflictos = $obj_conflictos->getConflictosByTerritorioId($id);
@@ -743,11 +739,7 @@ class TerritoriosController extends BackendController
         $obj_comunidades = new Comunidad();
         $this->comunidades = $obj_comunidades->getComunidadesByTerritorioId($id);
 
-        $cantidad_comunidad = 0;
-        foreach ($this->comunidades as $registros) :
-            $cantidad_comunidad++;
-        endforeach;
-        $this->cantidad_comunidad = $cantidad_comunidad;
+        $this->cantidad_comunidad = is_array($this->comunidades) ? count($this->comunidades) : 0;
 
         $obj_conflictos = new Conflicto();
         $this->conflictos = $obj_conflictos->getConflictosByTerritorioId($id);
