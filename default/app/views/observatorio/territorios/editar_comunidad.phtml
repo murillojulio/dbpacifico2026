@@ -13,10 +13,10 @@
                         <?php echo DwForm::text('comunidad.nombre', array('class'=>'input-lower input-required'), $obj_comunidad->nombre, 'Nombre de la comunidad'); ?>
                     </div>                
                     <div class="col-md-3">
-                        <?php echo DwForm::date('comunidad.fecha_creacion', array('class'=>''), substr($obj_comunidad->fecha_creacion, 0, 10), 'Fecha de creación'); ?>
-                    </div>               
+                        <?php echo DwForm::date('comunidad.fecha_creacion', array('class'=>''), substr($obj_comunidad->fecha_creacion ?? '', 0, 10), 'Fecha de creación'); ?>
+                    </div>
                     <div class="col-md-3">
-                        <?php echo DwForm::date('comunidad.fecha_disolucion', array('class'=>''), substr($obj_comunidad->fecha_disolucion, 0, 10), 'Fecha de disolución'); ?>
+                        <?php echo DwForm::date('comunidad.fecha_disolucion', array('class'=>''), substr($obj_comunidad->fecha_disolucion ?? '', 0, 10), 'Fecha de disolución'); ?>
                     </div>
                 </div>
      <div class="row">
