@@ -1,4 +1,14 @@
-<?php ?><div class="col-md-12">
+<?php
+$array_titulado_no = ($array_titulado_no ?? []) + [
+    'territorio_id'                  => null,
+    'id'                             => null,
+    'solicitud_titulo_fecha'         => null,
+    'solicitud_titulo_area'          => 0,
+    'solicitud_titulo_limite_lindero'=> null,
+    'solicitud_titulo_observacion'   => null,
+    'documento_solicitud_titulo'     => '',
+];
+?><div class="col-md-12">
      <?php echo DwForm::hidden('tituladono.territorio_id', NULL, $array_titulado_no['territorio_id']); ?>
 <?php echo DwForm::hidden('tituladono.id', NULL, $array_titulado_no['id']); ?>
               

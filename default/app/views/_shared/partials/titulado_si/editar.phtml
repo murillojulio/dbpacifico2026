@@ -1,5 +1,28 @@
-<?php ?> 
- <?php echo DwForm::hidden('tituladosi.territorio_id', NULL, $array_titulado_si['territorio_id']); ?>
+<?php
+$array_titulado_si = ($array_titulado_si ?? []) + [
+    'territorio_id'                       => null,
+    'id'                                  => null,
+    'resolucion_constitucion'             => null,
+    'area_titulada'                       => 0,
+    'limite_lindero'                      => null,
+    'documento_constitucion'              => '',
+    'solicitud_ampliacion_si_no'          => null,
+    'solicitud_ampliacion_fecha'          => null,
+    'solicitud_ampliacion_resolucion'     => null,
+    'solicitud_ampliacion_area'           => 0,
+    'solicitud_ampliacion_lindero_limite' => null,
+    'solicitud_ampliacion_observacion'    => null,
+    'solicitud_ampliacion_documento'      => '',
+    'solicitud_saneamiento_si_no'         => null,
+    'solicitud_saneamiento_fecha'         => null,
+    'solicitud_saneamiento_resolucion'    => null,
+    'solicitud_saneamiento_area'          => 0,
+    'solicitud_saneamiento_lindero_limite'=> null,
+    'solicitud_saneamiento_observacion'   => null,
+    'solicitud_saneamiento_documento'     => '',
+];
+?>
+<?php echo DwForm::hidden('tituladosi.territorio_id', NULL, $array_titulado_si['territorio_id']); ?>
 <?php echo DwForm::hidden('tituladosi.id', NULL, $array_titulado_si['id']); ?>
 <div class="col-md-12"> 
                        <div class="row">
