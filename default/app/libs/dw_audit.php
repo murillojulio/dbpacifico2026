@@ -63,7 +63,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function create ($msg, $name_log='') {
+    public static function create(string $msg, string $name_log = ''): void {
         self::log('CREATE', $msg, $name_log);
         
         $body = "<b>Usuario:</b>&nbsp;".Session::get('login')."<br>";
@@ -82,7 +82,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function update($msg, $name_log='') {
+    public static function update(string $msg, string $name_log = ''): void {
         self::log('UPDATE', $msg, $name_log);
     }
 
@@ -93,7 +93,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function warning ($msg, $name_log='') {
+    public static function warning(string $msg, string $name_log = ''): void {
         self::log('WARNING', $msg, $name_log);
     }
 
@@ -104,7 +104,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function error ($msg, $name_log='') {
+    public static function error(string $msg, string $name_log = ''): void {
         self::log('ERROR', $msg, $name_log);
     }
     
@@ -115,7 +115,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function debug ($msg, $name_log='') {
+    public static function debug(string $msg, string $name_log = ''): void {
         self::log('DEBUG', $msg, $name_log);
     }
 
@@ -126,7 +126,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function info ($msg, $name_log='') {
+    public static function info(string $msg, string $name_log = ''): void {
         self::log('INFO', $msg, $name_log);
     }
 }
