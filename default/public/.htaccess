@@ -1,7 +1,4 @@
 DirectoryIndex index.php
-# Mostrar errores PHP en el navegador (solo para depuración — revertir en producción)
-php_flag display_errors On
-php_value error_reporting 32767
 # Si esta mod_rewrite habilitado
 <IfModule mod_rewrite.c>
     # Activar modo de reescritura
