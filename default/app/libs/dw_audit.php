@@ -34,10 +34,10 @@ class DwAudit extends Logger {
     /**
      * Inicializa el Logger
      */
-    public static function initialize($name='') {
+    public static function initialize(string $name = ''): void {
         if(empty($name)){
             self::$_logName = 'audit' . date('Y-m-d') . '.txt';
-        }        
+        }
         self::$_login = Session::get('login');
         self::$_ip = (Session::get('ip')) ? Session::get('ip') : DwUtils::getIp();
         self::$_route = Router::get('route');
@@ -47,11 +47,14 @@ class DwAudit extends Logger {
      * Almacena un mensaje en el log
      *
      * @param string $type
-     * @param string $msg
+     * @param string|array $msg
      * @param string $name_log
      */
-    public static function log($type='DEBUG', $msg, $name_log) {
-        self::initialize($name_log);        
+    public static function log(string $type = 'DEBUG', string|array $msg = '', string $name_log = ''): void {
+        self::initialize($name_log);
+        if (is_array($msg)) {
+            $msg = print_r($msg, true);
+        }
         $msg = trim(trim($msg),'.').'.';
         parent::log($type, '['.self::$_route.']['.self::$_login.']['.self::$_ip.'] '.$msg, self::$_logName);
     }
@@ -93,40 +96,40 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function warning ($msg, $name_log='') {
+    public static function warning(string $msg, string $name_log = ''): void {
         self::log('WARNING', $msg, $name_log);
     }
 
     /**
      * Genera un log de tipo ERROR
      *
-     * @return
-     * @param string $msg
+     * @return void
+     * @param string|array $msg
      * @param string $name_log
      */
-    public static function error ($msg, $name_log='') {
+    public static function error(string|array $msg, string $name_log = ''): void {
         self::log('ERROR', $msg, $name_log);
     }
-    
+
     /**
      * Genera un log de tipo DEBUG
      *
-     * @return
-     * @param string $msg
+     * @return void
+     * @param string|array $msg
      * @param string $name_log
      */
-    public static function debug ($msg, $name_log='') {
+    public static function debug(string|array $msg, string $name_log = ''): void {
         self::log('DEBUG', $msg, $name_log);
     }
 
     /**
      * Genera un log de tipo INFO
      *
-     * @return
-     * @param string $msg
+     * @return void
+     * @param string|array $msg
      * @param string $name_log
      */
-    public static function info ($msg, $name_log='') {
+    public static function info(string|array $msg, string $name_log = ''): void {
         self::log('INFO', $msg, $name_log);
     }
 }
