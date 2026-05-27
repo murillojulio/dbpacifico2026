@@ -37,8 +37,8 @@ class DwAuth {
         } else {
 
             //Verifico si envía el array array('usuario'=>'admin') o string 'usuario'
-            $keyUser = (is_array($fieldUser)) ? @array_shift(array_keys($fieldUser)) : NULL;
-            $keyPass = (is_array($fieldPass)) ? @array_shift(array_keys($fieldPass)) : NULL;
+            $keyUser = (is_array($fieldUser)) ? array_key_first($fieldUser) : NULL;
+            $keyPass = (is_array($fieldPass)) ? array_key_first($fieldPass) : NULL;
             $valUser = ($keyUser) ? $fieldUser[$keyUser] : NULL;
             $valPass = ($keyPass) ? $fieldPass[$keyPass] : NULL;
 
