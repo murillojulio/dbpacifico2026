@@ -45,16 +45,16 @@
             </div>
                <div class="row">
                     <div id="div_titulado_si">
-                        <?php                            
-                                $array_titulado_si = (array) $obj_titulado_si;                               
-                                echo View::partial('titulado_si/editar', false, array('array_titulado_si'=>$array_titulado_si)); 
-                         ?> 
+                        <?php
+                                $array_titulado_si = isset($obj_titulado_si) ? (array) $obj_titulado_si : [];
+                                echo View::partial('titulado_si/editar', false, array('array_titulado_si'=>$array_titulado_si));
+                         ?>
                     </div>                    
                     <div id="div_titulado_no">
-                        <?php                            
-                                $array_titulado_no = (array) $obj_titulado_no;
-                                echo View::partial('titulado_no/editar', false, array('array_titulado_no'=>$array_titulado_no));                                 
-                         ?> 
+                        <?php
+                                $array_titulado_no = isset($obj_titulado_no) ? (array) $obj_titulado_no : [];
+                                echo View::partial('titulado_no/editar', false, array('array_titulado_no'=>$array_titulado_no));
+                         ?>
                     </div> 
                           
                 </div>
