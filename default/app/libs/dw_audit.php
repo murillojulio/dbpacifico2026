@@ -50,7 +50,7 @@ class DwAudit extends Logger {
      * @param string $msg
      * @param string $name_log
      */
-    public static function log($type, $msg, $name_log='') {
+    public static function log(string $type = 'DEBUG', array|string $msg = '', string $name_log = ''): void {
         self::initialize($name_log);        
         $msg = trim(trim($msg),'.').'.';
         parent::log($type, '['.self::$_route.']['.self::$_login.']['.self::$_ip.'] '.$msg, self::$_logName);
