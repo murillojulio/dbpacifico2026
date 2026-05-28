@@ -571,17 +571,17 @@ class TerritoriosController extends BackendController
         //
 
 
+        $obj_titulado_si = new TituladoSi();
         if ($obj_territorio->titulado == 'SI') {
-            $obj_titulado_si = new TituladoSi();
             $obj_titulado_si->getTituladoSiByTerritorioId($id);
-            $this->obj_titulado_si = $obj_titulado_si;
         }
+        $this->obj_titulado_si = $obj_titulado_si;
 
+        $obj_titulado_no = new TituladoNo();
         if ($obj_territorio->titulado == 'NO') {
-            $obj_titulado_no = new TituladoNo();
             $obj_titulado_no->getTituladoNoByTerritorioId($id);
-            $this->obj_titulado_no = $obj_titulado_no;
         }
+        $this->obj_titulado_no = $obj_titulado_no;
 
         $poblacion = new Poblacion();
         $poblacion = Poblacion::getPoblacion('territorio_id', $id);
@@ -672,17 +672,15 @@ class TerritoriosController extends BackendController
 
         $obj_titulado_si = new TituladoSi();
         if ($obj_territorio->titulado == 'SI') {
-
             $obj_titulado_si->getTituladoSiByTerritorioId($id);
-            $this->obj_titulado_si = $obj_titulado_si;
         }
+        $this->obj_titulado_si = $obj_titulado_si;
 
         $obj_titulado_no = new TituladoNo();
         if ($obj_territorio->titulado == 'NO') {
-
             $obj_titulado_no->getTituladoNoByTerritorioId($id);
-            $this->obj_titulado_no = $obj_titulado_no;
         }
+        $this->obj_titulado_no = $obj_titulado_no;
 
 
         if (Input::hasPost('territorio') && Input::hasPost('poblacion')) {
