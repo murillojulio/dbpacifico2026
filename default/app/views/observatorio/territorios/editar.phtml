@@ -53,12 +53,10 @@
                         <?php endif; ?>
                     </div>
                     <div id="div_titulado_no">
-                        <?php if (false): ?>
-                                <?php
+                        <?php
                                 $array_titulado_no = $obj_titulado_no->id ? (array) $obj_titulado_no : [];
                                 echo View::partial('titulado_no/editar', false, array('array_titulado_no'=>$array_titulado_no));
-                                ?>
-                        <?php endif; ?>
+                         ?>
                     </div>
 
                 </div>
