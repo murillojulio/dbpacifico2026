@@ -1,4 +1,14 @@
-<?php ?><div class="col-md-12">
+<?php
+$_defaults_tno = [
+    'territorio_id' => null, 'id' => null,
+    'solicitud_titulo_fecha' => '', 'solicitud_titulo_area' => 0,
+    'solicitud_titulo_limite_lindero' => '', 'solicitud_titulo_observacion' => '',
+    'documento_solicitud_titulo' => '',
+];
+$array_titulado_no = ($array_titulado_no ?? []) + $_defaults_tno;
+unset($_defaults_tno);
+?>
+<div class="col-md-12">
      <?php echo DwForm::hidden('tituladono.territorio_id', NULL, $array_titulado_no['territorio_id']); ?>
 <?php echo DwForm::hidden('tituladono.id', NULL, $array_titulado_no['id']); ?>
               
@@ -7,13 +17,13 @@
                   <div class="panel-body">
                       <div class="row">
                           <div class="col-md-3">                              
-                            <?php echo DwForm::date('tituladono.solicitud_titulo_fecha', array('class'=>''), substr($array_titulado_no['solicitud_titulo_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                            <?php echo DwForm::date('tituladono.solicitud_titulo_fecha', array('class'=>''), substr($array_titulado_no['solicitud_titulo_fecha'] ?? '', 0, 10), 'Fecha de la solicitud'); ?>
                         </div> 
                         <div class="col-md-3">
                             <label for="tituladono_solicitud_titulo_area">Area solicitada<!--<span class="req">*</span>--></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format($array_titulado_no['solicitud_titulo_area'], 2, '.', ','); ?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format($array_titulado_no['solicitud_titulo_area'] ?? 0, 2, '.', ','); ?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
                                           <div class="input-group-addon">Hectáreas</div>                                          
                                         </div>
                                       </div>
