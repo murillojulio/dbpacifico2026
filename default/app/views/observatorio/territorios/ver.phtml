@@ -46,14 +46,13 @@
                     
                         <?php
                             if ($obj_territorio->titulado == 'SI')
-                            {        
-                                $array_titulado_si = (array) $obj_titulado_si;
-                               
-                                echo View::partial('titulado_si/ver', false, array('array_titulado_si'=>$array_titulado_si)); 
+                            {
+                                $array_titulado_si = $obj_titulado_si->id ? (array) $obj_titulado_si : [];
+                                echo View::partial('titulado_si/ver', false, array('array_titulado_si'=>$array_titulado_si));
                             }
                             else {
-                                $array_titulado_no = (array) $obj_titulado_no;
-                                echo View::partial('titulado_no/ver', false, array('array_titulado_no'=>$array_titulado_no));                                 
+                                $array_titulado_no = $obj_titulado_no->id ? (array) $obj_titulado_no : [];
+                                echo View::partial('titulado_no/ver', false, array('array_titulado_no'=>$array_titulado_no));
                             }
 
                         ?>                    

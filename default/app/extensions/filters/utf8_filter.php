@@ -18,7 +18,7 @@ class Utf8Filter implements FilterInterface {
      */
     public static function execute($s, $options) {
         //Aplicar el filtro para decodificar los caracteres especiales de la base de datos
-        $string = html_entity_decode(utf8_decode($s));
+        $string = html_entity_decode(mb_convert_encoding((string)($s ?? ''), 'ISO-8859-1', 'UTF-8'));
         return $string;
     }
 

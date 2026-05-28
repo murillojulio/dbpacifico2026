@@ -233,7 +233,7 @@ class Reportes
             $pdf->WriteHTML("       <b>Descripción de la ubicación geográfica de la comunidad</b>");
             $pdf->Ln();
             $pdf->SetX(25);
-            $pdf->MultiCell(0, 5, utf8_decode($comunidad->descripcion_ubicacion));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)($comunidad->descripcion_ubicacion ?? ''), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln();
             $poblacion = Poblacion::getPoblacion('comunidad_id', $comunidad->id);
             $pdf->WriteHTML('       <b><u>Población</u></b>');
@@ -345,25 +345,25 @@ class Reportes
             $pdf->WriteHTML("<b>Hechos</b> ");
             $pdf->Ln();
             $pdf->SetX(30);
-            $pdf->MultiCell(0, 5, utf8_decode($conflicto->hechos));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)($conflicto->hechos ?? ''), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln(1);
             $pdf->SetX(25);
             $pdf->WriteHTML("<b>Actores</b> ");
             $pdf->Ln();
             $pdf->SetX(30);
-            $pdf->MultiCell(0, 5, utf8_decode($conflicto->actores));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)($conflicto->actores ?? ''), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln(1);
             $pdf->SetX(25);
             $pdf->WriteHTML("<b>Ubicación</b> ");
             $pdf->Ln();
             $pdf->SetX(30);
-            $pdf->MultiCell(0, 5, utf8_decode($conflicto->ubicacion));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)($conflicto->ubicacion ?? ''), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln(1);
             $pdf->SetX(25);
             $pdf->WriteHTML("<b>Observaciones</b> ");
             $pdf->Ln();
             $pdf->SetX(30);
-            $pdf->MultiCell(0, 5, utf8_decode($conflicto->observacion));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)($conflicto->observacion ?? ''), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln();
 
             $pdf->SetX(20);
@@ -393,7 +393,7 @@ class Reportes
 
         foreach ($obj_fuente as $fuente) :
             $pdf->SetX(15);
-            $pdf->MultiCell(0, 5, utf8_decode($fuente->nombre . " / fecha de la fuente: " . $fuente->fecha));
+            $pdf->MultiCell(0, 5, mb_convert_encoding((string)(($fuente->nombre ?? '') . " / fecha de la fuente: " . ($fuente->fecha ?? '')), 'ISO-8859-1', 'UTF-8'));
             $pdf->Ln();
         endforeach;
 

@@ -23,8 +23,8 @@ function BasicTable($header, $data, $ancho_columna, $set_x)
     $this->SetX($set_x);
     // Cabecera
     foreach($header as $col)
-        
-        $this->Cell($ancho_columna,7,utf8_decode($col),1);
+
+        $this->Cell($ancho_columna,7,mb_convert_encoding((string)($col ?? ''), 'ISO-8859-1', 'UTF-8'),1);
     $this->Ln();
 
     $this->SetX($set_x);
@@ -32,7 +32,7 @@ function BasicTable($header, $data, $ancho_columna, $set_x)
     foreach($data as $row)
     {
         foreach($row as $col)
-            $this->Cell($ancho_columna,6,utf8_decode($col),1);
+            $this->Cell($ancho_columna,6,mb_convert_encoding((string)($col ?? ''), 'ISO-8859-1', 'UTF-8'),1);
             $this->Ln();
             $this->SetX($set_x);
     }
@@ -45,13 +45,13 @@ function ImprovedTable($header, $data)
     $w = array(40, 35, 45, 40);
     // Cabeceras
     for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,utf8_decode($header[$i]),1,0,'C');
+        $this->Cell($w[$i],7,mb_convert_encoding((string)($header[$i] ?? ''), 'ISO-8859-1', 'UTF-8'),1,0,'C');
     $this->Ln();
     // Datos
     foreach($data as $row)
     {
-        $this->Cell($w[0],6,utf8_decode($row[0]),'LR');
-        $this->Cell($w[1],6,utf8_decode($row[1]),'LR');
+        $this->Cell($w[0],6,mb_convert_encoding((string)($row[0] ?? ''), 'ISO-8859-1', 'UTF-8'),'LR');
+        $this->Cell($w[1],6,mb_convert_encoding((string)($row[1] ?? ''), 'ISO-8859-1', 'UTF-8'),'LR');
         $this->Cell($w[2],6,number_format($row[2]),'LR',0,'R');
         $this->Cell($w[3],6,number_format($row[3]),'LR',0,'R');
         $this->Ln();
@@ -72,7 +72,7 @@ function FancyTable($header, $data)
     // Cabecera
     $w = array(40, 35, 45, 40);
     for($i=0;$i<count($header);$i++)
-        $this->Cell($w[$i],7,utf8_decode($header[$i]),1,0,'C',true);
+        $this->Cell($w[$i],7,mb_convert_encoding((string)($header[$i] ?? ''), 'ISO-8859-1', 'UTF-8'),1,0,'C',true);
     $this->Ln();
     // Restauración de colores y fuentes
     $this->SetFillColor(224,235,255);
@@ -95,7 +95,7 @@ function FancyTable($header, $data)
 
 function WriteHTML($html)
 {
-    $html = utf8_decode($html);
+    $html = mb_convert_encoding((string)($html ?? ''), 'ISO-8859-1', 'UTF-8');
     // Intérprete de HTML
     $html = str_replace("\n",' ',$html);
     $a = preg_split('/<(.*)>/U',$html,-1,PREG_SPLIT_DELIM_CAPTURE);
