@@ -1,4 +1,20 @@
-<?php ?> 
+<?php
+$_defaults_tsi = [
+    'territorio_id' => null, 'id' => null,
+    'resolucion_constitucion' => '', 'area_titulada' => 0, 'limite_lindero' => '',
+    'documento_constitucion' => '',
+    'solicitud_ampliacion_si_no' => '', 'solicitud_ampliacion_fecha' => '',
+    'solicitud_ampliacion_resolucion' => '', 'solicitud_ampliacion_area' => 0,
+    'solicitud_ampliacion_lindero_limite' => '', 'solicitud_ampliacion_observacion' => '',
+    'solicitud_ampliacion_documento' => '',
+    'solicitud_saneamiento_si_no' => '', 'solicitud_saneamiento_fecha' => '',
+    'solicitud_saneamiento_resolucion' => '', 'solicitud_saneamiento_area' => 0,
+    'solicitud_saneamiento_lindero_limite' => '', 'solicitud_saneamiento_observacion' => '',
+    'solicitud_saneamiento_documento' => '',
+];
+$array_titulado_si = ($array_titulado_si ?? []) + $_defaults_tsi;
+unset($_defaults_tsi);
+?>
  <?php echo DwForm::hidden('tituladosi.territorio_id', NULL, $array_titulado_si['territorio_id']); ?>
 <?php echo DwForm::hidden('tituladosi.id', NULL, $array_titulado_si['id']); ?>
 <div class="col-md-12"> 
@@ -10,7 +26,7 @@
                             <label for="tituladosi_area_titulada">Area titulada</label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="tituladosi_area_titulada" name="tituladosi[area_titulada]" type="text" value="<?php echo number_format($array_titulado_si['area_titulada'], 2, '.', ','); ?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                            <input id="tituladosi_area_titulada" name="tituladosi[area_titulada]" type="text" value="<?php echo number_format($array_titulado_si['area_titulada'] ?? 0, 2, '.', ','); ?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
                                           <div class="input-group-addon">ha</div>                                          
                                         </div>
                                       </div>
@@ -76,7 +92,7 @@
                 <div id="div_solicitud_ampliacion">  
                       <div class="row">
                           <div class="col-md-3">                              
-                            <?php echo DwForm::date('tituladosi.solicitud_ampliacion_fecha', array('class'=>''), substr($array_titulado_si['solicitud_ampliacion_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                            <?php echo DwForm::date('tituladosi.solicitud_ampliacion_fecha', array('class'=>''), substr($array_titulado_si['solicitud_ampliacion_fecha'] ?? '', 0, 10), 'Fecha de la solicitud'); ?>
                         </div> 
                           <div class="col-md-3">
                               
@@ -87,7 +103,7 @@
                             <label for="tituladosi_solicitud_ampliacion_area">Area solicitada<!--<span class="req">*</span>--></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="tituladosi_solicitud_ampliacion_area" name="tituladosi[solicitud_ampliacion_area]" type="text" value="<?php echo number_format($array_titulado_si['solicitud_ampliacion_area'], 2, '.', ',')?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                            <input id="tituladosi_solicitud_ampliacion_area" name="tituladosi[solicitud_ampliacion_area]" type="text" value="<?php echo number_format($array_titulado_si['solicitud_ampliacion_area'] ?? 0, 2, '.', ',')?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
                                           <div class="input-group-addon">ha</div>                                          
                                         </div>
                                       </div>
@@ -177,7 +193,7 @@
                       <div class="row">
                           <div class="col-md-3">
                               
-                            <?php echo DwForm::date('tituladosi.solicitud_saneamiento_fecha', array('class'=>''), substr($array_titulado_si['solicitud_saneamiento_fecha'], 0, 10), 'Fecha de la solicitud'); ?>
+                            <?php echo DwForm::date('tituladosi.solicitud_saneamiento_fecha', array('class'=>''), substr($array_titulado_si['solicitud_saneamiento_fecha'] ?? '', 0, 10), 'Fecha de la solicitud'); ?>
                         </div> 
                           <div class="col-md-3">
                               
@@ -188,7 +204,7 @@
                             <label for="tituladosi_solicitud_saneamiento_area">Area solicitada<!--<span class="req">*</span>--></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="tituladosi_solicitud_saneamiento_area" name="tituladosi[solicitud_saneamiento_area]" type="text" value="<?php echo number_format(['solicitud_saneamiento_area'], 2, '.', ',');?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
+                                            <input id="tituladosi_solicitud_saneamiento_area" name="tituladosi[solicitud_saneamiento_area]" type="text" value="<?php echo number_format($array_titulado_si['solicitud_saneamiento_area'] ?? 0, 2, '.', ',');?>" class="form-control formato_punto_coma" required="required" data-invalid="">                                          
                                           <div class="input-group-addon">Hectáreas</div>                                          
                                         </div>
                                       </div>
