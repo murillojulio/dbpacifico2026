@@ -39,7 +39,8 @@
                         <td><?php echo $territorio->nombre; ?></td>
                         <td><?php
                         foreach($territorio->getTerritorioMunicipio() as $ter):
-                            echo $ter->getMunicipio()->nombre;
+                            $mun = $ter->getMunicipio();
+                            echo $mun ? $mun->nombre : '';
                         endforeach;  ?></td>                        
                         <td><?php echo $territorio->departamento; ?></td> 
                         <td><?php echo $territorio->cant_caso_reg; ?></td>
