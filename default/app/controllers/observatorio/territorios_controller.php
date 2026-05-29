@@ -119,7 +119,7 @@ class TerritoriosController extends BackendController
 
         $territorio     = new Territorio();
         $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'comunidad_negra');
-        if (empty($territorios->items)) {
+        if (empty($territorios) || empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
         $this->territorios  = $territorios;
@@ -147,7 +147,7 @@ class TerritoriosController extends BackendController
 
         $territorio     = new Territorio();
         $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'indigena');
-        if (empty($territorios->items)) {
+        if (empty($territorios) || empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
         $this->territorios  = $territorios;
@@ -176,7 +176,7 @@ class TerritoriosController extends BackendController
 
         $territorio     = new Territorio();
         $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'urbano');
-        if (empty($territorios->items)) {
+        if (empty($territorios) || empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
         $this->territorios  = $territorios;

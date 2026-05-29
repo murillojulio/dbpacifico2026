@@ -92,7 +92,7 @@ class GestionTccnController extends BackendController
 
         $territorio     = new Territorio();
         $territorios    = $territorio->getAjaxTerritorio($field, $value, $order, $page, $tipo = 'comunidad_negra');
-        if (empty($territorios->items)) {
+        if (empty($territorios) || empty($territorios->items)) {
             Flash::info('No se han encontrado registros');
         }
         $this->territorios  = $territorios;

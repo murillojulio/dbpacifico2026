@@ -35,6 +35,7 @@
                 </tr>
             </thead>
             <tbody>
+                <?php if(!empty($territorios) && !empty($territorios->items)) { ?>
                 <?php foreach($territorios->items as $territorio): ?>
                     <?php $key_show = Security::setKey($territorio->id, 'show_actor_armado'); ?>
                     <?php $key_upd = Security::setKey($territorio->id, 'upd_actor_armado'); ?>
@@ -62,6 +63,7 @@
                     </tr>
                     <?php $territorios->counter++; ?>
                 <?php endforeach; ?>
+                <?php } ?>
             </tbody>
         </table>
        

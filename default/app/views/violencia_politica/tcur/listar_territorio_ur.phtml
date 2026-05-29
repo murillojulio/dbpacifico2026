@@ -1,15 +1,5 @@
 <?php View::flash(); ?>
 
-<script type="text/javascript">
-    $(function() {
-        $('table').kgrid({
-            form_to:    $.KumbiaPHP.publicPath+'violencia_politica/tcur/buscar_territorio_ur/', 
-            order_attr: '<?php echo (APP_AJAX) ? 'class="js-link js-spinner"' : ''; ?>',
-            order_to:   $.KumbiaPHP.publicPath+"violencia_politica/tcur/listar_territorio_ur/"
-        });
-    });
-</script>
-
 <div class="container shell-view">
 
     <?php View::process($page_module, $page_title, $set_title); ?>
@@ -24,7 +14,7 @@
 
     <div class="container-overflow">
 
-        <table class="table table-bordered table-hover table-striped table-condensed table-responsive">
+        <table class="table table-bordered table-hover table-striped table-condensed datatable">
             <thead>
                 <tr>
                     <th>NUM</th>
