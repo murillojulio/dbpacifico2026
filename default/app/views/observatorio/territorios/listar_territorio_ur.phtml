@@ -43,7 +43,7 @@
                         endforeach;  ?></td>                        
                         <td><?php echo $territorio->departamento; ?></td> 
                         <td><?php echo $territorio->cant_caso_reg; ?></td>
-                        <td><?php View::partial('nivel_estado/ver', false, array('nivel'=>$territorio->nivel, 'estado'=>$territorio->estado)); ?>
+                        <td><?php View::partial('nivel_estado/ver', false, array('nivel'=>$territorio->nivel, 'estado'=>$territorio->estado)); ?></td>
                         <td class="btn-actions">
                             <?php View::partial('opcion/ver', false, 
                                     array('elemento'=>'territorio',
