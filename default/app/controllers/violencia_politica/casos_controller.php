@@ -526,11 +526,12 @@ class CasosController extends BackendController {
         $this->departamento_id = '';
         $this->municipio_id = '';
         $this->territorio_id = '';
-    
+        $this->casos = [];
+
         if ($retorna_busqueda === 'si') {
             return $this->repetirBusqueda();
         }
-    
+
         if (!Input::hasPost('caso')) {
             return;
         }
