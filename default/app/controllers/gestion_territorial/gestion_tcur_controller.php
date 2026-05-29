@@ -73,7 +73,7 @@ class GestionTcurController extends BackendController
         $this->territorios = $territorios->getListadoTerritorio('urbano', $order, $page);
         $this->order = $order;
         $this->page = $page;
-        //$this->page_title = 'Listado de territorios monitoriados';
+        //$this->page_title = 'Listado de territorios monitoreados';
         $this->page_title = Territorio::TERRITORIO_URBANO;
     }
 

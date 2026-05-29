@@ -67,7 +67,7 @@ class TerritoriosController extends BackendController
         $this->territorios = $territorios->getListadoTerritorio('comunidad_negra', $order, $page);
         $this->order = $order;
         $this->page = $page;
-        $this->page_title = 'Listado de territorios monitoriados';
+        $this->page_title = 'Listado de territorios monitoreados';
         $this->page_module = Territorio::TERRITORIO_COMUNIDAD_NEGRA;
         Session::set('url_back', 'observatorio/territorios/listar_territorio_cn/' . $order . '/page.' . $page . '/');
     }
@@ -82,7 +82,7 @@ class TerritoriosController extends BackendController
         $this->territorios = $territorios->getListadoTerritorio('indigena', $order, $page);
         $this->order = $order;
         $this->page = $page;
-        $this->page_title = 'Listado de territorios monitoriados';
+        $this->page_title = 'Listado de territorios monitoreados';
         $this->page_module = Territorio::TERRITORIO_INDIGENA;
         Session::set('url_back', 'observatorio/territorios/listar_territorio_ci/' . $order . '/page.' . $page . '/');
     }
@@ -97,7 +97,7 @@ class TerritoriosController extends BackendController
         $this->territorios = $territorios->getListadoTerritorio('urbano', $order, $page);
         $this->order = $order;
         $this->page = $page;
-        $this->page_title = 'Listado de territorios monitoriados';
+        $this->page_title = 'Listado de territorios monitoreados';
         $this->page_module = Territorio::TERRITORIO_URBANO;
         Session::set('url_back', 'observatorio/territorios/listar_territorio_ur/' . $order . '/page.' . $page . '/');
     }

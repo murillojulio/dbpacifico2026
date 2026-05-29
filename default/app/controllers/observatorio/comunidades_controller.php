@@ -31,7 +31,7 @@ class ComunidadesController extends BackendController {
         $municipios = new Municipio();
         $this->municipios = $municipios->getListadoMunicipio('todos', $order, $page);        
         $this->order = $order;        
-        $this->page_title = 'Listado de municipios monitoriados';
+        $this->page_title = 'Listado de municipios monitoreados';
     }
     
     /**

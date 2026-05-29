@@ -32,7 +32,7 @@ class SubregionesController extends BackendController {
         $subregiones = new Subregion();
         $this->subregiones = $subregiones->getListadoSubregion('todos', $order, $page);        
         $this->order = $order;        
-        $this->page_title = 'Listado de subregiones monitoriados';
+        $this->page_title = 'Listado de subregiones monitoreados';
     }
     
     

@@ -71,7 +71,7 @@ class GestionTccnController extends BackendController
         $this->territorios = $territorios->getListadoTerritorio('comunidad_negra', $order, $page);
         $this->order = $order;
         $this->page = $page;
-        //$this->page_title = 'Listado de territorios monitoriados';
+        //$this->page_title = 'Listado de territorios monitoreados';
         $this->page_title = Territorio::TERRITORIO_COMUNIDAD_NEGRA;
     }
 

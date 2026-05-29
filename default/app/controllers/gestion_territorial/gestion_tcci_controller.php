@@ -59,7 +59,7 @@ class GestionTcciController extends BackendController {
         $this->territorios = $territorios->getListadoTerritorio('indigena', $order, $page);        
         $this->order = $order;      
         $this->page = $page;
-        //$this->page_title = 'Listado de territorios monitoriados';
+        //$this->page_title = 'Listado de territorios monitoreados';
         $this->page_title = Territorio::TERRITORIO_INDIGENA;
     }
         

@@ -32,7 +32,7 @@ class DepartamentosController extends BackendController {
         $departamentos = new Departamento();
         $this->departamentos = $departamentos->getListadoDepartamento('todos', $order, $page);        
         $this->order = $order;        
-        $this->page_title = 'Listado de departamentos monitoriados';
+        $this->page_title = 'Listado de departamentos monitoreados';
     }
     
      /**
