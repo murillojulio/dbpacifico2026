@@ -45,7 +45,7 @@
                                         <label for="departamento_area_total">Total<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="departamento_area_total" name="departamento[area_total]" type="text" value="<?php echo number_format($departamento->area_total, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">                                          
+                                            <input id="departamento_area_total" name="departamento[area_total]" type="text" value="<?php echo number_format((float)($departamento->area_total ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">                                          
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>
@@ -54,7 +54,7 @@
                                         <label for="departamento_area_urbana">Urbana<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="departamento_area_urbana" name="departamento[area_urbana]" type="text" value="<?php echo number_format($departamento->area_urbana, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
+                                            <input id="departamento_area_urbana" name="departamento[area_urbana]" type="text" value="<?php echo number_format((float)($departamento->area_urbana ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>
@@ -63,7 +63,7 @@
                                         <label for="departamento_area_rural">Rural<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="departamento_area_rural" name="departamento[area_rural]" type="text" value="<?php echo number_format($departamento->area_rural, 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
+                                            <input id="departamento_area_rural" name="departamento[area_rural]" type="text" value="<?php echo number_format((float)($departamento->area_rural ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control input-money" required="required" data-invalid="">
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>

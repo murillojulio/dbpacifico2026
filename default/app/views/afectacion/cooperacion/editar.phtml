@@ -103,7 +103,7 @@
                                     <?php echo DwForm::select('cooperacion.moneda_monto_inversion', array('' => '- SELECCIONE -', '$' => '$ - PESOS', 'US' => 'US - DOLARES', '€' => '€ - EUROS'), array('class' => ''), NULL, 'Moneda monto de inversión') ?>
                                 </div>
                                 <div class="col-md-3">
-                                    <?php echo DwForm::text('cooperacion.monto_inversion', array('class' => 'input-money'), number_format($cooperacion->monto_inversion, 2, '.', ','), 'Monto de inversión'); ?>
+                                    <?php echo DwForm::text('cooperacion.monto_inversion', array('class' => 'input-money'), number_format((float)($cooperacion->monto_inversion ?? 0), 2, '.', ','), 'Monto de inversión'); ?>
                                 </div>
                             </div>
                             <div class="row">

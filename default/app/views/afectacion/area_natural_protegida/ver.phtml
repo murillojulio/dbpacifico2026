@@ -38,7 +38,7 @@
                             <label for="area">Área<!--<span class="req">*</span>--></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input value="<?php echo number_format($area_natural_protegida->area, 2, '.', ','); ?>" id="area" name="area_natural_protegida[area]" type="text" class="form-control formato_punto_coma" readonly="" data-invalid="">                                          
+                                            <input value="<?php echo number_format((float)($area_natural_protegida->area ?? 0), 2, '.', ','); ?>" id="area" name="area_natural_protegida[area]" type="text" class="form-control formato_punto_coma" readonly="" data-invalid="">                                          
                                             <div class="input-group-addon">km<sup>2</sup></div>                                          
                                         </div>
                                       </div>

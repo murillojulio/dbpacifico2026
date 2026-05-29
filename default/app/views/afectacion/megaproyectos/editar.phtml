@@ -135,7 +135,7 @@
                                                     <label for="megaproyecto_area_terrestre">Terrestre</label>
                                                     <div class="form-group">
                                                         <div class="input-group">
-                                                            <input id="megaproyecto_area_terrestre" name="megaproyecto[area_terrestre]" type="text" value="<?php echo number_format($megaproyecto->area_terrestre, 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
+                                                            <input id="megaproyecto_area_terrestre" name="megaproyecto[area_terrestre]" type="text" value="<?php echo number_format((float)($megaproyecto->area_terrestre ?? 0), 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
                                                             <div class="input-group-addon">Km<sup>2</sup></div>
                                                         </div>
                                                     </div>
@@ -144,7 +144,7 @@
                                                     <label for="megaproyecto_area_maritima">Marítima</label>
                                                     <div class="form-group">
                                                         <div class="input-group">
-                                                            <input id="megaproyecto_area_maritima" name="megaproyecto[area_maritima]" type="text" value="<?php echo number_format($megaproyecto->area_maritima, 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
+                                                            <input id="megaproyecto_area_maritima" name="megaproyecto[area_maritima]" type="text" value="<?php echo number_format((float)($megaproyecto->area_maritima ?? 0), 2, ',', '.'); ?>" class="form-control formato_punto_coma" data-invalid="">
                                                             <div class="input-group-addon">Km<sup>2</sup></div>
                                                         </div>
                                                     </div>
@@ -282,7 +282,7 @@
                                                     <?php echo DwForm::select('megaproyecto.moneda_monto_inversion', array('' => '- SELECCIONE -', '$' => '$ - PESOS', 'US' => 'US - DOLARES', '€' => '€ - EUROS'), array('class' => ''), NULL, 'Moneda monto de inversión') ?>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <?php echo DwForm::text('megaproyecto.monto_inversion', array('class' => 'input-money'), number_format($megaproyecto->monto_inversion, 2, '.', ','), 'Monto de inversión'); ?>
+                                                    <?php echo DwForm::text('megaproyecto.monto_inversion', array('class' => 'input-money'), number_format((float)($megaproyecto->monto_inversion ?? 0), 2, '.', ','), 'Monto de inversión'); ?>
                                                 </div>
 
 

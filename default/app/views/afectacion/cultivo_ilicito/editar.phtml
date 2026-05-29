@@ -34,7 +34,7 @@
                                 <!--<span class="req">*</span>--></label>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input value="<?php echo number_format($cultivo_ilicito->area, 2, '.', ','); ?>" id="area" name="cultivo_ilicito[area]" type="text" class="form-control formato_punto_coma" required="" data-invalid="">
+                                    <input value="<?php echo number_format((float)($cultivo_ilicito->area ?? 0), 2, '.', ','); ?>" id="area" name="cultivo_ilicito[area]" type="text" class="form-control formato_punto_coma" required="" data-invalid="">
                                     <div class="input-group-addon">hectareas</div>
                                 </div>
                             </div>
@@ -239,7 +239,7 @@
                                         <!--<span class="req">*</span>--></label>
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input value="<?php echo number_format($cultivo_ilicito->area_erradicacion, 2, '.', ','); ?>" id="area_erradicacion" name="cultivo_ilicito[area_erradicacion]" type="text" class="form-control formato_punto_coma" required="" data-invalid="">
+                                            <input value="<?php echo number_format((float)($cultivo_ilicito->area_erradicacion ?? 0), 2, '.', ','); ?>" id="area_erradicacion" name="cultivo_ilicito[area_erradicacion]" type="text" class="form-control formato_punto_coma" required="" data-invalid="">
                                             <div class="input-group-addon">hectareas</div>
                                         </div>
                                     </div>

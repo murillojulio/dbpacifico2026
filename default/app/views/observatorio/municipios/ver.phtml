@@ -44,7 +44,7 @@
                                         <label for="municipio_area_total">Total<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="municipio_area_total" name="municipio[area_total]" type="text" value="<?php echo number_format($municipio->area_total, 2, '.', ','); ?>" class="formato_punto_coma form-control" readonly="">                                          
+                                            <input id="municipio_area_total" name="municipio[area_total]" type="text" value="<?php echo number_format((float)($municipio->area_total ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control" readonly="">                                          
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>
@@ -53,7 +53,7 @@
                                         <label for="municipio_area_cabecera">Cabecera<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="municipio_area_cabecera" name="municipio[area_cabecera]" type="text" value="<?php echo number_format($municipio->area_cabecera, 2, '.', ','); ?>" class="formato_punto_coma form-control " readonly="">                                          
+                                            <input id="municipio_area_cabecera" name="municipio[area_cabecera]" type="text" value="<?php echo number_format((float)($municipio->area_cabecera ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control " readonly="">                                          
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>
@@ -62,7 +62,7 @@
                                         <label for="municipio_area_rural">Rural<span class="req">*</span></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="municipio_area_rural" name="municipio[area_rural]" type="text" value="<?php echo number_format($municipio->area_rural, 2, '.', ','); ?>" class="formato_punto_coma form-control input-readonly" readonly="">                                          
+                                            <input id="municipio_area_rural" name="municipio[area_rural]" type="text" value="<?php echo number_format((float)($municipio->area_rural ?? 0), 2, '.', ','); ?>" class="formato_punto_coma form-control input-readonly" readonly="">                                          
                                           <div class="input-group-addon">Km<sup>2</sup></div>                                          
                                         </div>
                                       </div>

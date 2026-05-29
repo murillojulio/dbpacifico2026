@@ -20,7 +20,7 @@ unset($_defaults_tno);
                             <label for="tituladono_solicitud_titulo_area">Area solicitada<!--<span class="req">*</span>--></label>
                                      <div class="form-group">
                                         <div class="input-group">                                 
-                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format($array_titulado_no['solicitud_titulo_area'] ?? 0, 2, '.', ','); ?>" class="form-control formato_punto_coma" readonly="readonly" data-invalid="">                                          
+                                            <input id="tituladono_solicitud_titulo_area" name="tituladono[solicitud_titulo_area]" type="text" value="<?php echo number_format((float)($array_titulado_no['solicitud_titulo_area'] ?? 0), 2, '.', ','); ?>" class="form-control formato_punto_coma" readonly="readonly" data-invalid="">                                          
                                           <div class="input-group-addon">Hectáreas</div>                                          
                                         </div>
                                       </div>
