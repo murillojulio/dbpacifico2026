@@ -45,12 +45,10 @@
             </div>
                <div class="row">
                     <div id="div_titulado_si">
-                        <?php if (false): ?>
                         <?php
                                 $array_titulado_si = $obj_titulado_si->id ? (array) $obj_titulado_si : [];
                                 echo View::partial('titulado_si/editar', false, array('array_titulado_si'=>$array_titulado_si));
                          ?>
-                        <?php endif; ?>
                     </div>
                     <div id="div_titulado_no">
                         <?php
